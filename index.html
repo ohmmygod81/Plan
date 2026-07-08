@@ -278,6 +278,19 @@
   .tag-calc    { background: #1e3a2a; color: var(--green); }
   .tag-hard    { background: #3d1f1f; color: var(--red); }
 
+  /* ── 일자 구분 마커 ── */
+  .day-mark {
+    font-size: 11.5px;
+    font-weight: 700;
+    color: var(--blue);
+    background: #12233a;
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 8px;
+    margin: 14px 0 6px;
+  }
+  .day-mark:first-child { margin-top: 2px; }
+
   /* ── 공식 박스 ── */
   .formula-box {
     background: var(--bg);
@@ -456,6 +469,7 @@
       <span class="week-arrow" id="arrow-c1">▼</span>
     </div>
     <div class="week-body" id="body-c1">
+      <div class="day-mark">📅 Day 1</div>
       <div class="topic-item">
         <input type="checkbox" id="c1-1" onchange="saveAndRefresh(this)">
         <div class="topic-content">
@@ -464,6 +478,7 @@
           <span class="topic-tag tag-formula">공식</span>
         </div>
       </div>
+      <div class="day-mark">📅 Day 2</div>
       <div class="topic-item">
         <input type="checkbox" id="c1-2" onchange="saveAndRefresh(this)">
         <div class="topic-content">
@@ -485,6 +500,7 @@
           <span class="topic-tag tag-formula">공식</span>
         </div>
       </div>
+      <div class="day-mark">📅 Day 3</div>
       <div class="topic-item">
         <input type="checkbox" id="c1-4" onchange="saveAndRefresh(this)">
         <div class="topic-content">
@@ -504,6 +520,7 @@
       <span class="week-arrow" id="arrow-c2">▼</span>
     </div>
     <div class="week-body" id="body-c2">
+      <div class="day-mark">📅 Day 4</div>
       <div class="topic-item">
         <input type="checkbox" id="c2-1" onchange="saveAndRefresh(this)">
         <div class="topic-content">
@@ -512,6 +529,7 @@
           <span class="topic-tag tag-formula">공식</span>
         </div>
       </div>
+      <div class="day-mark">📅 Day 5</div>
       <div class="topic-item">
         <input type="checkbox" id="c2-2" onchange="saveAndRefresh(this)">
         <div class="topic-content">
@@ -526,6 +544,7 @@
           <span class="topic-tag tag-hard">자주출제</span><span class="topic-tag tag-formula">공식</span>
         </div>
       </div>
+      <div class="day-mark">📅 Day 6</div>
       <div class="topic-item">
         <input type="checkbox" id="c2-3" onchange="saveAndRefresh(this)">
         <div class="topic-content">
@@ -553,6 +572,7 @@
       <span class="week-arrow" id="arrow-c3">▼</span>
     </div>
     <div class="week-body" id="body-c3">
+      <div class="day-mark">📅 Day 7</div>
       <div class="topic-item">
         <input type="checkbox" id="c3-1" onchange="saveAndRefresh(this)">
         <div class="topic-content">
@@ -566,6 +586,7 @@
           <span class="topic-tag tag-hard">자주출제</span>
         </div>
       </div>
+      <div class="day-mark">📅 Day 8 (회로이론 마무리)</div>
       <div class="topic-item">
         <input type="checkbox" id="c3-2" onchange="saveAndRefresh(this)">
         <div class="topic-content">
@@ -606,6 +627,7 @@
       <span class="week-arrow" id="arrow-e1">▼</span>
     </div>
     <div class="week-body" id="body-e1">
+      <div class="day-mark">📅 Day 9</div>
       <div class="topic-item">
         <input type="checkbox" id="e1-1" onchange="saveAndRefresh(this)">
         <div class="topic-content">
@@ -614,6 +636,7 @@
           <span class="topic-tag tag-formula">공식</span>
         </div>
       </div>
+      <div class="day-mark">📅 Day 10</div>
       <div class="topic-item">
         <input type="checkbox" id="e1-2" onchange="saveAndRefresh(this)">
         <div class="topic-content">
@@ -622,6 +645,7 @@
           <span class="topic-tag tag-formula">공식</span>
         </div>
       </div>
+      <div class="day-mark">📅 Day 11</div>
       <div class="topic-item">
         <input type="checkbox" id="e1-3" onchange="saveAndRefresh(this)">
         <div class="topic-content">
@@ -653,6 +677,7 @@
       <span class="week-arrow" id="arrow-e2">▼</span>
     </div>
     <div class="week-body" id="body-e2">
+      <div class="day-mark">📅 Day 12</div>
       <div class="topic-item">
         <input type="checkbox" id="e2-1" onchange="saveAndRefresh(this)">
         <div class="topic-content">
@@ -661,6 +686,7 @@
           <span class="topic-tag tag-formula">공식</span>
         </div>
       </div>
+      <div class="day-mark">📅 Day 13</div>
       <div class="topic-item">
         <input type="checkbox" id="e2-2" onchange="saveAndRefresh(this)">
         <div class="topic-content">
@@ -669,6 +695,7 @@
           <span class="topic-tag tag-hard">자주출제</span>
         </div>
       </div>
+      <div class="day-mark">📅 Day 14</div>
       <div class="topic-item">
         <input type="checkbox" id="e2-3" onchange="saveAndRefresh(this)">
         <div class="topic-content">
@@ -692,6 +719,7 @@
       <span class="week-arrow" id="arrow-e3">▼</span>
     </div>
     <div class="week-body" id="body-e3">
+      <div class="day-mark">📅 Day 15</div>
       <div class="topic-item">
         <input type="checkbox" id="e3-1" onchange="saveAndRefresh(this)">
         <div class="topic-content">
@@ -700,6 +728,7 @@
           <span class="topic-tag tag-memo">암기</span>
         </div>
       </div>
+      <div class="day-mark">📅 Day 16 (전자기학 마무리)</div>
       <div class="topic-item">
         <input type="checkbox" id="e3-2" onchange="saveAndRefresh(this)">
         <div class="topic-content">
@@ -732,6 +761,7 @@
       <span class="week-arrow" id="arrow-ct1">▼</span>
     </div>
     <div class="week-body" id="body-ct1">
+      <div class="day-mark">📅 Day 17</div>
       <div class="topic-item">
         <input type="checkbox" id="ct1-1" onchange="saveAndRefresh(this)">
         <div class="topic-content">
@@ -747,6 +777,7 @@
           <span class="topic-tag tag-memo">암기</span><span class="topic-tag tag-hard">자주출제</span>
         </div>
       </div>
+      <div class="day-mark">📅 Day 18</div>
       <div class="topic-item">
         <input type="checkbox" id="ct1-2" onchange="saveAndRefresh(this)">
         <div class="topic-content">
@@ -766,6 +797,7 @@
       <span class="week-arrow" id="arrow-ct2">▼</span>
     </div>
     <div class="week-body" id="body-ct2">
+      <div class="day-mark">📅 Day 19</div>
       <div class="topic-item">
         <input type="checkbox" id="ct2-1" onchange="saveAndRefresh(this)">
         <div class="topic-content">
@@ -774,6 +806,7 @@
           <span class="topic-tag tag-hard">자주출제</span>
         </div>
       </div>
+      <div class="day-mark">📅 Day 20</div>
       <div class="topic-item">
         <input type="checkbox" id="ct2-2" onchange="saveAndRefresh(this)">
         <div class="topic-content">
@@ -797,6 +830,7 @@
       <span class="week-arrow" id="arrow-ct3">▼</span>
     </div>
     <div class="week-body" id="body-ct3">
+      <div class="day-mark">📅 Day 21 (제어공학 마무리)</div>
       <div class="topic-item">
         <input type="checkbox" id="ct3-1" onchange="saveAndRefresh(this)">
         <div class="topic-content">
@@ -845,6 +879,7 @@
       <span class="week-arrow" id="arrow-p1">▼</span>
     </div>
     <div class="week-body" id="body-p1">
+      <div class="day-mark">📅 Day 22</div>
       <div class="topic-item">
         <input type="checkbox" id="p1-1" onchange="saveAndRefresh(this)">
         <div class="topic-content">
@@ -857,6 +892,7 @@
           <span class="topic-tag tag-formula">공식</span><span class="topic-tag tag-hard">자주출제</span>
         </div>
       </div>
+      <div class="day-mark">📅 Day 23</div>
       <div class="topic-item">
         <input type="checkbox" id="p1-2" onchange="saveAndRefresh(this)">
         <div class="topic-content">
@@ -876,6 +912,7 @@
       <span class="week-arrow" id="arrow-p2">▼</span>
     </div>
     <div class="week-body" id="body-p2">
+      <div class="day-mark">📅 Day 24</div>
       <div class="topic-item">
         <input type="checkbox" id="p2-1" onchange="saveAndRefresh(this)">
         <div class="topic-content">
@@ -896,6 +933,7 @@
           <span class="topic-tag tag-hard">자주출제</span>
         </div>
       </div>
+      <div class="day-mark">📅 Day 25 (전력공학 마무리)</div>
       <div class="topic-item">
         <input type="checkbox" id="p2-3" onchange="saveAndRefresh(this)">
         <div class="topic-content">
@@ -928,6 +966,7 @@
       <span class="week-arrow" id="arrow-m1">▼</span>
     </div>
     <div class="week-body" id="body-m1">
+      <div class="day-mark">📅 Day 26</div>
       <div class="topic-item">
         <input type="checkbox" id="m1-1" onchange="saveAndRefresh(this)">
         <div class="topic-content">
@@ -968,6 +1007,7 @@
       <span class="week-arrow" id="arrow-m2">▼</span>
     </div>
     <div class="week-body" id="body-m2">
+      <div class="day-mark">📅 Day 27</div>
       <div class="topic-item">
         <input type="checkbox" id="m2-1" onchange="saveAndRefresh(this)">
         <div class="topic-content">
@@ -1009,6 +1049,7 @@
       <span class="week-arrow" id="arrow-m3">▼</span>
     </div>
     <div class="week-body" id="body-m3">
+      <div class="day-mark">📅 Day 28 (전기기기 마무리)</div>
       <div class="topic-item">
         <input type="checkbox" id="m3-1" onchange="saveAndRefresh(this)">
         <div class="topic-content">
@@ -1177,22 +1218,84 @@
       <span class="week-arrow" id="arrow-ex1">▼</span>
     </div>
     <div class="week-body" id="body-ex1">
-      <div class="topic-item"><input type="checkbox" id="ex-1" onchange="saveAndRefresh(this)">
-        <div class="topic-content"><div class="topic-name">1회전 — 회로이론 완료</div></div></div>
-      <div class="topic-item"><input type="checkbox" id="ex-2" onchange="saveAndRefresh(this)">
-        <div class="topic-content"><div class="topic-name">1회전 — 전기자기학 완료</div></div></div>
-      <div class="topic-item"><input type="checkbox" id="ex-3" onchange="saveAndRefresh(this)">
-        <div class="topic-content"><div class="topic-name">1회전 — 제어공학 완료</div></div></div>
-      <div class="topic-item"><input type="checkbox" id="ex-4" onchange="saveAndRefresh(this)">
-        <div class="topic-content"><div class="topic-name">1회전 — 전력공학 완료</div></div></div>
-      <div class="topic-item"><input type="checkbox" id="ex-5" onchange="saveAndRefresh(this)">
-        <div class="topic-content"><div class="topic-name">1회전 — 전기기기 완료</div></div></div>
-      <div class="topic-item"><input type="checkbox" id="ex-6" onchange="saveAndRefresh(this)">
-        <div class="topic-content"><div class="topic-name">1회전 — KEC 완료</div></div></div>
-      <div class="topic-item"><input type="checkbox" id="ex-7" onchange="saveAndRefresh(this)">
-        <div class="topic-content"><div class="topic-name">2회전 — 전 과목 오답 반복 완료</div></div></div>
-      <div class="topic-item"><input type="checkbox" id="ex-8" onchange="saveAndRefresh(this)">
-        <div class="topic-content"><div class="topic-name">3회전 — 실전 모의고사 완료</div></div></div>
+      <div class="day-mark">📅 Day 30</div>
+      <div class="topic-item"><input type="checkbox" id="ex-30" onchange="saveAndRefresh(this)">
+        <div class="topic-content"><div class="topic-name">1회전 — 회로이론 최근 3개년</div>
+        <div class="topic-detail">comcbt.com 연도별 풀기 → 오답 즉시 사진 업로드</div></div></div>
+
+      <div class="day-mark">📅 Day 31</div>
+      <div class="topic-item"><input type="checkbox" id="ex-31" onchange="saveAndRefresh(this)">
+        <div class="topic-content"><div class="topic-name">1회전 — 전자기학 최근 3개년</div></div></div>
+
+      <div class="day-mark">📅 Day 32</div>
+      <div class="topic-item"><input type="checkbox" id="ex-32" onchange="saveAndRefresh(this)">
+        <div class="topic-content"><div class="topic-name">1회전 — 제어공학 최근 3개년</div></div></div>
+
+      <div class="day-mark">📅 Day 33</div>
+      <div class="topic-item"><input type="checkbox" id="ex-33" onchange="saveAndRefresh(this)">
+        <div class="topic-content"><div class="topic-name">1회전 — 전력공학 최근 3개년</div></div></div>
+
+      <div class="day-mark">📅 Day 34</div>
+      <div class="topic-item"><input type="checkbox" id="ex-34" onchange="saveAndRefresh(this)">
+        <div class="topic-content"><div class="topic-name">1회전 — 전기기기 최근 3개년</div></div></div>
+
+      <div class="day-mark">📅 Day 35</div>
+      <div class="topic-item"><input type="checkbox" id="ex-35" onchange="saveAndRefresh(this)">
+        <div class="topic-content"><div class="topic-name">1회전 — KEC 최근 3개년</div></div></div>
+
+      <div class="day-mark">📅 Day 36</div>
+      <div class="topic-item"><input type="checkbox" id="ex-36" onchange="saveAndRefresh(this)">
+        <div class="topic-content"><div class="topic-name">1회전 오답노트 정리 ① — 40점 미만 과목 집중</div></div></div>
+
+      <div class="day-mark">📅 Day 37 (1회전 마무리)</div>
+      <div class="topic-item"><input type="checkbox" id="ex-37" onchange="saveAndRefresh(this)">
+        <div class="topic-content"><div class="topic-name">1회전 오답노트 정리 ② — 40점 미만 과목 집중</div></div></div>
+
+      <div class="day-mark">📅 Day 38</div>
+      <div class="topic-item"><input type="checkbox" id="ex-38" onchange="saveAndRefresh(this)">
+        <div class="topic-content"><div class="topic-name">2회전 — 회로이론·전자기학 오답 재풀이</div>
+        <div class="topic-detail">범위 4~5개년으로 확장</div></div></div>
+
+      <div class="day-mark">📅 Day 39</div>
+      <div class="topic-item"><input type="checkbox" id="ex-39" onchange="saveAndRefresh(this)">
+        <div class="topic-content"><div class="topic-name">2회전 — 제어공학·전력공학 오답 재풀이</div></div></div>
+
+      <div class="day-mark">📅 Day 40</div>
+      <div class="topic-item"><input type="checkbox" id="ex-40" onchange="saveAndRefresh(this)">
+        <div class="topic-content"><div class="topic-name">2회전 — 전기기기·KEC 오답 재풀이</div></div></div>
+
+      <div class="day-mark">📅 Day 41</div>
+      <div class="topic-item"><input type="checkbox" id="ex-41" onchange="saveAndRefresh(this)">
+        <div class="topic-content"><div class="topic-name">2회전 — 확장범위 신규문제 풀이 ①</div></div></div>
+
+      <div class="day-mark">📅 Day 42</div>
+      <div class="topic-item"><input type="checkbox" id="ex-42" onchange="saveAndRefresh(this)">
+        <div class="topic-content"><div class="topic-name">2회전 — 확장범위 신규문제 풀이 ②</div></div></div>
+
+      <div class="day-mark">📅 Day 43</div>
+      <div class="topic-item"><input type="checkbox" id="ex-43" onchange="saveAndRefresh(this)">
+        <div class="topic-content"><div class="topic-name">2회전 — 반복오답(별표) 문제만 재확인</div></div></div>
+
+      <div class="day-mark">📅 Day 44 (2회전 마무리)</div>
+      <div class="topic-item"><input type="checkbox" id="ex-44" onchange="saveAndRefresh(this)">
+        <div class="topic-content"><div class="topic-name">2회전 — 전 과목 총점검</div></div></div>
+
+      <div class="day-mark">📅 Day 45</div>
+      <div class="topic-item"><input type="checkbox" id="ex-45" onchange="saveAndRefresh(this)">
+        <div class="topic-content"><div class="topic-name">3회전 — 실전 모의고사 ①</div>
+        <div class="topic-detail">시간 맞춰 전 과목 (2시간30분) 실전처럼</div></div></div>
+
+      <div class="day-mark">📅 Day 46</div>
+      <div class="topic-item"><input type="checkbox" id="ex-46" onchange="saveAndRefresh(this)">
+        <div class="topic-content"><div class="topic-name">3회전 — 오답노트 총복습 (별표 위주)</div></div></div>
+
+      <div class="day-mark">📅 Day 47</div>
+      <div class="topic-item"><input type="checkbox" id="ex-47" onchange="saveAndRefresh(this)">
+        <div class="topic-content"><div class="topic-name">3회전 — 실전 모의고사 ②</div></div></div>
+
+      <div class="day-mark">📅 Day 48 (최종 마무리)</div>
+      <div class="topic-item"><input type="checkbox" id="ex-48" onchange="saveAndRefresh(this)">
+        <div class="topic-content"><div class="topic-name">KEC 숫자·공식 최종 암기 확인 + 전체 마무리</div></div></div>
     </div>
   </div>
 </div>
@@ -1314,4 +1417,3 @@
 </script>
 </body>
 </html>
-
