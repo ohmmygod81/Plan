@@ -6,17 +6,17 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="전기기사플랜">
-<meta name="theme-color" content="#0d1117">
+<meta name="theme-color" content="#1c2128">
 <title>전기기사 49일 플랜</title>
 <style>
   :root {
     /* iPhone 15 Pro 실측값 기준 fallback (Dynamic Island 59pt / Home Indicator 34pt) */
     --safe-top: env(safe-area-inset-top, 59px);
     --safe-bottom: env(safe-area-inset-bottom, 34px);
-    --bg: #0d1117;
-    --surface: #161b22;
-    --border: #30363d;
-    --muted: #21262d;
+    --bg: #1c2128;
+    --surface: #262c35;
+    --border: #3d444d;
+    --muted: #2d333b;
     --text: #e6edf3;
     --text2: #c9d1d9;
     --text3: #8b949e;
@@ -405,6 +405,56 @@
   .nav-item.active .nav-icon { filter: brightness(1.4); }
 
   .footer { text-align: center; padding: 20px 0 0; font-size: 12px; color: var(--text4); }
+
+  /* ── 일일 할일 서브아이템 ── */
+  .task-sub {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 8px 0 8px 12px;
+    border-bottom: 1px solid rgba(33,38,45,0.6);
+  }
+  .task-sub:last-child { border-bottom: none; }
+  .task-sub input[type="checkbox"] {
+    width: 18px; height: 18px;
+    accent-color: var(--purple);
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .task-sub-text { font-size: 13px; color: var(--text3); line-height: 1.5; flex:1; }
+  .task-sub input:checked ~ .task-sub-text { text-decoration: line-through; color: var(--text4); }
+
+  /* ── 일자 마커 강화 ── */
+  .day-mark {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--blue);
+    background: #0d1e30;
+    border: 1px solid #1f3d5c;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 12px;
+    border-radius: 9px;
+    margin: 14px 0 4px;
+  }
+  .day-mark .day-date {
+    margin-left: auto;
+    font-size: 11px;
+    color: var(--text4);
+    font-weight: 400;
+  }
+  .quota-badge {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 8px;
+    background: #1e3a2a;
+    color: var(--green);
+    margin-left: 6px;
+  }
+
 </style>
 </head>
 <body>
@@ -441,10 +491,10 @@
 <!-- 탭 (수평 스크롤) -->
 <div class="tabs" id="tabBar">
   <div class="tab active" onclick="showTab('circuit',this)">⚡ 회로이론</div>
-  <div class="tab" onclick="showTab('emag',this)">🧲 전자기학</div>
   <div class="tab" onclick="showTab('control',this)">🎛️ 제어공학</div>
-  <div class="tab" onclick="showTab('power',this)">🏭 전력공학</div>
+  <div class="tab" onclick="showTab('emag',this)">🧲 전자기학</div>
   <div class="tab" onclick="showTab('machine',this)">⚙️ 전기기기</div>
+  <div class="tab" onclick="showTab('power',this)">🏭 전력공학</div>
   <div class="tab" onclick="showTab('kec',this)">📋 KEC</div>
   <div class="tab" onclick="showTab('exam',this)">📝 기출풀이</div>
 </div>
@@ -458,57 +508,76 @@
       <span class="subject-period-badge">Day 1~8</span>
     </div>
     <div class="subject-desc">계산 문제 비중 최고. 공식 암기 → 유형 패턴화 순서로 접근</div>
-    <div class="subject-strategy">💡 이론책 읽지 말고 기출에 나온 공식만 뽑아서 외우기. 이미 시작함!</div>
+    <div class="subject-strategy">💡 이론책 정독 ❌ — 기출 공식만 뽑아 외우기. 매일 기출 5문제 필수!</div>
   </div>
 
   <div class="week-section">
     <div class="week-header" onclick="toggleWeek('c1')">
       <span class="week-badge current">진행중</span>
-      <span class="week-title">1단계 — 직류회로 · 기초</span>
-      <span class="week-days">Day 1~3</span>
+      <span class="week-title">1단계 — 직류회로 기초</span>
+      <span class="week-days">Day 1~4</span>
       <span class="week-arrow" id="arrow-c1">▼</span>
     </div>
     <div class="week-body" id="body-c1">
-      <div class="day-mark">📅 Day 1</div>
+
+      <div class="day-mark">📅 Day 1 <span class="day-date">07/09</span><span class="quota-badge">기출 5문제</span></div>
       <div class="topic-item">
         <input type="checkbox" id="c1-1" onchange="saveAndRefresh(this)">
         <div class="topic-content">
           <div class="topic-name">옴의 법칙 · KVL · KCL</div>
-          <div class="topic-detail">KVL: 폐회로 전압합=0 / KCL: 분기점 전류합=0</div>
+          <div class="formula-box">
+            <div class="f-title">📐 핵심공식</div>
+            <div class="formula">V=IR / KVL: 폐회로 전압합=0 / KCL: 분기점 전류합=0</div>
+            <div class="formula">도체저항: R=ρL/A [Ω] (ρ:고유저항, L:길이, A:단면적)</div>
+          </div>
           <span class="topic-tag tag-formula">공식</span>
         </div>
       </div>
-      <div class="day-mark">📅 Day 2</div>
+      <div class="task-sub"><input type="checkbox" id="c1-1a" onchange="saveAndRefresh(this)"><span class="task-sub-text">V=IR, I=V/R, R=V/I 문제 5개 풀기 (comcbt)</span></div>
+
+      <div class="day-mark">📅 Day 2 <span class="day-date">07/10</span><span class="quota-badge">기출 5문제</span></div>
       <div class="topic-item">
         <input type="checkbox" id="c1-2" onchange="saveAndRefresh(this)">
         <div class="topic-content">
-          <div class="topic-name">저항 직렬·병렬 합성</div>
+          <div class="topic-name">저항 직렬·병렬 합성 / 전류·전압 분배</div>
           <div class="formula-box">
             <div class="f-title">📐 핵심공식</div>
-            <div class="formula">직렬: R = R₁+R₂</div>
-            <div class="formula">병렬: R = R₁R₂/(R₁+R₂)</div>
-            <div class="formula">전류분배: I₁ = I×R₂/(R₁+R₂)</div>
+            <div class="formula">직렬: R합 = R₁+R₂ / 전압분배: V₁=V×R₁/(R₁+R₂)</div>
+            <div class="formula">병렬: R합 = R₁R₂/(R₁+R₂) / 전류분배: I₁=I×R₂/(R₁+R₂)</div>
           </div>
           <span class="topic-tag tag-formula">공식</span><span class="topic-tag tag-calc">계산</span>
         </div>
       </div>
+      <div class="task-sub"><input type="checkbox" id="c1-2a" onchange="saveAndRefresh(this)"><span class="task-sub-text">직병렬 합성저항 계산 기출 5문제</span></div>
+      <div class="task-sub"><input type="checkbox" id="c1-2b" onchange="saveAndRefresh(this)"><span class="task-sub-text">전류분배·전압분배 공식 손으로 3번 써보기</span></div>
+
+      <div class="day-mark">📅 Day 3 <span class="day-date">07/11</span><span class="quota-badge">기출 5문제</span></div>
       <div class="topic-item">
         <input type="checkbox" id="c1-3" onchange="saveAndRefresh(this)">
         <div class="topic-content">
-          <div class="topic-name">전력 · 전력량</div>
-          <div class="topic-detail">P = VI = I²R = V²/R (W) / W = Pt (J)</div>
-          <span class="topic-tag tag-formula">공식</span>
+          <div class="topic-name">전력·전력량 / 밀만의 정리</div>
+          <div class="formula-box">
+            <div class="f-title">📐 핵심공식 — 밀만정리 자주출제!</div>
+            <div class="formula">P=VI=I²R=V²/R [W] / W=Pt [J] (1Wh=3600J)</div>
+            <div class="formula">밀만의 정리: V0 = (V1/R1+V2/R2+…)/(1/R1+1/R2+…)</div>
+          </div>
+          <span class="topic-tag tag-formula">공식</span><span class="topic-tag tag-memo">암기</span>
         </div>
       </div>
-      <div class="day-mark">📅 Day 3</div>
+      <div class="task-sub"><input type="checkbox" id="c1-3a" onchange="saveAndRefresh(this)"><span class="task-sub-text">전력 P 계산 기출 3문제</span></div>
+      <div class="task-sub"><input type="checkbox" id="c1-3b" onchange="saveAndRefresh(this)"><span class="task-sub-text">밀만의 정리 적용 기출 2문제</span></div>
+
+      <div class="day-mark">📅 Day 4 <span class="day-date">07/12</span><span class="quota-badge">기출 5문제</span></div>
       <div class="topic-item">
         <input type="checkbox" id="c1-4" onchange="saveAndRefresh(this)">
         <div class="topic-content">
-          <div class="topic-name">중첩의 원리 · 테브난/노턴 정리</div>
-          <div class="topic-detail">테브난: 개방전압+등가저항 / 노턴: 단락전류</div>
+          <div class="topic-name">중첩의 원리 · 테브난 / 노턴 정리</div>
+          <div class="topic-detail">테브난: 개방전압 Vth + 등가저항 Rth / 노턴: 단락전류 In</div>
           <span class="topic-tag tag-hard">자주출제</span>
         </div>
       </div>
+      <div class="task-sub"><input type="checkbox" id="c1-4a" onchange="saveAndRefresh(this)"><span class="task-sub-text">테브난 등가회로 변환 기출 3문제</span></div>
+      <div class="task-sub"><input type="checkbox" id="c1-4b" onchange="saveAndRefresh(this)"><span class="task-sub-text">중첩의 원리 전류 계산 기출 2문제</span></div>
     </div>
   </div>
 
@@ -516,91 +585,248 @@
     <div class="week-header" onclick="toggleWeek('c2')">
       <span class="week-badge">예정</span>
       <span class="week-title">2단계 — 교류회로 · RLC</span>
-      <span class="week-days">Day 4~6</span>
+      <span class="week-days">Day 5~7</span>
       <span class="week-arrow" id="arrow-c2">▼</span>
     </div>
     <div class="week-body" id="body-c2">
-      <div class="day-mark">📅 Day 4</div>
+
+      <div class="day-mark">📅 Day 5 <span class="day-date">07/13</span><span class="quota-badge">기출 5문제</span></div>
       <div class="topic-item">
         <input type="checkbox" id="c2-1" onchange="saveAndRefresh(this)">
         <div class="topic-content">
-          <div class="topic-name">정현파 교류 · 페이저</div>
-          <div class="topic-detail">순시값 v=Vm sin(ωt+θ) / 실효값 V=Vm/√2</div>
-          <span class="topic-tag tag-formula">공식</span>
+          <div class="topic-name">정현파 교류 · 페이저 · 실효값</div>
+          <div class="formula-box">
+            <div class="f-title">📐 핵심공식</div>
+            <div class="formula">순시값 v=Vm sin(ωt+θ) / 실효값 V=Vm/√2≈0.707Vm / 평균값 Vav=2Vm/π≈0.637Vm</div>
+            <div class="formula">파고율=최대값/실효값(sin파=√2) / 파형률=실효값/평균값(sin파≈1.11)</div>
+          </div>
+          <span class="topic-tag tag-formula">공식</span><span class="topic-tag tag-memo">암기</span>
         </div>
       </div>
-      <div class="day-mark">📅 Day 5</div>
+      <div class="task-sub"><input type="checkbox" id="c2-1a" onchange="saveAndRefresh(this)"><span class="task-sub-text">실효값·최대값 변환 기출 3문제</span></div>
+      <div class="task-sub"><input type="checkbox" id="c2-1b" onchange="saveAndRefresh(this)"><span class="task-sub-text">위상차·위상관계 기출 2문제</span></div>
+
+      <div class="day-mark">📅 Day 6 <span class="day-date">07/14</span><span class="quota-badge">기출 5문제</span></div>
       <div class="topic-item">
         <input type="checkbox" id="c2-2" onchange="saveAndRefresh(this)">
         <div class="topic-content">
-          <div class="topic-name">R, L, C 임피던스 · 리액턴스</div>
+          <div class="topic-name">R·L·C 임피던스 / 어드미턴스</div>
           <div class="formula-box">
             <div class="f-title">📐 핵심공식</div>
-            <div class="formula">XL = ωL = 2πfL</div>
-            <div class="formula">XC = 1/ωC = 1/2πfC</div>
-            <div class="formula">Z = R + j(XL - XC)</div>
-            <div class="formula">|Z| = √(R² + (XL-XC)²)</div>
+            <div class="formula">XL=ωL=2πfL / XC=1/ωC / Z=R+j(XL-XC)</div>
+            <div class="formula">|Z|=√(R²+(XL-XC)²) / Y=1/Z=G+jB</div>
           </div>
-          <span class="topic-tag tag-hard">자주출제</span><span class="topic-tag tag-formula">공식</span>
-        </div>
-      </div>
-      <div class="day-mark">📅 Day 6</div>
-      <div class="topic-item">
-        <input type="checkbox" id="c2-3" onchange="saveAndRefresh(this)">
-        <div class="topic-content">
-          <div class="topic-name">RLC 직렬·병렬 공진</div>
-          <div class="topic-detail">공진조건: XL=XC → ω₀=1/√LC → f₀=1/(2π√LC)</div>
           <span class="topic-tag tag-hard">자주출제</span><span class="topic-tag tag-calc">계산</span>
         </div>
       </div>
+      <div class="task-sub"><input type="checkbox" id="c2-2a" onchange="saveAndRefresh(this)"><span class="task-sub-text">임피던스 크기·위상각 계산 기출 3문제</span></div>
+      <div class="task-sub"><input type="checkbox" id="c2-2b" onchange="saveAndRefresh(this)"><span class="task-sub-text">XL, XC 주파수 변화에 따른 변화 문제 2문제</span></div>
+
+      <div class="day-mark">📅 Day 7 <span class="day-date">07/15</span><span class="quota-badge">기출 5문제</span></div>
       <div class="topic-item">
-        <input type="checkbox" id="c2-4" onchange="saveAndRefresh(this)">
+        <input type="checkbox" id="c2-3" onchange="saveAndRefresh(this)">
         <div class="topic-content">
-          <div class="topic-name">교류 전력 · 역률</div>
-          <div class="topic-detail">P=VIcosθ(유효) / Q=VIsinθ(무효) / S=VI(피상) / cosθ=P/S</div>
-          <span class="topic-tag tag-formula">공식</span><span class="topic-tag tag-hard">자주출제</span>
+          <div class="topic-name">RLC 공진 · 교류 전력 · 역률</div>
+          <div class="topic-detail">공진: XL=XC → f₀=1/(2π√LC) / P=VIcosθ / cosθ=P/S / Q=VIsinθ</div>
+          <span class="topic-tag tag-hard">자주출제</span><span class="topic-tag tag-formula">공식</span>
         </div>
       </div>
+      <div class="task-sub"><input type="checkbox" id="c2-3a" onchange="saveAndRefresh(this)"><span class="task-sub-text">공진주파수 계산 기출 2문제</span></div>
+      <div class="task-sub"><input type="checkbox" id="c2-3b" onchange="saveAndRefresh(this)"><span class="task-sub-text">유효전력·무효전력·역률 계산 기출 3문제</span></div>
     </div>
   </div>
 
   <div class="week-section">
     <div class="week-header" onclick="toggleWeek('c3')">
       <span class="week-badge">예정</span>
-      <span class="week-title">3단계 — 3상회로 · 과도현상</span>
-      <span class="week-days">Day 7~8</span>
+      <span class="week-title">3단계 — 3상회로·과도현상·마무리</span>
+      <span class="week-days">Day 8</span>
       <span class="week-arrow" id="arrow-c3">▼</span>
     </div>
     <div class="week-body" id="body-c3">
-      <div class="day-mark">📅 Day 7</div>
+
+      <div class="day-mark">📅 Day 8 (회로이론 마무리) <span class="day-date">07/16</span><span class="quota-badge">기출 10문제</span></div>
       <div class="topic-item">
         <input type="checkbox" id="c3-1" onchange="saveAndRefresh(this)">
         <div class="topic-content">
-          <div class="topic-name">3상 전력 · Y-Δ 변환</div>
+          <div class="topic-name">3상회로 Y-Δ 변환 · 3상 전력</div>
           <div class="formula-box">
-            <div class="f-title">📐 3상 핵심</div>
-            <div class="formula">Y: VL=√3Vp, IL=Ip</div>
-            <div class="formula">Δ: VL=Vp, IL=√3Ip</div>
-            <div class="formula">P = √3×VL×IL×cosθ</div>
+            <div class="f-title">📐 핵심공식</div>
+            <div class="formula">Y결선: VL=√3Vp, IL=Ip / Δ결선: VL=Vp, IL=√3Ip</div>
+            <div class="formula">3상 전력: P=√3×VL×IL×cosθ = 3×Vp×Ip×cosθ</div>
           </div>
           <span class="topic-tag tag-hard">자주출제</span>
         </div>
       </div>
-      <div class="day-mark">📅 Day 8 (회로이론 마무리)</div>
+      <div class="task-sub"><input type="checkbox" id="c3-1a" onchange="saveAndRefresh(this)"><span class="task-sub-text">Y↔Δ 변환 전압·전류 계산 기출 3문제</span></div>
       <div class="topic-item">
         <input type="checkbox" id="c3-2" onchange="saveAndRefresh(this)">
         <div class="topic-content">
-          <div class="topic-name">과도현상 · 시정수</div>
-          <div class="topic-detail">RL: τ=L/R / RC: τ=RC</div>
+          <div class="topic-name">과도현상 · 시정수 τ</div>
+          <div class="formula-box">
+            <div class="f-title">📐 핵심공식</div>
+            <div class="formula">RL회로: τ=L/R / RC회로: τ=RC / 5τ 후 정상상태 도달(약 99.3%)</div>
+            <div class="formula">RL 전류: i(t)=I(1-e^(-t/τ)) / RC 전압: v(t)=V(1-e^(-t/τ))</div>
+          </div>
           <span class="topic-tag tag-formula">공식</span>
         </div>
       </div>
+      <div class="task-sub"><input type="checkbox" id="c3-2a" onchange="saveAndRefresh(this)"><span class="task-sub-text">시정수 계산 기출 2문제</span></div>
       <div class="topic-item">
         <input type="checkbox" id="c3-3" onchange="saveAndRefresh(this)">
         <div class="topic-content">
-          <div class="topic-name">라플라스 변환 기초 (회로 적용)</div>
-          <div class="topic-detail">기본 변환쌍 암기 후 회로에 적용하는 유형</div>
-          <span class="topic-tag tag-hard">어려움</span>
+          <div class="topic-name">회로이론 전체 기출 10문제 풀기</div>
+          <div class="topic-detail">comcbt.com → 회로이론 최근 1개년 / 틀린 거 오답노트 업로드</div>
+          <span class="topic-tag tag-hard">총정리</span>
+        </div>
+      </div>
+      <div class="task-sub"><input type="checkbox" id="c3-3a" onchange="saveAndRefresh(this)"><span class="task-sub-text">틀린 문제 사진 찍어서 오답노트 채널 업로드</span></div>
+      <div class="task-sub"><input type="checkbox" id="c3-3b" onchange="saveAndRefresh(this)"><span class="task-sub-text">공식 요약노트 손으로 정리 (A4 1장)</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 제어공학 ===== -->
+<div class="subject-panel" id="panel-control">
+  <div class="subject-header">
+    <div class="subject-title-row">
+      <span class="subject-icon">🎛️</span>
+      <span class="subject-name-big">제어공학</span>
+      <span class="subject-period-badge">Day 9~13</span>
+    </div>
+    <div class="subject-desc">라플라스·블록선도가 핵심. 패턴이 반복되므로 유형 파악이 관건</div>
+    <div class="subject-strategy">💡 변환표 통째 암기 → 전달함수 → 블록선도 순서. 5일 집중!</div>
+  </div>
+
+  <div class="week-section">
+    <div class="week-header" onclick="toggleWeek('ct1')">
+      <span class="week-badge">예정</span>
+      <span class="week-title">라플라스 변환 · 역변환</span>
+      <span class="week-days">Day 9~10</span>
+      <span class="week-arrow" id="arrow-ct1">▼</span>
+    </div>
+    <div class="week-body" id="body-ct1">
+
+      <div class="day-mark">📅 Day 9 <span class="day-date">07/17</span><span class="quota-badge">기출 5문제</span></div>
+      <div class="topic-item">
+        <input type="checkbox" id="ct1-1" onchange="saveAndRefresh(this)">
+        <div class="topic-content">
+          <div class="topic-name">기본 라플라스 변환쌍 완전 암기</div>
+          <div class="formula-box">
+            <div class="f-title">📐 반드시 외울 것</div>
+            <div class="formula">δ(t) → 1 / u(t)=1 → 1/s</div>
+            <div class="formula">t → 1/s² / t² → 2/s³</div>
+            <div class="formula">e^(-at) → 1/(s+a)</div>
+            <div class="formula">sinωt → ω/(s²+ω²)</div>
+            <div class="formula">cosωt → s/(s²+ω²)</div>
+            <div class="formula">te^(-at) → 1/(s+a)²</div>
+          </div>
+          <span class="topic-tag tag-memo">암기</span><span class="topic-tag tag-hard">자주출제</span>
+        </div>
+      </div>
+      <div class="task-sub"><input type="checkbox" id="ct1-1a" onchange="saveAndRefresh(this)"><span class="task-sub-text">변환쌍 표 손으로 3번 쓰기 (보지 않고)</span></div>
+      <div class="task-sub"><input type="checkbox" id="ct1-1b" onchange="saveAndRefresh(this)"><span class="task-sub-text">라플라스 변환 기출 5문제</span></div>
+
+      <div class="day-mark">📅 Day 10 <span class="day-date">07/18</span><span class="quota-badge">기출 5문제</span></div>
+      <div class="topic-item">
+        <input type="checkbox" id="ct1-2" onchange="saveAndRefresh(this)">
+        <div class="topic-content">
+          <div class="topic-name">초기값·최종값 정리 / 부분분수 분해</div>
+          <div class="formula-box">
+            <div class="f-title">📐 핵심공식</div>
+            <div class="formula">초기값: lim(s→∞)sF(s) / 최종값: lim(s→0)sF(s)</div>
+            <div class="formula">헤비사이드 전개법(부분분수) / 시간추이정리: f(t-a)u(t-a) → e^(-as)F(s)</div>
+          </div>
+          <span class="topic-tag tag-hard">자주출제</span>
+        </div>
+      </div>
+      <div class="task-sub"><input type="checkbox" id="ct1-2a" onchange="saveAndRefresh(this)"><span class="task-sub-text">초기값·최종값 구하기 기출 3문제</span></div>
+      <div class="task-sub"><input type="checkbox" id="ct1-2b" onchange="saveAndRefresh(this)"><span class="task-sub-text">역라플라스 변환 (부분분수 분해) 기출 2문제</span></div>
+    </div>
+  </div>
+
+  <div class="week-section">
+    <div class="week-header" onclick="toggleWeek('ct2')">
+      <span class="week-badge">예정</span>
+      <span class="week-title">전달함수 · 블록선도</span>
+      <span class="week-days">Day 11~12</span>
+      <span class="week-arrow" id="arrow-ct2">▼</span>
+    </div>
+    <div class="week-body" id="body-ct2">
+
+      <div class="day-mark">📅 Day 11 <span class="day-date">07/19</span><span class="quota-badge">기출 5문제</span></div>
+      <div class="topic-item">
+        <input type="checkbox" id="ct2-1" onchange="saveAndRefresh(this)">
+        <div class="topic-content">
+          <div class="topic-name">전달함수 G(s) / RC·RL 회로 전달함수</div>
+          <div class="topic-detail">G(s)=출력/입력(라플라스) / 초기조건=0 / RC: G=1/(RCs+1) / RL: G=RLs/(RLs+R)</div>
+          <span class="topic-tag tag-hard">자주출제</span>
+        </div>
+      </div>
+      <div class="task-sub"><input type="checkbox" id="ct2-1a" onchange="saveAndRefresh(this)"><span class="task-sub-text">RC 회로 전달함수 G(s) 구하기 기출 3문제</span></div>
+      <div class="task-sub"><input type="checkbox" id="ct2-1b" onchange="saveAndRefresh(this)"><span class="task-sub-text">RLC 회로 전달함수 기출 2문제</span></div>
+
+      <div class="day-mark">📅 Day 12 <span class="day-date">07/20</span><span class="quota-badge">기출 5문제</span></div>
+      <div class="topic-item">
+        <input type="checkbox" id="ct2-2" onchange="saveAndRefresh(this)">
+        <div class="topic-content">
+          <div class="topic-name">블록선도 단순화 · 피드백 공식 · 신호흐름선도</div>
+          <div class="formula-box">
+            <div class="f-title">📐 핵심공식 (가장 많이 출제!)</div>
+            <div class="formula">직렬연결: G = G₁×G₂</div>
+            <div class="formula">병렬연결: G = G₁±G₂</div>
+            <div class="formula">부피드백: C/R = G/(1+GH)</div>
+            <div class="formula">정피드백: C/R = G/(1-GH)</div>
+          </div>
+          <span class="topic-tag tag-hard">자주출제</span>
+        </div>
+      </div>
+      <div class="task-sub"><input type="checkbox" id="ct2-2a" onchange="saveAndRefresh(this)"><span class="task-sub-text">피드백 전달함수 C/R 계산 기출 3문제</span></div>
+      <div class="task-sub"><input type="checkbox" id="ct2-2b" onchange="saveAndRefresh(this)"><span class="task-sub-text">블록선도 단순화 기출 2문제</span></div>
+    </div>
+  </div>
+
+  <div class="week-section">
+    <div class="week-header" onclick="toggleWeek('ct3')">
+      <span class="week-badge">예정</span>
+      <span class="week-title">시간응답 · 안정도 · 마무리</span>
+      <span class="week-days">Day 13</span>
+      <span class="week-arrow" id="arrow-ct3">▼</span>
+    </div>
+    <div class="week-body" id="body-ct3">
+
+      <div class="day-mark">📅 Day 13 (제어공학 마무리) <span class="day-date">07/21</span><span class="quota-badge">기출 10문제</span></div>
+      <div class="topic-item">
+        <input type="checkbox" id="ct3-1" onchange="saveAndRefresh(this)">
+        <div class="topic-content">
+          <div class="topic-name">2차 시스템 특성 · 감쇠비 ζ · 자연주파수 ωn</div>
+          <div class="formula-box">
+            <div class="f-title">📐 핵심공식</div>
+            <div class="formula">특성방정식: s²+2ζωns+ωn²=0</div>
+            <div class="formula">ζ&lt;1: 부족감쇠(진동, 오버슈트 발생) / ζ=1: 임계감쇠 / ζ&gt;1: 과감쇠(느림)</div>
+          </div>
+          <span class="topic-tag tag-memo">암기</span>
+        </div>
+      </div>
+      <div class="topic-item">
+        <input type="checkbox" id="ct3-2" onchange="saveAndRefresh(this)">
+        <div class="topic-content">
+          <div class="topic-name">루스-후르비츠 안정도 판별</div>
+          <div class="formula-box">
+            <div class="f-title">📐 핵심공식</div>
+            <div class="formula">특성방정식 a0sⁿ+a1sⁿ⁻¹+…+an=0 → 1행: a0,a2,a4… / 2행: a1,a3,a5…</div>
+            <div class="formula">① 계수 모두 같은 부호(양수) ② 루스 배열 1열 부호변화 없음 → 안정</div>
+          </div>
+          <span class="topic-tag tag-hard">자주출제</span>
+        </div>
+      </div>
+      <div class="task-sub"><input type="checkbox" id="ct3-2a" onchange="saveAndRefresh(this)"><span class="task-sub-text">루스 행렬 작성 후 안정도 판별 기출 3문제</span></div>
+      <div class="topic-item">
+        <input type="checkbox" id="ct3-3" onchange="saveAndRefresh(this)">
+        <div class="topic-content">
+          <div class="topic-name">제어공학 전체 기출 10문제 + 오답 정리</div>
+          <div class="topic-detail">보드선도 개념(이득여유·위상여유) 포함 / 틀린 거 오답노트</div>
+          <span class="topic-tag tag-hard">총정리</span>
         </div>
       </div>
     </div>
@@ -613,59 +839,86 @@
     <div class="subject-title-row">
       <span class="subject-icon">🧲</span>
       <span class="subject-name-big">전기자기학</span>
-      <span class="subject-period-badge">Day 9~16</span>
+      <span class="subject-period-badge">Day 14~21</span>
     </div>
-    <div class="subject-desc">공식 암기 비중 가장 높음. 깊이 파지 말고 공식만 외워서 대입</div>
-    <div class="subject-strategy">💡 유도하려 하지 말것. 공식 보고 대입하는 패턴만 익히면 됨</div>
+    <div class="subject-desc">공식 암기 비중 가장 높음. 유도하려 하지 말고 공식 패턴만 외우기</div>
+    <div class="subject-strategy">💡 공식 외우고 → 숫자 대입 → 끝. 이 과목 이해는 나중에!</div>
   </div>
 
   <div class="week-section">
     <div class="week-header" onclick="toggleWeek('e1')">
       <span class="week-badge">예정</span>
       <span class="week-title">정전계</span>
-      <span class="week-days">Day 9~11</span>
+      <span class="week-days">Day 14~17</span>
       <span class="week-arrow" id="arrow-e1">▼</span>
     </div>
     <div class="week-body" id="body-e1">
-      <div class="day-mark">📅 Day 9</div>
+
+      <div class="day-mark">📅 Day 14 <span class="day-date">07/22</span><span class="quota-badge">기출 5문제</span></div>
       <div class="topic-item">
         <input type="checkbox" id="e1-1" onchange="saveAndRefresh(this)">
         <div class="topic-content">
-          <div class="topic-name">쿨롱의 법칙 · 전계 E</div>
-          <div class="topic-detail">F = Q₁Q₂/(4πεr²) / E = Q/(4πεr²)</div>
+          <div class="topic-name">쿨롱의 법칙 · 전계 E · 전기력선</div>
+          <div class="formula-box">
+            <div class="f-title">📐 핵심공식</div>
+            <div class="formula">F = Q₁Q₂/(4πε₀r²) [N]</div>
+            <div class="formula">E = Q/(4πε₀r²) = F/Q [V/m]</div>
+            <div class="formula">ε₀ = 8.854×10⁻¹² [F/m]</div>
+          </div>
           <span class="topic-tag tag-formula">공식</span>
         </div>
       </div>
-      <div class="day-mark">📅 Day 10</div>
+      <div class="task-sub"><input type="checkbox" id="e1-1a" onchange="saveAndRefresh(this)"><span class="task-sub-text">두 점전하 사이 힘 F 계산 기출 3문제</span></div>
+      <div class="task-sub"><input type="checkbox" id="e1-1b" onchange="saveAndRefresh(this)"><span class="task-sub-text">전계 E 세기 계산 기출 2문제</span></div>
+
+      <div class="day-mark">📅 Day 15 <span class="day-date">07/23</span><span class="quota-badge">기출 5문제</span></div>
       <div class="topic-item">
         <input type="checkbox" id="e1-2" onchange="saveAndRefresh(this)">
         <div class="topic-content">
-          <div class="topic-name">가우스 법칙 · 전속밀도 D</div>
-          <div class="topic-detail">D = εE / 전속 Ψ = Q</div>
+          <div class="topic-name">가우스 법칙 · 전속밀도 D · 유전율</div>
+          <div class="formula-box">
+            <div class="f-title">📐 핵심공식</div>
+            <div class="formula">가우스 법칙: ∮D·dS = Q (폐곡면 통과 전속=내부전하)</div>
+            <div class="formula">D = εE = ε₀εsE / 전속 Ψ=Q / D=Q/(4πr²) [C/m²]</div>
+          </div>
           <span class="topic-tag tag-formula">공식</span>
         </div>
       </div>
-      <div class="day-mark">📅 Day 11</div>
+      <div class="task-sub"><input type="checkbox" id="e1-2a" onchange="saveAndRefresh(this)"><span class="task-sub-text">D, E, ε 관계 계산 기출 3문제</span></div>
+      <div class="task-sub"><input type="checkbox" id="e1-2b" onchange="saveAndRefresh(this)"><span class="task-sub-text">유전율 변화 시 전속밀도 변화 문제 2문제</span></div>
+
+      <div class="day-mark">📅 Day 16 <span class="day-date">07/24</span><span class="quota-badge">기출 5문제</span></div>
       <div class="topic-item">
         <input type="checkbox" id="e1-3" onchange="saveAndRefresh(this)">
         <div class="topic-content">
-          <div class="topic-name">콘덴서 정전용량</div>
+          <div class="topic-name">콘덴서 정전용량 C · 직병렬 · 에너지</div>
           <div class="formula-box">
             <div class="f-title">📐 핵심공식</div>
-            <div class="formula">C = εA/d (면적↑ 거리↓ → C↑)</div>
-            <div class="formula">W = ½CV² = Q²/2C</div>
+            <div class="formula">평행판: C = εA/d [F] (면적↑거리↓ → C↑)</div>
+            <div class="formula">에너지: W = ½CV² = Q²/2C = ½QV [J]</div>
+            <div class="formula">직렬: 1/C합=Σ1/Cₙ / 병렬: C합=ΣCₙ</div>
           </div>
           <span class="topic-tag tag-hard">자주출제</span>
         </div>
       </div>
+      <div class="task-sub"><input type="checkbox" id="e1-3a" onchange="saveAndRefresh(this)"><span class="task-sub-text">평행판 C 계산 (거리·면적 변화) 기출 3문제</span></div>
+      <div class="task-sub"><input type="checkbox" id="e1-3b" onchange="saveAndRefresh(this)"><span class="task-sub-text">직병렬 합성 정전용량 + 에너지 기출 2문제</span></div>
+
+      <div class="day-mark">📅 Day 17 <span class="day-date">07/25</span><span class="quota-badge">기출 5문제</span></div>
       <div class="topic-item">
         <input type="checkbox" id="e1-4" onchange="saveAndRefresh(this)">
         <div class="topic-content">
-          <div class="topic-name">전위 · 전위경도</div>
-          <div class="topic-detail">V = Q/(4πεr) / E = -dV/dr</div>
-          <span class="topic-tag tag-formula">공식</span>
+          <div class="topic-name">전위 V · 전위경도 · 도체 특성</div>
+          <div class="formula-box">
+            <div class="f-title">📐 핵심공식</div>
+            <div class="formula">V = Q/(4πεr) [V] / E = -dV/dr = -gradV</div>
+            <div class="formula">도체표면: 등전위면, E는 항상 표면에 수직 / 도체 내부 E=0</div>
+          </div>
+          <span class="topic-tag tag-formula">공식</span><span class="topic-tag tag-memo">암기</span>
         </div>
       </div>
+      <div class="task-sub"><input type="checkbox" id="e1-4a" onchange="saveAndRefresh(this)"><span class="task-sub-text">점전하에 의한 전위 V 계산 기출 3문제</span></div>
+      <div class="task-sub"><input type="checkbox" id="e1-4b" onchange="saveAndRefresh(this)"><span class="task-sub-text">전위경도(E=-dV/dr) 적용 기출 2문제</span></div>
     </div>
   </div>
 
@@ -673,275 +926,104 @@
     <div class="week-header" onclick="toggleWeek('e2')">
       <span class="week-badge">예정</span>
       <span class="week-title">자계 · 전자기유도</span>
-      <span class="week-days">Day 12~14</span>
+      <span class="week-days">Day 18~20</span>
       <span class="week-arrow" id="arrow-e2">▼</span>
     </div>
     <div class="week-body" id="body-e2">
-      <div class="day-mark">📅 Day 12</div>
+
+      <div class="day-mark">📅 Day 18 <span class="day-date">07/26</span><span class="quota-badge">기출 5문제</span></div>
       <div class="topic-item">
         <input type="checkbox" id="e2-1" onchange="saveAndRefresh(this)">
         <div class="topic-content">
-          <div class="topic-name">앙페르 법칙 · 자계 H</div>
-          <div class="topic-detail">무한직선: H=I/(2πr) / 원형: H=I/(2r)</div>
+          <div class="topic-name">앙페르 법칙 · 자계 H · 자속밀도 B</div>
+          <div class="formula-box">
+            <div class="f-title">📐 핵심공식</div>
+            <div class="formula">무한직선: H=I/(2πr) [A/m]</div>
+            <div class="formula">원형코일: H=I/(2r) / 솔레노이드: H=nI</div>
+            <div class="formula">B=μH=μ₀μsH [T] / μ₀=4π×10⁻⁷</div>
+          </div>
           <span class="topic-tag tag-formula">공식</span>
         </div>
       </div>
-      <div class="day-mark">📅 Day 13</div>
+      <div class="task-sub"><input type="checkbox" id="e2-1a" onchange="saveAndRefresh(this)"><span class="task-sub-text">무한직선 도체에서 H, B 계산 기출 3문제</span></div>
+      <div class="task-sub"><input type="checkbox" id="e2-1b" onchange="saveAndRefresh(this)"><span class="task-sub-text">평행도체 사이 힘 계산 기출 2문제</span></div>
+
+      <div class="day-mark">📅 Day 19 <span class="day-date">07/27</span><span class="quota-badge">기출 5문제</span></div>
       <div class="topic-item">
         <input type="checkbox" id="e2-2" onchange="saveAndRefresh(this)">
         <div class="topic-content">
-          <div class="topic-name">패러데이 · 렌츠의 법칙</div>
-          <div class="topic-detail">e = -N×dΦ/dt / 렌츠: 자속 변화 방해하는 방향</div>
-          <span class="topic-tag tag-hard">자주출제</span>
-        </div>
-      </div>
-      <div class="day-mark">📅 Day 14</div>
-      <div class="topic-item">
-        <input type="checkbox" id="e2-3" onchange="saveAndRefresh(this)">
-        <div class="topic-content">
-          <div class="topic-name">인덕턴스 · 상호인덕턴스</div>
+          <div class="topic-name">패러데이 법칙 · 렌츠의 법칙 · 인덕턴스 L</div>
           <div class="formula-box">
             <div class="f-title">📐 핵심공식</div>
-            <div class="formula">M = k√(L₁L₂)</div>
-            <div class="formula">직렬 L합 = L₁+L₂±2M</div>
+            <div class="formula">e=-N×dΦ/dt [V] / 렌츠: 자속변화 방해방향(-부호)</div>
+            <div class="formula">L=NΦ/I / e=L×di/dt</div>
+            <div class="formula">도체운동 기전력: e=Blvsinθ [V] (플레밍의 오른손법칙)</div>
           </div>
           <span class="topic-tag tag-hard">자주출제</span>
         </div>
       </div>
+      <div class="task-sub"><input type="checkbox" id="e2-2a" onchange="saveAndRefresh(this)"><span class="task-sub-text">유기기전력 e 계산 기출 3문제</span></div>
+      <div class="task-sub"><input type="checkbox" id="e2-2b" onchange="saveAndRefresh(this)"><span class="task-sub-text">렌츠 법칙 방향 판별 기출 2문제</span></div>
+
+      <div class="day-mark">📅 Day 20 <span class="day-date">07/28</span><span class="quota-badge">기출 5문제</span></div>
+      <div class="topic-item">
+        <input type="checkbox" id="e2-3" onchange="saveAndRefresh(this)">
+        <div class="topic-content">
+          <div class="topic-name">상호인덕턴스 M · 자기에너지 · 자성체</div>
+          <div class="formula-box">
+            <div class="f-title">📐 핵심공식</div>
+            <div class="formula">M=k√(L₁L₂) (k: 결합계수 0~1)</div>
+            <div class="formula">직렬: L합=L₁+L₂±2M (가동:+, 차동:-)</div>
+            <div class="formula">자기에너지: W=½LI² [J]</div>
+          </div>
+          <span class="topic-tag tag-hard">자주출제</span>
+        </div>
+      </div>
+      <div class="task-sub"><input type="checkbox" id="e2-3a" onchange="saveAndRefresh(this)"><span class="task-sub-text">상호인덕턴스 M 계산 기출 3문제</span></div>
+      <div class="task-sub"><input type="checkbox" id="e2-3b" onchange="saveAndRefresh(this)"><span class="task-sub-text">가동·차동 직렬 L합 계산 기출 2문제</span></div>
     </div>
   </div>
 
   <div class="week-section">
     <div class="week-header" onclick="toggleWeek('e3')">
       <span class="week-badge">예정</span>
-      <span class="week-title">전자파 · 맥스웰 방정식</span>
-      <span class="week-days">Day 15~16</span>
+      <span class="week-title">전자파 · 마무리</span>
+      <span class="week-days">Day 21</span>
       <span class="week-arrow" id="arrow-e3">▼</span>
     </div>
     <div class="week-body" id="body-e3">
-      <div class="day-mark">📅 Day 15</div>
+
+      <div class="day-mark">📅 Day 21 (전자기학 마무리) <span class="day-date">07/29</span><span class="quota-badge">기출 10문제</span></div>
       <div class="topic-item">
         <input type="checkbox" id="e3-1" onchange="saveAndRefresh(this)">
         <div class="topic-content">
           <div class="topic-name">맥스웰 방정식 (이름+의미 암기)</div>
-          <div class="topic-detail">가우스·패러데이·앙페르·자기 — 계산보다 개념 위주</div>
+          <div class="topic-detail">① 가우스(전계) ② 가우스(자계) ③ 패러데이 ④ 앙페르-맥스웰</div>
           <span class="topic-tag tag-memo">암기</span>
         </div>
       </div>
-      <div class="day-mark">📅 Day 16 (전자기학 마무리)</div>
       <div class="topic-item">
         <input type="checkbox" id="e3-2" onchange="saveAndRefresh(this)">
         <div class="topic-content">
-          <div class="topic-name">전자파 속도</div>
-          <div class="topic-detail">v = 1/√(με) = 3×10⁸ m/s (진공)</div>
+          <div class="topic-name">전자파 속도 · 포인팅벡터</div>
+          <div class="formula-box">
+            <div class="f-title">📐 핵심공식</div>
+            <div class="formula">v=1/√(με)=3×10⁸ m/s (진공) / 파장 λ=v/f</div>
+            <div class="formula">포인팅벡터: P=E×H [W/m²] / 고유임피던스(진공): η₀=√(μ₀/ε₀)≈377Ω</div>
+          </div>
           <span class="topic-tag tag-formula">공식</span>
         </div>
       </div>
-    </div>
-  </div>
-</div>
-
-<!-- ===== 제어공학 ===== -->
-<div class="subject-panel" id="panel-control">
-  <div class="subject-header">
-    <div class="subject-title-row">
-      <span class="subject-icon">🎛️</span>
-      <span class="subject-name-big">제어공학</span>
-      <span class="subject-period-badge">Day 17~21</span>
-    </div>
-    <div class="subject-desc">라플라스·블록선도가 핵심. 패턴 반복이 많아서 유형 파악이 중요</div>
-    <div class="subject-strategy">💡 변환표 암기 → 전달함수 → 블록선도 단순화 순서로 접근</div>
-  </div>
-
-  <div class="week-section">
-    <div class="week-header" onclick="toggleWeek('ct1')">
-      <span class="week-badge">예정</span>
-      <span class="week-title">라플라스 변환</span>
-      <span class="week-days">Day 17~18</span>
-      <span class="week-arrow" id="arrow-ct1">▼</span>
-    </div>
-    <div class="week-body" id="body-ct1">
-      <div class="day-mark">📅 Day 17</div>
       <div class="topic-item">
-        <input type="checkbox" id="ct1-1" onchange="saveAndRefresh(this)">
+        <input type="checkbox" id="e3-3" onchange="saveAndRefresh(this)">
         <div class="topic-content">
-          <div class="topic-name">기본 라플라스 변환쌍</div>
-          <div class="formula-box">
-            <div class="f-title">📐 반드시 암기</div>
-            <div class="formula">1 → 1/s</div>
-            <div class="formula">t → 1/s²</div>
-            <div class="formula">e^(-at) → 1/(s+a)</div>
-            <div class="formula">sinωt → ω/(s²+ω²)</div>
-            <div class="formula">cosωt → s/(s²+ω²)</div>
-          </div>
-          <span class="topic-tag tag-memo">암기</span><span class="topic-tag tag-hard">자주출제</span>
+          <div class="topic-name">전기자기학 전체 기출 10문제 풀기</div>
+          <div class="topic-detail">comcbt.com → 전기자기학 최근 1개년 / 틀린 거 오답노트 업로드</div>
+          <span class="topic-tag tag-hard">총정리</span>
         </div>
       </div>
-      <div class="day-mark">📅 Day 18</div>
-      <div class="topic-item">
-        <input type="checkbox" id="ct1-2" onchange="saveAndRefresh(this)">
-        <div class="topic-content">
-          <div class="topic-name">초기값·최종값 정리</div>
-          <div class="topic-detail">초기: lim(s→∞) sF(s) / 최종: lim(s→0) sF(s)</div>
-          <span class="topic-tag tag-hard">자주출제</span>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="week-section">
-    <div class="week-header" onclick="toggleWeek('ct2')">
-      <span class="week-badge">예정</span>
-      <span class="week-title">전달함수 · 블록선도</span>
-      <span class="week-days">Day 19~20</span>
-      <span class="week-arrow" id="arrow-ct2">▼</span>
-    </div>
-    <div class="week-body" id="body-ct2">
-      <div class="day-mark">📅 Day 19</div>
-      <div class="topic-item">
-        <input type="checkbox" id="ct2-1" onchange="saveAndRefresh(this)">
-        <div class="topic-content">
-          <div class="topic-name">전달함수 G(s) 구하기</div>
-          <div class="topic-detail">G(s) = 출력/입력 (초기조건 0으로 놓고 계산)</div>
-          <span class="topic-tag tag-hard">자주출제</span>
-        </div>
-      </div>
-      <div class="day-mark">📅 Day 20</div>
-      <div class="topic-item">
-        <input type="checkbox" id="ct2-2" onchange="saveAndRefresh(this)">
-        <div class="topic-content">
-          <div class="topic-name">블록선도 단순화 · 피드백 공식</div>
-          <div class="formula-box">
-            <div class="f-title">📐 피드백 (가장 중요!)</div>
-            <div class="formula">C/R = G/(1+GH) (부피드백)</div>
-            <div class="formula">C/R = G/(1-GH) (정피드백)</div>
-          </div>
-          <span class="topic-tag tag-hard">자주출제</span>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="week-section">
-    <div class="week-header" onclick="toggleWeek('ct3')">
-      <span class="week-badge">예정</span>
-      <span class="week-title">시간응답 · 안정도</span>
-      <span class="week-days">Day 21</span>
-      <span class="week-arrow" id="arrow-ct3">▼</span>
-    </div>
-    <div class="week-body" id="body-ct3">
-      <div class="day-mark">📅 Day 21 (제어공학 마무리)</div>
-      <div class="topic-item">
-        <input type="checkbox" id="ct3-1" onchange="saveAndRefresh(this)">
-        <div class="topic-content">
-          <div class="topic-name">2차 시스템 · 감쇠비</div>
-          <div class="topic-detail">ζ&lt;1: 부족감쇠 / ζ=1: 임계 / ζ&gt;1: 과감쇠</div>
-          <span class="topic-tag tag-memo">암기</span>
-        </div>
-      </div>
-      <div class="topic-item">
-        <input type="checkbox" id="ct3-2" onchange="saveAndRefresh(this)">
-        <div class="topic-content">
-          <div class="topic-name">루스-후르비츠 안정도 판별</div>
-          <div class="topic-detail">계수 모두 양수 + 루스 행렬 1열 모두 양수 → 안정</div>
-          <span class="topic-tag tag-hard">자주출제</span>
-        </div>
-      </div>
-      <div class="topic-item">
-        <input type="checkbox" id="ct3-3" onchange="saveAndRefresh(this)">
-        <div class="topic-content">
-          <div class="topic-name">보드선도 · 이득여유·위상여유</div>
-          <div class="topic-detail">개념만 파악, 계산은 기출 패턴으로</div>
-          <span class="topic-tag tag-memo">암기</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ===== 전력공학 ===== -->
-<div class="subject-panel" id="panel-power">
-  <div class="subject-header">
-    <div class="subject-title-row">
-      <span class="subject-icon">🏭</span>
-      <span class="subject-name-big">전력공학</span>
-      <span class="subject-period-badge">Day 22~25</span>
-    </div>
-    <div class="subject-desc">현장 경험 있어서 개념 이해 빠름. 공식+수치 암기 위주</div>
-    <div class="subject-strategy">💡 현장 설비와 연결해서 외우면 훨씬 빨리 외워짐</div>
-  </div>
-
-  <div class="week-section">
-    <div class="week-header" onclick="toggleWeek('p1')">
-      <span class="week-badge">예정</span>
-      <span class="week-title">송전선로 · 선로정수</span>
-      <span class="week-days">Day 22~23</span>
-      <span class="week-arrow" id="arrow-p1">▼</span>
-    </div>
-    <div class="week-body" id="body-p1">
-      <div class="day-mark">📅 Day 22</div>
-      <div class="topic-item">
-        <input type="checkbox" id="p1-1" onchange="saveAndRefresh(this)">
-        <div class="topic-content">
-          <div class="topic-name">전압강하 · 전력손실</div>
-          <div class="formula-box">
-            <div class="f-title">📐 핵심공식</div>
-            <div class="formula">Vd = √3×I(Rcosθ+Xsinθ)</div>
-            <div class="formula">P손실 = 3I²R</div>
-          </div>
-          <span class="topic-tag tag-formula">공식</span><span class="topic-tag tag-hard">자주출제</span>
-        </div>
-      </div>
-      <div class="day-mark">📅 Day 23</div>
-      <div class="topic-item">
-        <input type="checkbox" id="p1-2" onchange="saveAndRefresh(this)">
-        <div class="topic-content">
-          <div class="topic-name">코로나 방전 · 페란티 현상</div>
-          <div class="topic-detail">코로나: 임계전압 이상 방전 / 페란티: 경부하 시 수전단 전압↑</div>
-          <span class="topic-tag tag-memo">암기</span>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="week-section">
-    <div class="week-header" onclick="toggleWeek('p2')">
-      <span class="week-badge">예정</span>
-      <span class="week-title">변전소 · 차단기 · 보호계전</span>
-      <span class="week-days">Day 24~25</span>
-      <span class="week-arrow" id="arrow-p2">▼</span>
-    </div>
-    <div class="week-body" id="body-p2">
-      <div class="day-mark">📅 Day 24</div>
-      <div class="topic-item">
-        <input type="checkbox" id="p2-1" onchange="saveAndRefresh(this)">
-        <div class="topic-content">
-          <div class="topic-name">차단기 종류 · 차단용량</div>
-          <div class="topic-detail">OCB/VCB/GCB/ACB 특징 구분 / Ps=√3×V×Is</div>
-          <span class="topic-tag tag-memo">암기</span><span class="topic-tag tag-hard">자주출제</span>
-        </div>
-      </div>
-      <div class="topic-item">
-        <input type="checkbox" id="p2-2" onchange="saveAndRefresh(this)">
-        <div class="topic-content">
-          <div class="topic-name">단락전류 · %임피던스</div>
-          <div class="formula-box">
-            <div class="f-title">📐 핵심공식</div>
-            <div class="formula">%Z = I×Z/V × 100</div>
-            <div class="formula">Is = In × 100/%Z</div>
-          </div>
-          <span class="topic-tag tag-hard">자주출제</span>
-        </div>
-      </div>
-      <div class="day-mark">📅 Day 25 (전력공학 마무리)</div>
-      <div class="topic-item">
-        <input type="checkbox" id="p2-3" onchange="saveAndRefresh(this)">
-        <div class="topic-content">
-          <div class="topic-name">보호계전기 종류</div>
-          <div class="topic-detail">과전류(OCR)·거리(DR)·방향(DGR)·차동(87) 기능별 암기</div>
-          <span class="topic-tag tag-memo">암기</span>
-        </div>
-      </div>
+      <div class="task-sub"><input type="checkbox" id="e3-3a" onchange="saveAndRefresh(this)"><span class="task-sub-text">공식 암기표 다시 확인 (쿨롱~맥스웰 전체)</span></div>
+      <div class="task-sub"><input type="checkbox" id="e3-3b" onchange="saveAndRefresh(this)"><span class="task-sub-text">오답 사진 찍어서 채널 업로드</span></div>
     </div>
   </div>
 </div>
@@ -952,120 +1034,285 @@
     <div class="subject-title-row">
       <span class="subject-icon">⚙️</span>
       <span class="subject-name-big">전기기기</span>
-      <span class="subject-period-badge">Day 26~28</span>
+      <span class="subject-period-badge">Day 22~24</span>
     </div>
-    <div class="subject-desc">변압기·유도전동기·직류기 3가지가 핵심. 인버터 경험 활용!</div>
-    <div class="subject-strategy">💡 현장에서 모터·인버터 다뤄봤으니 개념 연결이 쉬움. 공식 위주로 빠르게</div>
+    <div class="subject-desc">변압기·유도전동기·직류기 3가지 집중. 인버터 현장경험 적극 활용!</div>
+    <div class="subject-strategy">💡 슬립·동기속도는 현장 VFD와 직결! 연결해서 외우면 절대 안 잊음</div>
   </div>
 
   <div class="week-section">
     <div class="week-header" onclick="toggleWeek('m1')">
       <span class="week-badge">예정</span>
       <span class="week-title">변압기</span>
-      <span class="week-days">Day 26</span>
+      <span class="week-days">Day 22</span>
       <span class="week-arrow" id="arrow-m1">▼</span>
     </div>
     <div class="week-body" id="body-m1">
-      <div class="day-mark">📅 Day 26</div>
+
+      <div class="day-mark">📅 Day 22 <span class="day-date">07/30</span><span class="quota-badge">기출 7문제</span></div>
       <div class="topic-item">
         <input type="checkbox" id="m1-1" onchange="saveAndRefresh(this)">
         <div class="topic-content">
-          <div class="topic-name">권수비 · 전압·전류 변환</div>
-          <div class="topic-detail">a = N₁/N₂ = V₁/V₂ = I₂/I₁</div>
+          <div class="topic-name">권수비 · 전압·전류·임피던스 변환</div>
+          <div class="formula-box">
+            <div class="f-title">📐 핵심공식</div>
+            <div class="formula">a = N₁/N₂ = V₁/V₂ = I₂/I₁</div>
+            <div class="formula">임피던스 변환: Z₁ = a²Z₂</div>
+          </div>
           <span class="topic-tag tag-formula">공식</span><span class="topic-tag tag-hard">자주출제</span>
         </div>
       </div>
+      <div class="task-sub"><input type="checkbox" id="m1-1a" onchange="saveAndRefresh(this)"><span class="task-sub-text">권수비로 2차 전압·전류 계산 기출 3문제</span></div>
       <div class="topic-item">
         <input type="checkbox" id="m1-2" onchange="saveAndRefresh(this)">
         <div class="topic-content">
-          <div class="topic-name">효율 · 최대효율 조건</div>
+          <div class="topic-name">변압기 효율 · 최대효율 조건</div>
           <div class="formula-box">
             <div class="f-title">📐 핵심공식</div>
-            <div class="formula">η = 출력/(출력+Pi+Pc) × 100%</div>
-            <div class="formula">최대효율: Pi = m²Pc</div>
-            <div class="formula">부하율 m = √(Pi/Pc)</div>
+            <div class="formula">η = 출력/(출력+Pi+m²Pc) × 100%</div>
+            <div class="formula">최대효율조건: Pi = m²Pc (철손=동손)</div>
+            <div class="formula">최대효율 부하율: m = √(Pi/Pc)</div>
           </div>
           <span class="topic-tag tag-hard">자주출제</span>
         </div>
       </div>
+      <div class="task-sub"><input type="checkbox" id="m1-2a" onchange="saveAndRefresh(this)"><span class="task-sub-text">최대효율 부하율 m 계산 기출 2문제</span></div>
       <div class="topic-item">
         <input type="checkbox" id="m1-3" onchange="saveAndRefresh(this)">
         <div class="topic-content">
-          <div class="topic-name">병렬운전 조건</div>
-          <div class="topic-detail">극성·전압·주파수·%Z·내부저항비 일치</div>
+          <div class="topic-name">변압기 결선 (Y-Y·Δ-Δ·Y-Δ) · 병렬운전</div>
+          <div class="formula-box">
+            <div class="f-title">📐 핵심공식</div>
+            <div class="formula">Y-Δ: 위상차 30° / 병렬운전 조건: 극성·전압·주파수·%Z 일치</div>
+            <div class="formula">V결선 출력비: P_V/P_Δ = 1/√3 ≈ 57.7% (변압기 2대로 3상 공급 시)</div>
+          </div>
           <span class="topic-tag tag-memo">암기</span>
         </div>
       </div>
+      <div class="task-sub"><input type="checkbox" id="m1-3a" onchange="saveAndRefresh(this)"><span class="task-sub-text">결선방식별 특징 기출 2문제</span></div>
     </div>
   </div>
 
   <div class="week-section">
     <div class="week-header" onclick="toggleWeek('m2')">
       <span class="week-badge">예정</span>
-      <span class="week-title">유도전동기 ← 인버터 연결!</span>
-      <span class="week-days">Day 27</span>
+      <span class="week-title">유도전동기 ← 인버터 직결!</span>
+      <span class="week-days">Day 23</span>
       <span class="week-arrow" id="arrow-m2">▼</span>
     </div>
     <div class="week-body" id="body-m2">
-      <div class="day-mark">📅 Day 27</div>
+
+      <div class="day-mark">📅 Day 23 <span class="day-date">07/31</span><span class="quota-badge">기출 7문제</span></div>
       <div class="topic-item">
         <input type="checkbox" id="m2-1" onchange="saveAndRefresh(this)">
         <div class="topic-content">
-          <div class="topic-name">슬립 · 동기속도</div>
+          <div class="topic-name">동기속도 Ns · 슬립 s · 회전속도 N</div>
           <div class="formula-box">
-            <div class="f-title">📐 현장과 연결!</div>
-            <div class="formula">Ns = 120f/P (rpm)</div>
-            <div class="formula">s = (Ns-N)/Ns</div>
-            <div class="formula">N = Ns(1-s)</div>
-            <div class="formula">인버터로 f 바꾸면 Ns 변함!</div>
+            <div class="f-title">📐 현장 VFD와 직결!</div>
+            <div class="formula">Ns = 120f/P [rpm] ← 인버터로 f 바꾸면 Ns 변함</div>
+            <div class="formula">s = (Ns-N)/Ns / N = Ns(1-s)</div>
+            <div class="formula">s=0: 동기속도 / s=1: 정지상태</div>
           </div>
           <span class="topic-tag tag-hard">자주출제</span>
         </div>
       </div>
+      <div class="task-sub"><input type="checkbox" id="m2-1a" onchange="saveAndRefresh(this)"><span class="task-sub-text">Ns, s, N 계산 기출 3문제</span></div>
       <div class="topic-item">
         <input type="checkbox" id="m2-2" onchange="saveAndRefresh(this)">
         <div class="topic-content">
-          <div class="topic-name">2차 입력·동손·기계출력 비율</div>
-          <div class="topic-detail">P2 : Pc2 : P0 = 1 : s : (1-s)</div>
+          <div class="topic-name">2차 입력·동손·기계출력 비율 · 토크</div>
+          <div class="formula-box">
+            <div class="f-title">📐 핵심공식</div>
+            <div class="formula">P2 : Pc2 : P0 = 1 : s : (1-s)</div>
+            <div class="formula">기계출력 P0 = P2(1-s) [W]</div>
+            <div class="formula">토크 T = P2/ωs = P2/(2πNs/60) [N·m]</div>
+          </div>
           <span class="topic-tag tag-hard">자주출제</span>
         </div>
       </div>
+      <div class="task-sub"><input type="checkbox" id="m2-2a" onchange="saveAndRefresh(this)"><span class="task-sub-text">슬립s로 동손·기계출력 비율 계산 기출 2문제</span></div>
       <div class="topic-item">
         <input type="checkbox" id="m2-3" onchange="saveAndRefresh(this)">
         <div class="topic-content">
-          <div class="topic-name">기동방법 종류</div>
-          <div class="topic-detail">직입/Y-Δ/리액터/콘도르파 기동 특징 암기</div>
+          <div class="topic-name">기동방법 · 속도제어 방법</div>
+          <div class="topic-detail">기동: 직입/Y-Δ/리액터/콘도르파 / 속도제어: 주파수(인버터)·극수변환·2차저항</div>
+          <div class="formula-box">
+            <div class="f-title">📐 핵심 암기</div>
+            <div class="formula">Y-Δ 기동: 기동전류·기동토크 모두 1/3배로 감소 (상전압 1/√3배)</div>
+          </div>
           <span class="topic-tag tag-memo">암기</span>
         </div>
       </div>
+      <div class="task-sub"><input type="checkbox" id="m2-3a" onchange="saveAndRefresh(this)"><span class="task-sub-text">기동법별 기동전류·토크 특성 기출 2문제</span></div>
     </div>
   </div>
 
   <div class="week-section">
     <div class="week-header" onclick="toggleWeek('m3')">
       <span class="week-badge">예정</span>
-      <span class="week-title">직류기 · 동기기</span>
-      <span class="week-days">Day 28</span>
+      <span class="week-title">직류기 · 동기기 · 마무리</span>
+      <span class="week-days">Day 24</span>
       <span class="week-arrow" id="arrow-m3">▼</span>
     </div>
     <div class="week-body" id="body-m3">
-      <div class="day-mark">📅 Day 28 (전기기기 마무리)</div>
+
+      <div class="day-mark">📅 Day 24 (전기기기 마무리) <span class="day-date">08/01</span><span class="quota-badge">기출 10문제</span></div>
       <div class="topic-item">
         <input type="checkbox" id="m3-1" onchange="saveAndRefresh(this)">
         <div class="topic-content">
-          <div class="topic-name">직류전동기 속도 제어</div>
-          <div class="topic-detail">N = (V-IaRa)/kΦ — 전압·저항·자속으로 제어</div>
+          <div class="topic-name">직류기 종류 · 직류전동기 속도제어</div>
+          <div class="formula-box">
+            <div class="f-title">📐 핵심공식</div>
+            <div class="formula">기전력: E = PZΦNa/60a [V]</div>
+            <div class="formula">속도: N = (V-IaRa)/kΦ [rpm]</div>
+            <div class="formula">속도제어: 전압↑ or 저항↓ or 자속↓ → 속도↑</div>
+          </div>
           <span class="topic-tag tag-formula">공식</span>
         </div>
       </div>
+      <div class="task-sub"><input type="checkbox" id="m3-1a" onchange="saveAndRefresh(this)"><span class="task-sub-text">직류전동기 속도 N 계산 기출 2문제</span></div>
       <div class="topic-item">
         <input type="checkbox" id="m3-2" onchange="saveAndRefresh(this)">
         <div class="topic-content">
-          <div class="topic-name">동기발전기 병렬운전 조건</div>
-          <div class="topic-detail">전압·주파수·위상·파형 4가지 일치</div>
+          <div class="topic-name">동기발전기 · 동기전동기 특성</div>
+          <div class="formula-box">
+            <div class="f-title">📐 핵심공식</div>
+            <div class="formula">병렬운전 조건: 전압·주파수·위상·파형 일치 / 동기조상기: 역률개선</div>
+            <div class="formula">단락비 Ks=1/%Zs×100 (Ks 클수록 안정도↑, 동기임피던스↓)</div>
+          </div>
           <span class="topic-tag tag-memo">암기</span>
         </div>
       </div>
+      <div class="topic-item">
+        <input type="checkbox" id="m3-3" onchange="saveAndRefresh(this)">
+        <div class="topic-content">
+          <div class="topic-name">전기기기 전체 기출 10문제 + 오답 정리</div>
+          <div class="topic-detail">comcbt.com → 전기기기 최근 1개년 / 오답노트 업로드</div>
+          <span class="topic-tag tag-hard">총정리</span>
+        </div>
+      </div>
+      <div class="task-sub"><input type="checkbox" id="m3-3a" onchange="saveAndRefresh(this)"><span class="task-sub-text">틀린 문제 사진 찍어서 오답노트 업로드</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 전력공학 ===== -->
+<div class="subject-panel" id="panel-power">
+  <div class="subject-header">
+    <div class="subject-title-row">
+      <span class="subject-icon">🏭</span>
+      <span class="subject-name-big">전력공학</span>
+      <span class="subject-period-badge">Day 25~28</span>
+    </div>
+    <div class="subject-desc">현장 경험 있어서 개념 이해 빠름. 현장 설비와 연결해서 외우기</div>
+    <div class="subject-strategy">💡 인버터·VFD 경험을 떠올리면서 공부하면 훨씬 빠름!</div>
+  </div>
+
+  <div class="week-section">
+    <div class="week-header" onclick="toggleWeek('p1')">
+      <span class="week-badge">예정</span>
+      <span class="week-title">송전선로 · 선로정수 · 송전특성</span>
+      <span class="week-days">Day 25~26</span>
+      <span class="week-arrow" id="arrow-p1">▼</span>
+    </div>
+    <div class="week-body" id="body-p1">
+
+      <div class="day-mark">📅 Day 25 <span class="day-date">08/02</span><span class="quota-badge">기출 5문제</span></div>
+      <div class="topic-item">
+        <input type="checkbox" id="p1-1" onchange="saveAndRefresh(this)">
+        <div class="topic-content">
+          <div class="topic-name">선로정수 R·L·C·G / 전압강하 · 전력손실</div>
+          <div class="formula-box">
+            <div class="f-title">📐 핵심공식</div>
+            <div class="formula">전압강하: Vd=√3×I×(Rcosθ+Xsinθ) [V]</div>
+            <div class="formula">전력손실: Pl=3I²R [W]</div>
+            <div class="formula">전압강하율: ε=Vd/Vs×100 [%]</div>
+          </div>
+          <span class="topic-tag tag-formula">공식</span><span class="topic-tag tag-hard">자주출제</span>
+        </div>
+      </div>
+      <div class="task-sub"><input type="checkbox" id="p1-1a" onchange="saveAndRefresh(this)"><span class="task-sub-text">3상 전압강하 Vd 계산 기출 3문제</span></div>
+      <div class="task-sub"><input type="checkbox" id="p1-1b" onchange="saveAndRefresh(this)"><span class="task-sub-text">전력손실·손실률 계산 기출 2문제</span></div>
+
+      <div class="day-mark">📅 Day 26 <span class="day-date">08/03</span><span class="quota-badge">기출 5문제</span></div>
+      <div class="topic-item">
+        <input type="checkbox" id="p1-2" onchange="saveAndRefresh(this)">
+        <div class="topic-content">
+          <div class="topic-name">코로나 방전 · 페란티 효과 · 중성점 접지</div>
+          <div class="formula-box">
+            <div class="f-title">📐 핵심공식</div>
+            <div class="formula">코로나 임계전압: E0=24.3×m0×m1×δ×d×log10(D/r) [kV]</div>
+            <div class="formula">페란티: 경부하 시 Vr&gt;Vs (충전전류 영향) / 중성점: 직접·저항·리액터·소호리액터 접지</div>
+          </div>
+          <span class="topic-tag tag-memo">암기</span>
+        </div>
+      </div>
+      <div class="task-sub"><input type="checkbox" id="p1-2a" onchange="saveAndRefresh(this)"><span class="task-sub-text">코로나 임계전압 공식 암기 + 기출 2문제</span></div>
+      <div class="task-sub"><input type="checkbox" id="p1-2b" onchange="saveAndRefresh(this)"><span class="task-sub-text">중성점 접지방식별 특징 암기표 작성</span></div>
+      <div class="task-sub"><input type="checkbox" id="p1-2c" onchange="saveAndRefresh(this)"><span class="task-sub-text">페란티·코로나 관련 기출 3문제</span></div>
+    </div>
+  </div>
+
+  <div class="week-section">
+    <div class="week-header" onclick="toggleWeek('p2')">
+      <span class="week-badge">예정</span>
+      <span class="week-title">변전소 · 차단기 · 보호계전 · 마무리</span>
+      <span class="week-days">Day 27~28</span>
+      <span class="week-arrow" id="arrow-p2">▼</span>
+    </div>
+    <div class="week-body" id="body-p2">
+
+      <div class="day-mark">📅 Day 27 <span class="day-date">08/04</span><span class="quota-badge">기출 5문제</span></div>
+      <div class="topic-item">
+        <input type="checkbox" id="p2-1" onchange="saveAndRefresh(this)">
+        <div class="topic-content">
+          <div class="topic-name">차단기 종류 · 차단용량 · %임피던스</div>
+          <div class="formula-box">
+            <div class="f-title">📐 핵심공식</div>
+            <div class="formula">차단용량: Ps=√3×V×Is [MVA]</div>
+            <div class="formula">%Z=I×Z/V×100 / Is=In×100/%Z</div>
+          </div>
+          <span class="topic-tag tag-hard">자주출제</span>
+        </div>
+      </div>
+      <div class="task-sub"><input type="checkbox" id="p2-1a" onchange="saveAndRefresh(this)"><span class="task-sub-text">OCB·VCB·GCB 특징 비교표 암기</span></div>
+      <div class="task-sub"><input type="checkbox" id="p2-1b" onchange="saveAndRefresh(this)"><span class="task-sub-text">%Z이용 단락전류 계산 기출 3문제</span></div>
+      <div class="topic-item">
+        <input type="checkbox" id="p2-2" onchange="saveAndRefresh(this)">
+        <div class="topic-content">
+          <div class="topic-name">보호계전기 종류 · 동작원리</div>
+          <div class="topic-detail">과전류(OCR)·거리(DR)·방향지락(DGR)·차동(87)·부족전압(UVR) 기능 암기</div>
+          <div class="formula-box">
+            <div class="f-title">📐 ANSI 계전기 번호 암기</div>
+            <div class="formula">51: 과전류 / 27: 부족전압 / 59: 과전압 / 67: 방향지락 / 87: 차동계전</div>
+          </div>
+          <span class="topic-tag tag-memo">암기</span>
+        </div>
+      </div>
+      <div class="task-sub"><input type="checkbox" id="p2-2a" onchange="saveAndRefresh(this)"><span class="task-sub-text">계전기 종류별 적용장소 기출 2문제</span></div>
+
+      <div class="day-mark">📅 Day 28 (전력공학 마무리) <span class="day-date">08/05</span><span class="quota-badge">기출 10문제</span></div>
+      <div class="topic-item">
+        <input type="checkbox" id="p2-3" onchange="saveAndRefresh(this)">
+        <div class="topic-content">
+          <div class="topic-name">이상전압·피뢰기 / 조상설비 / 수전설비</div>
+          <div class="formula-box">
+            <div class="f-title">📐 핵심공식</div>
+            <div class="formula">뇌서지·개폐서지 / 콘덴서 무효전력: Qc=ωCV² [Var]</div>
+            <div class="formula">역률개선 콘덴서 용량: Qc=P(tanθ1-tanθ2) [kVA]</div>
+          </div>
+          <span class="topic-tag tag-memo">암기</span>
+        </div>
+      </div>
+      <div class="topic-item">
+        <input type="checkbox" id="p2-4" onchange="saveAndRefresh(this)">
+        <div class="topic-content">
+          <div class="topic-name">전력공학 전체 기출 10문제 + 오답 정리</div>
+          <div class="topic-detail">comcbt.com → 전력공학 최근 1개년 풀기</div>
+          <span class="topic-tag tag-hard">총정리</span>
+        </div>
+      </div>
+      <div class="task-sub"><input type="checkbox" id="p2-4a" onchange="saveAndRefresh(this)"><span class="task-sub-text">틀린 문제 오답노트 업로드</span></div>
     </div>
   </div>
 </div>
@@ -1075,80 +1322,119 @@
   <div class="subject-header">
     <div class="subject-title-row">
       <span class="subject-icon">📋</span>
-      <span class="subject-name-big">KEC</span>
+      <span class="subject-name-big">KEC (전기설비기술기준)</span>
       <span class="subject-period-badge">Day 29</span>
     </div>
-    <div class="subject-desc">순수 암기. 숫자·거리·용량 수치가 핵심. 이해 말고 그냥 외우기</div>
-    <div class="subject-strategy">💡 하루만 써서 핵심 수치표 만들어 외우기. 기출에 나온 숫자만 집중</div>
+    <div class="subject-desc">순수 암기. 숫자·거리·용량 수치가 핵심. 기출에 나온 숫자만!</div>
+    <div class="subject-strategy">💡 하루만 쓰는 과목. 표 만들어서 통째로 외우기</div>
   </div>
 
   <div class="week-section">
     <div class="week-header" onclick="toggleWeek('k1')">
       <span class="week-badge">예정</span>
-      <span class="week-title">전압 구분 · 이격거리</span>
+      <span class="week-title">전압구분 · 이격거리 · 접지</span>
       <span class="week-days">Day 29 오전</span>
       <span class="week-arrow" id="arrow-k1">▼</span>
     </div>
     <div class="week-body" id="body-k1">
+
+      <div class="day-mark">📅 Day 29 오전 <span class="day-date">08/06</span><span class="quota-badge">기출 10문제</span></div>
       <div class="topic-item">
         <input type="checkbox" id="k1-1" onchange="saveAndRefresh(this)">
         <div class="topic-content">
-          <div class="topic-name">전압 구분 암기</div>
+          <div class="topic-name">전압 구분 · 전선 굵기 규정</div>
           <div class="formula-box">
-            <div class="f-title">📐 반드시 암기</div>
-            <div class="formula">저압: 교류 1kV↓ / 직류 1.5kV↓</div>
-            <div class="formula">고압: 교류 1kV초과 ~ 7kV↓</div>
+            <div class="f-title">📐 반드시 암기 (자주출제)</div>
+            <div class="formula">저압: 교류 1kV 이하 / 직류 1.5kV 이하</div>
+            <div class="formula">고압: 교류 1kV 초과 ~ 7kV 이하</div>
             <div class="formula">특고압: 7kV 초과</div>
           </div>
           <span class="topic-tag tag-memo">암기</span><span class="topic-tag tag-hard">자주출제</span>
         </div>
       </div>
+      <div class="task-sub"><input type="checkbox" id="k1-1a" onchange="saveAndRefresh(this)"><span class="task-sub-text">전압구분 관련 기출 3문제</span></div>
       <div class="topic-item">
         <input type="checkbox" id="k1-2" onchange="saveAndRefresh(this)">
         <div class="topic-content">
-          <div class="topic-name">가공전선로 지표상 높이</div>
-          <div class="topic-detail">도로횡단: 6m / 철도횡단: 6.5m / 일반: 5m (저압기준)</div>
+          <div class="topic-name">가공전선로 지표상 높이 · 이격거리</div>
+          <div class="formula-box">
+            <div class="f-title">📐 이격거리 암기표</div>
+            <div class="formula">일반 도로: 5m (저압) / 6m (고압·특고압)</div>
+            <div class="formula">도로 횡단: 6m / 철도 횡단: 6.5m</div>
+            <div class="formula">보안공사 도로: 5m / 횡단보도: 3m</div>
+          </div>
           <span class="topic-tag tag-memo">암기</span><span class="topic-tag tag-hard">자주출제</span>
         </div>
       </div>
+      <div class="task-sub"><input type="checkbox" id="k1-2a" onchange="saveAndRefresh(this)"><span class="task-sub-text">이격거리 기출 3문제</span></div>
+      <div class="topic-item">
+        <input type="checkbox" id="k1-3" onchange="saveAndRefresh(this)">
+        <div class="topic-content">
+          <div class="topic-name">접지 계통 · 접지저항 값</div>
+          <div class="formula-box">
+            <div class="f-title">📐 핵심 암기 (KEC 개정 반영)</div>
+            <div class="formula">TN/TT/IT 계통 특징 / 계통접지·보호접지·등전위본딩</div>
+            <div class="formula">구접지(1~특별3종) 폐지 → 통합접지 방식 적용 / 접지도체 굵기는 KEC 표 기준</div>
+          </div>
+          <span class="topic-tag tag-memo">암기</span>
+        </div>
+      </div>
+      <div class="task-sub"><input type="checkbox" id="k1-3a" onchange="saveAndRefresh(this)"><span class="task-sub-text">접지 종류·저항값 기출 4문제</span></div>
     </div>
   </div>
 
   <div class="week-section">
     <div class="week-header" onclick="toggleWeek('k2')">
       <span class="week-badge">예정</span>
-      <span class="week-title">접지 · 보호장치 · 배선</span>
+      <span class="week-title">배선 · 보호장치 · 수전설비</span>
       <span class="week-days">Day 29 오후</span>
       <span class="week-arrow" id="arrow-k2">▼</span>
     </div>
     <div class="week-body" id="body-k2">
+
+      <div class="day-mark">📅 Day 29 오후 <span class="day-date">08/06</span><span class="quota-badge">기출 10문제</span></div>
       <div class="topic-item">
         <input type="checkbox" id="k2-1" onchange="saveAndRefresh(this)">
         <div class="topic-content">
-          <div class="topic-name">접지 계통 종류</div>
-          <div class="topic-detail">TN·TT·IT 계통 / 계통접지·보호접지·피뢰접지</div>
-          <span class="topic-tag tag-memo">암기</span>
-        </div>
-      </div>
-      <div class="topic-item">
-        <input type="checkbox" id="k2-2" onchange="saveAndRefresh(this)">
-        <div class="topic-content">
-          <div class="topic-name">누전차단기 · 과전류차단기</div>
-          <div class="topic-detail">누전차단기 정격감도전류 30mA 기준 암기</div>
+          <div class="topic-name">누전차단기 · 과전류차단기 정격</div>
+          <div class="formula-box">
+            <div class="f-title">📐 핵심 수치 암기</div>
+            <div class="formula">누전차단기 정격감도전류: 30mA (인체보호)</div>
+            <div class="formula">동작시간: 0.03초 이내</div>
+            <div class="formula">과전류차단기: 전선 허용전류 이하 정격</div>
+          </div>
           <span class="topic-tag tag-memo">암기</span><span class="topic-tag tag-hard">자주출제</span>
         </div>
       </div>
+      <div class="task-sub"><input type="checkbox" id="k2-1a" onchange="saveAndRefresh(this)"><span class="task-sub-text">차단기 정격 관련 기출 3문제</span></div>
       <div class="topic-item">
-        <input type="checkbox" id="k2-3" onchange="saveAndRefresh(this)">
+        <input type="checkbox" id="k2-2" onchange="saveAndRefresh(this)">
         <div class="topic-content">
-          <div class="topic-name">전압강하 기준</div>
-          <div class="topic-detail">간선 2% 이하 / 분기회로 2% 이하 (합계 4%)</div>
+          <div class="topic-name">전압강하 기준 · 전선 굵기 선정</div>
+          <div class="topic-detail">간선 전압강하: 2% 이하 / 분기회로: 2% 이하 / 간선+분기 합계: 4% 이하</div>
           <span class="topic-tag tag-memo">암기</span>
         </div>
       </div>
+      <div class="task-sub"><input type="checkbox" id="k2-2a" onchange="saveAndRefresh(this)"><span class="task-sub-text">전압강하 기준 기출 2문제</span></div>
+      <div class="topic-item">
+        <input type="checkbox" id="k2-3" onchange="saveAndRefresh(this)">
+        <div class="topic-content">
+          <div class="topic-name">피뢰설비 · 수전설비 · 특고압 기준</div>
+          <div class="formula-box">
+            <div class="f-title">📐 핵심 암기</div>
+            <div class="formula">피뢰침 보호각 원칙 45° 이하 / 회전구체법으로 보호범위 산정</div>
+            <div class="formula">수전설비 구성: CB(차단기)·MOF(계기용변성기)·DS(단로기)·LA(피뢰기)·PT·CT</div>
+          </div>
+          <span class="topic-tag tag-memo">암기</span>
+        </div>
+      </div>
+      <div class="task-sub"><input type="checkbox" id="k2-3a" onchange="saveAndRefresh(this)"><span class="task-sub-text">KEC 전체 기출 10문제 풀기 + 오답 정리</span></div>
+      <div class="task-sub"><input type="checkbox" id="k2-3b" onchange="saveAndRefresh(this)"><span class="task-sub-text">숫자·수치 암기표 최종 확인</span></div>
     </div>
   </div>
 </div>
+
+
 
 <!-- ===== 기출풀이 ===== -->
 <div class="subject-panel" id="panel-exam">
@@ -1388,7 +1674,7 @@
   function showTabNav(id) {
     // 상단 탭도 같이 활성화
     const tabEls = document.querySelectorAll('.tab');
-    const panels = ['circuit','emag','control','power','machine','kec','exam'];
+    const panels = ['circuit','control','emag','machine','power','kec','exam'];
     const idx = panels.indexOf(id);
     document.querySelectorAll('.subject-panel').forEach(p => p.classList.remove('active'));
     tabEls.forEach(t => t.classList.remove('active'));
