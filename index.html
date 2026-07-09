@@ -26,6 +26,7 @@
     --purple: #bc8cff;
     --red: #f78166;
     --tab-h: 60px;
+    --tabsbar-h: 52px;
   }
 
   * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
@@ -39,7 +40,7 @@
     min-height: 100vh;
     /* 다이나믹 아일랜드 + 하단 탭바 여백 */
     padding-top: calc(var(--safe-top) + 8px);
-    padding-bottom: calc(var(--tab-h) + var(--safe-bottom) + 8px);
+    padding-bottom: calc(var(--tab-h) + var(--tabsbar-h) + var(--safe-bottom) + 8px);
     padding-left: 14px;
     padding-right: 14px;
     -webkit-text-size-adjust: 100%;
@@ -136,17 +137,28 @@
   .progress-compare.behind { background: #3a1a14; color: var(--red);   border: 1px solid #7a3226; }
   .progress-compare.even   { background: var(--muted); color: var(--text3); border: 1px solid var(--border); }
 
-  /* ── 탭 (스크롤) ── */
-  .tabs {
+  /* ── 탭 ── */
+
+  /* ── 과목 탭을 하단에 고정한 두번째 줄 ── */
+  .tabs-bottom {
+    position: fixed;
+    left: 0; right: 0;
+    bottom: calc(var(--tab-h) + var(--safe-bottom));
+    height: var(--tabsbar-h);
     display: flex;
+    align-items: center;
     gap: 7px;
     overflow-x: auto;
-    padding: 2px 0 8px;
-    margin-bottom: 12px;
+    padding: 0 10px;
+    background: rgba(13,17,23,0.92);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    border-top: 1px solid var(--border);
     scrollbar-width: none;
     -webkit-overflow-scrolling: touch;
+    z-index: 99;
   }
-  .tabs::-webkit-scrollbar { display: none; }
+  .tabs-bottom::-webkit-scrollbar { display: none; }
   .tab {
     flex-shrink: 0;
     min-height: 36px;
@@ -233,22 +245,10 @@
   }
   .week-badge.done    { background: var(--muted);  color: var(--text4); }
   .week-badge.current { background: #2d1e3e; color: var(--purple); }
-  .round-badge {
-    font-size: 11px;
-    font-weight: 700;
-    padding: 4px 9px;
-    border-radius: 10px;
-    white-space: nowrap;
-  }
-  .round-badge.r1 { background: #1f3d5c; color: var(--blue); }
-  .round-badge.r2 { background: #2d1e3e; color: var(--purple); }
   .week-title { font-size: 14px; font-weight: 600; color: var(--text2); flex: 1; line-height: 1.3; }
   .week-days  { font-size: 11px; color: var(--text4); white-space: nowrap; }
-  .week-arrow { font-size: 12px; color: var(--text4); transition: transform 0.2s; }
-  .week-arrow.open { transform: rotate(180deg); }
 
-  .week-body { display: none; padding: 0 14px 14px; }
-  .week-body.open { display: block; }
+  .week-body { display: block; padding: 0 14px 14px; }
 
   /* ── 세부 항목 ── */
   .topic-item {
@@ -429,25 +429,6 @@
 
   .footer { text-align: center; padding: 20px 0 0; font-size: 12px; color: var(--text4); }
 
-  /* ── 치트키 이론 이동 버튼 ── */
-  .theory-link-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    margin-top: 14px;
-    padding: 15px;
-    background: linear-gradient(135deg, #1f3d5c, #17304a);
-    border: 1px solid #1f6feb;
-    border-radius: 14px;
-    color: var(--blue);
-    font-size: 15px;
-    font-weight: 700;
-    text-decoration: none;
-    user-select: none;
-  }
-  .theory-link-btn:active { opacity: 0.7; }
-
   /* ── 일일 할일 서브아이템 ── */
   .task-sub {
     display: flex;
@@ -539,17 +520,6 @@
   <div class="progress-compare" id="progressCompare"></div>
 </div>
 
-<!-- 탭 (수평 스크롤) -->
-<div class="tabs" id="tabBar">
-  <div class="tab active" onclick="showTab('circuit',this)">⚡ 회로이론</div>
-  <div class="tab" onclick="showTab('control',this)">🎛️ 제어공학</div>
-  <div class="tab" onclick="showTab('emag',this)">🧲 전자기학</div>
-  <div class="tab" onclick="showTab('machine',this)">⚙️ 전기기기</div>
-  <div class="tab" onclick="showTab('power',this)">🏭 전력공학</div>
-  <div class="tab" onclick="showTab('kec',this)">📋 KEC</div>
-  <div class="tab" onclick="showTab('exam',this)">📝 기출풀이</div>
-</div>
-
 <!-- ===== 회로이론 ===== -->
 <div class="subject-panel active" id="panel-circuit">
   <div class="subject-header">
@@ -563,12 +533,10 @@
   </div>
 
   <div class="week-section">
-    <div class="week-header" onclick="toggleWeek('c1')">
-      <span class="round-badge r1">1회독</span>
+    <div class="week-header">
       <span class="week-badge current">진행중</span>
       <span class="week-title">1단계 — 직류회로 기초</span>
       <span class="week-days">Day 1~4</span>
-      <span class="week-arrow" id="arrow-c1">▼</span>
     </div>
     <div class="week-body" id="body-c1">
 
@@ -634,12 +602,10 @@
   </div>
 
   <div class="week-section">
-    <div class="week-header" onclick="toggleWeek('c2')">
-      <span class="round-badge r1">1회독</span>
+    <div class="week-header">
       <span class="week-badge">예정</span>
       <span class="week-title">2단계 — 교류회로 · RLC</span>
       <span class="week-days">Day 5~7</span>
-      <span class="week-arrow" id="arrow-c2">▼</span>
     </div>
     <div class="week-body" id="body-c2">
 
@@ -690,12 +656,10 @@
   </div>
 
   <div class="week-section">
-    <div class="week-header" onclick="toggleWeek('c3')">
-      <span class="round-badge r2">2회독</span>
+    <div class="week-header">
       <span class="week-badge">예정</span>
       <span class="week-title">3단계 — 3상회로·과도현상·마무리</span>
       <span class="week-days">Day 8</span>
-      <span class="week-arrow" id="arrow-c3">▼</span>
     </div>
     <div class="week-body" id="body-c3">
 
@@ -753,12 +717,10 @@
   </div>
 
   <div class="week-section">
-    <div class="week-header" onclick="toggleWeek('ct1')">
-      <span class="round-badge r1">1회독</span>
+    <div class="week-header">
       <span class="week-badge">예정</span>
       <span class="week-title">라플라스 변환 · 역변환</span>
       <span class="week-days">Day 9~10</span>
-      <span class="week-arrow" id="arrow-ct1">▼</span>
     </div>
     <div class="week-body" id="body-ct1">
 
@@ -801,12 +763,10 @@
   </div>
 
   <div class="week-section">
-    <div class="week-header" onclick="toggleWeek('ct2')">
-      <span class="round-badge r1">1회독</span>
+    <div class="week-header">
       <span class="week-badge">예정</span>
       <span class="week-title">전달함수 · 블록선도</span>
       <span class="week-days">Day 11~12</span>
-      <span class="week-arrow" id="arrow-ct2">▼</span>
     </div>
     <div class="week-body" id="body-ct2">
 
@@ -843,12 +803,10 @@
   </div>
 
   <div class="week-section">
-    <div class="week-header" onclick="toggleWeek('ct3')">
-      <span class="round-badge r2">2회독</span>
+    <div class="week-header">
       <span class="week-badge">예정</span>
       <span class="week-title">시간응답 · 안정도 · 마무리</span>
       <span class="week-days">Day 13</span>
-      <span class="week-arrow" id="arrow-ct3">▼</span>
     </div>
     <div class="week-body" id="body-ct3">
 
@@ -903,12 +861,10 @@
   </div>
 
   <div class="week-section">
-    <div class="week-header" onclick="toggleWeek('e1')">
-      <span class="round-badge r1">1회독</span>
+    <div class="week-header">
       <span class="week-badge">예정</span>
       <span class="week-title">정전계</span>
       <span class="week-days">Day 14~17</span>
-      <span class="week-arrow" id="arrow-e1">▼</span>
     </div>
     <div class="week-body" id="body-e1">
 
@@ -981,12 +937,10 @@
   </div>
 
   <div class="week-section">
-    <div class="week-header" onclick="toggleWeek('e2')">
-      <span class="round-badge r1">1회독</span>
+    <div class="week-header">
       <span class="week-badge">예정</span>
       <span class="week-title">자계 · 전자기유도</span>
       <span class="week-days">Day 18~20</span>
-      <span class="week-arrow" id="arrow-e2">▼</span>
     </div>
     <div class="week-body" id="body-e2">
 
@@ -1044,12 +998,10 @@
   </div>
 
   <div class="week-section">
-    <div class="week-header" onclick="toggleWeek('e3')">
-      <span class="round-badge r2">2회독</span>
+    <div class="week-header">
       <span class="week-badge">예정</span>
       <span class="week-title">전자파 · 마무리</span>
       <span class="week-days">Day 21</span>
-      <span class="week-arrow" id="arrow-e3">▼</span>
     </div>
     <div class="week-body" id="body-e3">
 
@@ -1101,12 +1053,10 @@
   </div>
 
   <div class="week-section">
-    <div class="week-header" onclick="toggleWeek('m1')">
-      <span class="round-badge r1">1회독</span>
+    <div class="week-header">
       <span class="week-badge">예정</span>
       <span class="week-title">변압기</span>
       <span class="week-days">Day 22</span>
-      <span class="week-arrow" id="arrow-m1">▼</span>
     </div>
     <div class="week-body" id="body-m1">
 
@@ -1155,12 +1105,10 @@
   </div>
 
   <div class="week-section">
-    <div class="week-header" onclick="toggleWeek('m2')">
-      <span class="round-badge r1">1회독</span>
+    <div class="week-header">
       <span class="week-badge">예정</span>
       <span class="week-title">유도전동기 ← 인버터 직결!</span>
       <span class="week-days">Day 23</span>
-      <span class="week-arrow" id="arrow-m2">▼</span>
     </div>
     <div class="week-body" id="body-m2">
 
@@ -1210,12 +1158,10 @@
   </div>
 
   <div class="week-section">
-    <div class="week-header" onclick="toggleWeek('m3')">
-      <span class="round-badge r2">2회독</span>
+    <div class="week-header">
       <span class="week-badge">예정</span>
       <span class="week-title">직류기 · 동기기 · 마무리</span>
       <span class="week-days">Day 24</span>
-      <span class="week-arrow" id="arrow-m3">▼</span>
     </div>
     <div class="week-body" id="body-m3">
 
@@ -1272,12 +1218,10 @@
   </div>
 
   <div class="week-section">
-    <div class="week-header" onclick="toggleWeek('p1')">
-      <span class="round-badge r1">1회독</span>
+    <div class="week-header">
       <span class="week-badge">예정</span>
       <span class="week-title">송전선로 · 선로정수 · 송전특성</span>
       <span class="week-days">Day 25~26</span>
-      <span class="week-arrow" id="arrow-p1">▼</span>
     </div>
     <div class="week-body" id="body-p1">
 
@@ -1318,12 +1262,10 @@
   </div>
 
   <div class="week-section">
-    <div class="week-header" onclick="toggleWeek('p2')">
-      <span class="round-badge r2">2회독</span>
+    <div class="week-header">
       <span class="week-badge">예정</span>
       <span class="week-title">변전소 · 차단기 · 보호계전 · 마무리</span>
       <span class="week-days">Day 27~28</span>
-      <span class="week-arrow" id="arrow-p2">▼</span>
     </div>
     <div class="week-body" id="body-p2">
 
@@ -1395,12 +1337,10 @@
   </div>
 
   <div class="week-section">
-    <div class="week-header" onclick="toggleWeek('k1')">
-      <span class="round-badge r1">1회독</span>
+    <div class="week-header">
       <span class="week-badge">예정</span>
       <span class="week-title">전압구분 · 이격거리 · 접지</span>
       <span class="week-days">Day 29 오전</span>
-      <span class="week-arrow" id="arrow-k1">▼</span>
     </div>
     <div class="week-body" id="body-k1">
 
@@ -1450,12 +1390,10 @@
   </div>
 
   <div class="week-section">
-    <div class="week-header" onclick="toggleWeek('k2')">
-      <span class="round-badge r2">2회독</span>
+    <div class="week-header">
       <span class="week-badge">예정</span>
       <span class="week-title">배선 · 보호장치 · 수전설비</span>
       <span class="week-days">Day 29 오후</span>
-      <span class="week-arrow" id="arrow-k2">▼</span>
     </div>
     <div class="week-body" id="body-k2">
 
@@ -1564,11 +1502,10 @@
   </div>
 
   <div class="week-section">
-    <div class="week-header" onclick="toggleWeek('ex1')">
+    <div class="week-header">
       <span class="week-badge current">체크리스트</span>
       <span class="week-title">기출 진행 체크</span>
       <span class="week-days">Day 30~48</span>
-      <span class="week-arrow" id="arrow-ex1">▼</span>
     </div>
     <div class="week-body" id="body-ex1">
       <div class="day-mark">📅 Day 30</div>
@@ -1663,9 +1600,19 @@
   <div class="rule-row">🍺 <span><strong>술</strong> — 비번 첫날 저녁만 ㅋㅋ</span></div>
 </div>
 
-<a class="theory-link-btn" href="https://ohmmygod81.github.io/1page/">📖 전트키 이론</a>
 
 <div class="footer">목표: 과목당 40점↑ + 평균 60점 🎯 할 수 있어요 💪</div>
+
+<!-- 과목 탭 (하단 고정, 수평 스크롤) -->
+<div class="tabs-bottom" id="tabBar">
+  <div class="tab active" onclick="showTab('circuit',this)">⚡ 회로이론</div>
+  <div class="tab" onclick="showTab('control',this)">🎛️ 제어공학</div>
+  <div class="tab" onclick="showTab('emag',this)">🧲 전자기학</div>
+  <div class="tab" onclick="showTab('machine',this)">⚙️ 전기기기</div>
+  <div class="tab" onclick="showTab('power',this)">🏭 전력공학</div>
+  <div class="tab" onclick="showTab('kec',this)">📋 KEC</div>
+  <div class="tab" onclick="showTab('exam',this)">📝 기출풀이</div>
+</div>
 
 <!-- 하단 고정 탭바 (iOS 스타일) -->
 <div class="bottom-nav">
@@ -1673,25 +1620,47 @@
     <div class="nav-icon">🏠</div>
     <div class="nav-label">홈</div>
   </div>
-  <div class="nav-item" onclick="showTabNav('circuit')">
-    <div class="nav-icon">⚡</div>
-    <div class="nav-label">회로</div>
-  </div>
-  <div class="nav-item" onclick="showTabNav('control')">
-    <div class="nav-icon">🎛️</div>
-    <div class="nav-label">제어</div>
-  </div>
-  <div class="nav-item" onclick="showTabNav('machine')">
-    <div class="nav-icon">⚙️</div>
-    <div class="nav-label">기기</div>
-  </div>
-  <div class="nav-item" onclick="showTabNav('exam')">
-    <div class="nav-icon">📝</div>
-    <div class="nav-label">기출</div>
+  <a class="nav-item" href="https://ohmmygod81.github.io/1page/" style="text-decoration:none;">
+    <div class="nav-icon">📖</div>
+    <div class="nav-label">치트키</div>
+  </a>
+  <div class="nav-item" onclick="scrollTop()">
+    <div class="nav-icon">⬆️</div>
+    <div class="nav-label">맨위로</div>
   </div>
 </div>
 
+<!-- Firebase (체크박스 기록을 기기 간 동기화하기 위해 사용) -->
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+
 <script>
+  // ⚠️ 아래 firebaseConfig 값을 본인 Firebase 프로젝트 설정으로 교체하세요.
+  // (코팅반_통합관리.html에서 쓰던 것과 같은 프로젝트를 써도 되고, 새 프로젝트를 만들어도 됩니다.)
+  // Firebase 콘솔 > 프로젝트 설정 > 일반 > 내 앱 > SDK 설정 및 구성 에서 확인 가능합니다.
+  const firebaseConfig = {
+    apiKey: "AIzaSyBbm0hy_qz_85UCSu2uLUCUN6zYhs-sAqo",
+    authDomain: "hoho-a270e.firebaseapp.com",
+    databaseURL: "https://hoho-a270e-default-rtdb.firebaseio.com",
+    projectId: "hoho-a270e",
+    storageBucket: "hoho-a270e.firebasestorage.app",
+    messagingSenderId: "240112645938",
+    appId: "1:240112645938:web:7bc00ffa220c07327ec92b",
+    measurementId: "G-97XCVP2Z3H"
+  };
+
+  const CHECK_PATH = 'examPlan49/checks'; // Realtime Database 안에서 이 앱의 체크 기록이 저장되는 경로
+
+  let db = null;
+  let fbReady = false;
+  try {
+    firebase.initializeApp(firebaseConfig);
+    db = firebase.database();
+    fbReady = true;
+  } catch (e) {
+    console.warn('Firebase 초기화 실패 - localStorage만 사용합니다.', e);
+  }
+
   const START = new Date(2026, 6, 9);
   const EXAM  = new Date(2026, 7, 27);
   const STUDY_END = new Date(2026, 7, 26);
@@ -1741,15 +1710,39 @@
   }
 
   function saveAndRefresh(el) {
-    localStorage.setItem('chk_' + el.id, el.checked);
+    const val = el.checked;
+    // 1) localStorage에 즉시 저장 (오프라인이거나 Firebase가 느려도 화면은 바로 반영)
+    localStorage.setItem('chk_' + el.id, val);
     updateProgress();
+    // 2) Firebase에도 저장해서 다른 기기(폰/PC)에서도 같은 기록을 보게 함
+    if (fbReady) {
+      db.ref(CHECK_PATH + '/' + el.id).set(val)
+        .catch(err => console.warn('Firebase 저장 실패 (localStorage에는 저장됨):', err));
+    }
   }
 
   function loadChecks() {
+    // 1) localStorage 값으로 먼저 즉시 렌더링 (첫 화면 빠르게)
     document.querySelectorAll('input[type=checkbox]').forEach(el => {
       el.checked = localStorage.getItem('chk_' + el.id) === 'true';
     });
     updateProgress();
+
+    // 2) Firebase에 연결되어 있으면 실시간으로 최신 기록을 받아와서 덮어씀
+    //    (다른 기기에서 체크한 내용도 자동으로 반영됨)
+    if (fbReady) {
+      db.ref(CHECK_PATH).on('value', snapshot => {
+        const data = snapshot.val() || {};
+        document.querySelectorAll('input[type=checkbox]').forEach(el => {
+          const checked = !!data[el.id];
+          el.checked = checked;
+          localStorage.setItem('chk_' + el.id, checked);
+        });
+        updateProgress();
+      }, err => {
+        console.warn('Firebase 읽기 실패 - localStorage 기록을 그대로 사용합니다.', err);
+      });
+    }
   }
 
   // 상단 탭 클릭
@@ -1761,32 +1754,10 @@
     window.scrollTo({top: 0, behavior: 'smooth'});
   }
 
-  // 하단 탭바 클릭
-  function showTabNav(id) {
-    // 상단 탭도 같이 활성화
-    const tabEls = document.querySelectorAll('.tab');
-    const panels = ['circuit','control','emag','machine','power','kec','exam'];
-    const idx = panels.indexOf(id);
-    document.querySelectorAll('.subject-panel').forEach(p => p.classList.remove('active'));
-    tabEls.forEach(t => t.classList.remove('active'));
-    document.getElementById('panel-' + id).classList.add('active');
-    if(tabEls[idx]) tabEls[idx].classList.add('active');
-    // 하단 탭바 active
-    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-    window.scrollTo({top: 0, behavior: 'smooth'});
-  }
-
   function scrollTop() {
     window.scrollTo({top: 0, behavior: 'smooth'});
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
     document.getElementById('nav-home').classList.add('active');
-  }
-
-  function toggleWeek(id) {
-    const body  = document.getElementById('body-' + id);
-    const arrow = document.getElementById('arrow-' + id);
-    body.classList.toggle('open');
-    arrow.classList.toggle('open');
   }
 
   updateHeader();
