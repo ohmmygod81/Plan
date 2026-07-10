@@ -9,1743 +9,657 @@
 <meta name="theme-color" content="#1c2128">
 <title>전기기사 49일 플랜</title>
 <style>
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
   :root {
-    /* iPhone 15 Pro 실측값 기준 fallback (Dynamic Island 59pt / Home Indicator 34pt) */
-    --safe-top: env(safe-area-inset-top, 59px);
-    --safe-bottom: env(safe-area-inset-bottom, 34px);
     --bg: #1c2128;
-    --surface: #262c35;
-    --border: #3d444d;
-    --muted: #2d333b;
-    --text: #e6edf3;
-    --text2: #c9d1d9;
-    --text3: #8b949e;
-    --text4: #6e7681;
-    --blue: #58a6ff;
-    --green: #3fb950;
-    --purple: #bc8cff;
-    --red: #f78166;
-    --tab-h: 60px;
+    --card: #262c35;
+    --card2: #2c333d;
+    --border: #3a4250;
+    --text: #eaf0f7;
+    --sub: #9aa8bd;
+    --subdim: #7f8da3;
+    --accent: #5aa9ff;
+    --accent2: #ffb454;
+    --good: #3ddc84;
+    --bad: #ff6b6b;
   }
-
-  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
-
-  html { font-size: 16px; }
-
   body {
-    background: var(--bg);
+    margin: 0; padding: 0 0 50px;
+    background:
+      radial-gradient(circle at 15% 0%, rgba(90,169,255,0.10), transparent 40%),
+      radial-gradient(circle at 85% 8%, rgba(255,180,84,0.08), transparent 35%),
+      var(--bg);
     color: var(--text);
-    font-family: -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
-    min-height: 100vh;
-    /* 다이나믹 아일랜드 + 하단 탭바 여백 */
-    padding-top: calc(var(--safe-top) + 8px);
-    padding-bottom: calc(var(--tab-h) + var(--safe-bottom) + 8px);
-    padding-left: 14px;
-    padding-right: 14px;
-    -webkit-text-size-adjust: 100%;
+    font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Segoe UI", Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
   }
+  .wrap { padding: 16px 12px 0; }
 
-  /* ── 헤더 ── */
-  .header {
-    text-align: center;
-    padding: 14px 0 14px;
-    border-bottom: 1px solid var(--border);
-    margin-bottom: 14px;
+  /* ---- Header ---- */
+  .hero { text-align:center; margin-bottom:12px; }
+  .hero .badge {
+    display:inline-block; font-size:10.5px; font-weight:700; letter-spacing:.5px;
+    color:var(--accent); background:rgba(90,169,255,0.12); border:1px solid rgba(90,169,255,0.3);
+    padding:3px 10px; border-radius:20px; margin-bottom:8px;
   }
-  .header h1 {
-    font-size: 18px;
-    font-weight: 800;
-    color: #f0f6fc;
-    letter-spacing: -0.3px;
+  .hero h1 {
+    font-size:21px; margin:0 0 4px; font-weight:800;
+    background:linear-gradient(90deg,#fff,#a8c8ff);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
   }
-  .header .sub { font-size: 12px; color: var(--text4); margin-top: 4px; }
-  .exam-badge {
-    display: inline-block;
-    margin-top: 8px;
-    background: #1f3d5c;
-    border: 1px solid #1f6feb;
-    border-radius: 20px;
-    padding: 5px 14px;
-    font-size: 12px;
-    color: var(--blue);
-    font-weight: 600;
-  }
+  .hero .sub { color:var(--sub); font-size:12px; }
 
-  /* ── D-Day 카드 ── */
-  .top-stats {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    margin-bottom: 12px;
+  /* ---- Today card ---- */
+  .today-card {
+    background:linear-gradient(155deg, #17324d, #101820 65%);
+    border:1px solid #234261; border-radius:18px; padding:16px;
+    margin-bottom:14px; position:relative; overflow:hidden;
   }
-  .stat-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 16px 10px;
-    text-align: center;
+  .today-card::after {
+    content:""; position:absolute; top:-30px; right:-30px; width:120px; height:120px;
+    background:radial-gradient(circle, rgba(90,169,255,0.25), transparent 70%);
   }
-  .stat-num { font-size: 42px; font-weight: 800; line-height: 1; }
-  .stat-num.red    { color: var(--red); }
-  .stat-num.green  { color: var(--green); }
-  .stat-label { font-size: 12px; color: var(--text4); margin-top: 6px; }
+  .today-card .tc-top { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+  .today-card .tc-label { font-size:11px; color:#9fc2ff; font-weight:700; letter-spacing:.3px; }
+  .today-card .tc-tag { font-size:10px; font-weight:700; padding:2px 9px; border-radius:20px; color:#12161c; }
+  .today-card .tc-title { font-size:15.5px; font-weight:700; margin-bottom:10px; line-height:1.4; }
+  .today-card .tc-tasks { display:flex; flex-direction:column; gap:6px; margin-bottom:4px; }
+  .today-card .tc-task {
+    display:flex; align-items:flex-start; gap:8px; font-size:12.5px; color:#dce6f2;
+    background:rgba(255,255,255,0.04); border-radius:9px; padding:8px 9px;
+  }
+  .today-card .tc-task input { width:17px; height:17px; margin-top:1px; accent-color:var(--good); flex-shrink:0; }
+  .today-card .tc-task.done label { color:var(--subdim); text-decoration:line-through; }
+  .today-card .tc-more {
+    margin-top:10px; width:100%; padding:9px; border-radius:10px; border:1px solid rgba(255,255,255,0.15);
+    background:rgba(255,255,255,0.06); color:#fff; font-size:12.5px; font-weight:600;
+  }
+  .today-card.no-plan { text-align:center; padding:20px 16px; }
+  .today-card.no-plan .tc-title { font-size:13.5px; color:#c2cee0; margin:0; }
 
-  /* ── 진행률 ── */
-  .progress-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 14px 16px;
-    margin-bottom: 12px;
+  /* ---- Stats ---- */
+  .stats { display:flex; gap:7px; margin-bottom:10px; }
+  .stat {
+    flex:1; background:var(--card); border:1px solid var(--border); border-radius:13px;
+    padding:11px 5px; text-align:center;
   }
-  .progress-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 8px;
-    font-size: 13px;
-  }
-  .progress-row span:first-child { color: var(--text3); }
-  .progress-row span:last-child  { font-weight: 700; color: var(--green); }
-  .bar-bg {
-    background: var(--muted);
-    border-radius: 6px;
-    height: 9px;
-    overflow: hidden;
-    margin-bottom: 6px;
-  }
-  .bar-fill {
-    height: 100%;
-    border-radius: 6px;
-    background: linear-gradient(90deg, #1f6feb, var(--blue));
-    transition: width 0.6s ease;
-  }
-  .bar-fill.real {
-    background: linear-gradient(90deg, #238636, var(--green));
-  }
-  .bar-label { font-size: 11px; color: var(--text4); text-align: right; }
-  .progress-compare {
-    margin-top: 12px;
-    padding: 9px 12px;
-    border-radius: 10px;
-    font-size: 12.5px;
-    font-weight: 600;
-    text-align: center;
-  }
-  .progress-compare.ahead  { background: #0d2818; color: var(--green); border: 1px solid #238636; }
-  .progress-compare.behind { background: #3a1a14; color: var(--red);   border: 1px solid #7a3226; }
-  .progress-compare.even   { background: var(--muted); color: var(--text3); border: 1px solid var(--border); }
+  .stat .num { font-size:22px; font-weight:800; color:var(--accent); font-variant-numeric:tabular-nums; }
+  .stat .lbl { font-size:9px; color:var(--sub); margin-top:3px; font-weight:600; }
+  .stat .bar { height:5px; background:#1c232f; border-radius:3px; margin-top:7px; overflow:hidden; }
+  .stat .bar i { display:block; height:100%; border-radius:3px; transition:width .3s ease; }
+  .stat.plan .num { color:var(--accent2); }
+  .stat.plan .bar i { background:linear-gradient(90deg,#ffb454,#ff8a3d); }
+  .stat.real .bar i { background:linear-gradient(90deg,#3ddc84,#22b56b); }
+  .stat.streak .num { color:#ff9f6b; }
 
-  /* ── 과목 패널 ── */
-  .subject-panel { display: none; }
-  .subject-panel.active { display: block; }
+  /* ---- Quick links ---- */
+  .linkrow { display:flex; gap:8px; margin-bottom:16px; }
+  .linkrow a {
+    flex:1; display:flex; align-items:center; justify-content:center; gap:6px;
+    font-size:12px; font-weight:600; color:var(--text); text-decoration:none;
+    border:1px solid var(--border); padding:10px 8px; border-radius:12px; background:var(--card);
+  }
+  .linkrow a .ic { font-size:14px; }
+  .linkrow a.store { border-color:rgba(61,220,132,0.35); background:rgba(61,220,132,0.08); color:#8ff0bd; }
 
-  .subject-header {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 16px;
-    margin-bottom: 10px;
+  /* ---- Subject progress ---- */
+  .subjects { margin-bottom:16px; }
+  .subjects h2 { font-size:12.5px; color:var(--sub); font-weight:700; margin:0 0 8px 2px; }
+  .subj-grid { display:flex; flex-wrap:wrap; gap:6px; }
+  .subj {
+    background:var(--card); border:1px solid var(--border); border-radius:20px; padding:7px 12px;
+    display:flex; align-items:center; gap:6px; font-size:11.5px; font-weight:700; white-space:nowrap;
   }
-  .subject-title-row {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 8px;
-  }
-  .subject-icon { font-size: 24px; }
-  .subject-name-big { font-size: 19px; font-weight: 700; color: #f0f6fc; }
-  .subject-period-badge {
-    margin-left: auto;
-    font-size: 11px;
-    background: var(--muted);
-    color: var(--text3);
-    padding: 4px 9px;
-    border-radius: 10px;
-    white-space: nowrap;
-  }
-  .subject-desc { font-size: 13px; color: var(--text4); line-height: 1.6; }
-  .subject-strategy {
-    margin-top: 10px;
-    background: var(--bg);
-    border-radius: 10px;
-    padding: 11px 13px;
-    font-size: 13px;
-    color: var(--text3);
-    line-height: 1.7;
-    border-left: 3px solid var(--blue);
-  }
+  .subj .s-pct { color:var(--sub); font-variant-numeric:tabular-nums; font-weight:600; }
 
-  /* ── 주차 섹션 ── */
-  .week-section {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    margin-bottom: 10px;
-    overflow: hidden;
+  /* ---- Calendar card w/ month navigation ---- */
+  .cal-card { background:var(--card2); border:1px solid var(--border); border-radius:16px; padding:12px; margin-bottom:16px; }
+  .cal-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
+  .cal-header .cal-title { font-size:14.5px; font-weight:800; color:var(--text); display:flex; align-items:center; gap:7px; }
+  .cal-header .cal-title::before { content:""; width:4px; height:14px; background:var(--accent); border-radius:2px; display:inline-block; }
+  .cal-btn {
+    width:30px; height:30px; border-radius:50%; border:1px solid var(--border); background:var(--card);
+    color:var(--text); font-size:15px; font-weight:700; display:flex; align-items:center; justify-content:center;
+    line-height:1; cursor:pointer; padding:0;
   }
-  .week-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 15px 14px;
-    min-height: 54px;          /* 터치 타겟 44px+ */
-    user-select: none;
+  .cal-btn:active { transform:scale(0.9); }
+  .cal-btn:disabled { opacity:.3; cursor:default; }
+  .grid { display:grid; grid-template-columns: repeat(7, 1fr); gap:4px; }
+  .wd { text-align:center; font-size:10.5px; color:var(--sub); padding-bottom:3px; font-weight:700; }
+  .cell {
+    min-height:82px; border-radius:10px; padding:5px 5px 6px;
+    background:var(--card); border:1px solid var(--border); position:relative;
+    font-size:10px; line-height:1.25; cursor:pointer;
+    transition: transform .1s ease;
   }
-  .week-header:active { background: rgba(255,255,255,0.04); }
-  .week-badge {
-    font-size: 11px;
-    font-weight: 700;
-    padding: 4px 9px;
-    border-radius: 10px;
-    background: #1f3d5c;
-    color: var(--blue);
-    white-space: nowrap;
+  .cell:active { transform: scale(0.94); }
+  .cell.empty { background:transparent; border:none; cursor:default; }
+  .cell .dnum { font-size:9px; color:var(--sub); font-weight:600; }
+  .cell .date { font-size:11.5px; font-weight:700; color:var(--text); }
+  .cell .tag { display:inline-block; margin-top:2px; padding:1.5px 5px; border-radius:5px; font-size:8.7px; font-weight:700; color:#12161c; }
+  .cell .topic { margin-top:2px; color:#c2cddc; font-size:9.3px; }
+  .cell.today { border-color:var(--accent); box-shadow:0 0 0 1.5px var(--accent) inset, 0 0 14px rgba(90,169,255,0.25); }
+  .cell.exam { background:linear-gradient(155deg,#3a1418,#1a0d10); border-color:var(--bad); }
+  .cell.exam .date { color:#ff8f8f; }
+  .cell.rest { background:var(--card); }
+  .cell.done { border-color:rgba(61,220,132,0.5); }
+  .cell .check {
+    position:absolute; top:4px; right:4px; font-size:10px; color:var(--good);
   }
-  .week-badge.done    { background: var(--muted);  color: var(--text4); }
-  .week-badge.current { background: #2d1e3e; color: var(--purple); }
-  .week-title { font-size: 14px; font-weight: 600; color: var(--text2); flex: 1; line-height: 1.3; }
-  .week-days  { font-size: 11px; color: var(--text4); white-space: nowrap; }
-  .week-arrow { font-size: 12px; color: var(--text4); transition: transform 0.2s; }
-  .week-arrow.open { transform: rotate(180deg); }
+  .cell .curbadge {
+    display:inline-block; margin-top:2px; margin-left:4px; font-size:7.5px; font-weight:800;
+    color:#12161c; background:var(--accent2); padding:1px 5px; border-radius:5px; vertical-align:middle;
+  }
+  .cell .prog { position:absolute; bottom:0; left:0; height:3px; background:var(--good); border-radius:0 0 10px 10px; transition:width .3s; }
 
-  .week-body { display: none; padding: 0 14px 14px; }
-  .week-body.open { display: block; }
+  .c-circuit { background:#5aa9ff; }
+  .c-control { background:#3ddc84; }
+  .c-magnetic { background:#ffb454; }
+  .c-machine { background:#c792ff; }
+  .c-power { background:#ff6b6b; }
+  .c-kec { background:#3ddceb; }
+  .c-exam { background:#9aa7ba; }
 
-  /* ── 세부 항목 ── */
-  .topic-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    padding: 12px 0;
-    border-bottom: 1px solid var(--muted);
-    min-height: 44px;          /* 터치 타겟 */
-  }
-  .topic-item:last-child { border-bottom: none; }
+  footer { text-align:center; color:var(--subdim); font-size:11px; margin-top:20px; padding:0 14px; }
 
-  /* 체크박스 — 아이폰 터치에 맞게 크게 */
-  .topic-item input[type="checkbox"] {
-    width: 22px;
-    height: 22px;
-    accent-color: var(--green);
-    flex-shrink: 0;
-    margin-top: 1px;
-    cursor: pointer;
+  /* ---- modal ---- */
+  .overlay {
+    display:none; position:fixed; inset:0; background:rgba(0,0,0,.65); backdrop-filter: blur(2px);
+    z-index:50; align-items:flex-end; justify-content:center;
   }
-  .topic-content { flex: 1; min-width: 0; }
-  .topic-name {
-    font-size: 14px;
-    color: var(--text2);
-    font-weight: 500;
-    line-height: 1.45;
+  .overlay.show { display:flex; }
+  .sheet {
+    background:var(--card); width:100%; max-width:480px; border-radius:20px 20px 0 0;
+    max-height:85vh; overflow-y:auto; padding:18px 16px 30px;
+    border-top:1px solid var(--border); animation: slideup .2s ease;
   }
-  .topic-item input:checked ~ .topic-content .topic-name {
-    text-decoration: line-through;
-    color: var(--text4);
-  }
-  .topic-detail {
-    font-size: 12px;
-    color: var(--text4);
-    margin-top: 4px;
-    line-height: 1.55;
-  }
-  .topic-tag {
-    display: inline-block;
-    font-size: 11px;
-    padding: 2px 7px;
-    border-radius: 8px;
-    margin-top: 5px;
-    margin-right: 4px;
-    font-weight: 600;
-  }
-  .tag-formula { background: #1f3d5c; color: var(--blue); }
-  .tag-memo    { background: #2d1e3e; color: var(--purple); }
-  .tag-calc    { background: #1e3a2a; color: var(--green); }
-  .tag-hard    { background: #3d1f1f; color: var(--red); }
+  @keyframes slideup { from { transform:translateY(30px); opacity:0; } to { transform:translateY(0); opacity:1; } }
+  .sheet-handle { width:36px; height:4px; background:#2a3242; border-radius:2px; margin:0 auto 14px; }
+  .sheet-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:4px; }
+  .sheet-header h3 { font-size:17px; margin:0; font-weight:800; }
+  .sheet-tag { font-size:10px; font-weight:700; padding:3px 9px; border-radius:7px; color:#12161c; }
+  .sheet-date { font-size:12px; color:var(--sub); margin-bottom:14px; }
+  .sheet-title { font-size:14.5px; font-weight:700; margin-bottom:12px; color:var(--text); line-height:1.4; }
 
-  /* ── 일자 구분 마커 ── */
-  .day-mark {
-    font-size: 11.5px;
-    font-weight: 700;
-    color: var(--blue);
-    background: #12233a;
-    display: inline-block;
-    padding: 4px 10px;
-    border-radius: 8px;
-    margin: 14px 0 6px;
-  }
-  .day-mark:first-child { margin-top: 2px; }
-
-  /* ── 공식 박스 ── */
   .formula-box {
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 11px 13px;
-    margin: 9px 0 4px;
-    line-height: 1.9;
+    background:var(--bg); border:1px solid var(--border); border-radius:11px;
+    padding:11px 13px; margin-bottom:8px; font-size:12.5px; color:#c3cfdf; line-height:1.65;
   }
-  .f-title {
-    font-size: 12px;
-    color: var(--blue);
-    font-weight: 700;
-    margin-bottom: 6px;
-  }
-  .formula {
-    color: var(--text);
-    font-family: 'Courier New', 'Menlo', monospace;
-    font-size: 13px;
-  }
+  .formula-box::before { content:"📐 "; }
 
-  /* ── 기출 카드 ── */
-  .exam-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 16px;
-    margin-bottom: 10px;
+  .tasklist { margin-top:16px; }
+  .tasklist h4 { font-size:12px; color:var(--sub); margin:0 0 8px; font-weight:700; }
+  .task {
+    display:flex; align-items:flex-start; gap:9px; padding:10px 9px;
+    border-radius:10px; margin-bottom:6px; background:var(--bg); border:1px solid var(--border);
   }
-  .exam-card-title {
-    font-size: 14px;
-    font-weight: 700;
-    color: var(--purple);
-    margin-bottom: 12px;
-  }
-  .exam-step {
-    display: flex;
-    gap: 12px;
-    padding: 10px 0;
-    border-bottom: 1px solid var(--muted);
-    align-items: flex-start;
-    min-height: 44px;
-  }
-  .exam-step:last-child { border-bottom: none; }
-  .step-num {
-    width: 24px; height: 24px;
-    border-radius: 50%;
-    background: #2d1e3e;
-    color: var(--purple);
-    font-size: 12px;
-    font-weight: 700;
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0;
-    margin-top: 1px;
-  }
-  .step-text { font-size: 14px; color: var(--text3); line-height: 1.6; }
-  .step-text strong { color: var(--text2); }
+  .task input { width:18px; height:18px; margin-top:1px; accent-color:var(--good); flex-shrink:0; }
+  .task label { font-size:13px; color:var(--text); line-height:1.45; }
+  .task.done { opacity:.75; }
+  .task.done label { color:var(--subdim); text-decoration:line-through; }
 
-  /* ── 핵심규칙 ── */
-  .rules-mini {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 16px;
-    margin-top: 14px;
+  .close-btn {
+    width:100%; margin-top:18px; padding:12px; border:none; border-radius:12px;
+    background:var(--accent); color:#12161c; font-size:14px; font-weight:800;
   }
-  .rules-mini-title { font-size: 14px; font-weight: 700; color: #f0f6fc; margin-bottom: 12px; }
-  .rule-row {
-    display: flex;
-    gap: 10px;
-    align-items: flex-start;
-    padding: 10px 0;
-    border-bottom: 1px solid var(--muted);
-    font-size: 14px;
-    color: var(--text3);
-    min-height: 44px;
-  }
-  .rule-row:last-child { border-bottom: none; }
-  .rule-row strong { color: var(--text2); }
-
-  /* ── 하단 고정 탭바 (iOS 스타일) ── */
-  .bottom-nav {
-    position: fixed;
-    bottom: 0;
-    left: 0; right: 0;
-    height: calc(var(--tab-h) + var(--safe-bottom));
-    background: rgba(13,17,23,0.92);
-    backdrop-filter: saturate(180%) blur(20px);
-    -webkit-backdrop-filter: saturate(180%) blur(20px);
-    border-top: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 4px;
-    padding: 0 6px var(--safe-bottom);
-    z-index: 100;
-  }
-  .nav-item {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex: 1;
-    height: 36px;
-    padding: 0 1px;
-    border-radius: 6px;
-    border: 1px solid var(--border);
-    user-select: none;
-    text-decoration: none;
-    overflow: hidden;
-  }
-  .nav-item:active { opacity: 0.6; }
-  .nav-label { font-size: 12.5px; color: var(--text2); font-weight: 700; white-space: nowrap; letter-spacing: -0.5px; }
-  .nav-item.active { border-color: #1f6feb; }
-  .nav-item.active .nav-label { color: var(--blue); }
-  .nav-item.theory .nav-label { color: var(--blue); }
-
-  .footer { text-align: center; padding: 20px 0 0; font-size: 12px; color: var(--text4); }
-
-  /* ── 일일 할일 서브아이템 ── */
-  .task-sub {
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    padding: 8px 0 8px 12px;
-    border-bottom: 1px solid rgba(33,38,45,0.6);
-  }
-  .task-sub:last-child { border-bottom: none; }
-  .task-sub input[type="checkbox"] {
-    width: 18px; height: 18px;
-    accent-color: var(--purple);
-    flex-shrink: 0;
-    margin-top: 2px;
-  }
-  .task-sub-text { font-size: 13px; color: var(--text3); line-height: 1.5; flex:1; }
-  .task-sub input:checked ~ .task-sub-text { text-decoration: line-through; color: var(--text4); }
-
-  /* ── 일자 마커 강화 ── */
-  .day-mark {
-    font-size: 12px;
-    font-weight: 700;
-    color: var(--blue);
-    background: #0d1e30;
-    border: 1px solid #1f3d5c;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 7px 12px;
-    border-radius: 9px;
-    margin: 14px 0 4px;
-  }
-  .day-mark .day-date {
-    margin-left: auto;
-    font-size: 11px;
-    color: var(--text4);
-    font-weight: 400;
-  }
-  .quota-badge {
-    display: inline-block;
-    font-size: 11px;
-    font-weight: 700;
-    padding: 2px 8px;
-    border-radius: 8px;
-    background: #1e3a2a;
-    color: var(--green);
-    margin-left: 6px;
-  }
-
 </style>
 </head>
 <body>
+<div class="wrap">
 
-<!-- 헤더 -->
-<div class="header">
-  <h1>⚡ 전기기사 필기 플랜</h1>
-  <div class="sub">코팅반 형배님 맞춤 · 8월 27일 시험</div>
-  <div class="exam-badge" id="examBadge">📅 계산 중...</div>
+<div class="hero">
+  <h1>전기기사 49일 플랜</h1>
+  <div class="sub">2026년 8월 27일 시험 · 하루하루 체크하며 완주하기</div>
 </div>
 
-<!-- D-Day + 완료율 -->
-<div class="top-stats">
-  <div class="stat-card">
-    <div class="stat-num red" id="ddayNum">-</div>
-    <div class="stat-label">D-Day (시험까지)</div>
-  </div>
-  <div class="stat-card">
-    <div class="stat-num green" id="checkPct">0%</div>
-    <div class="stat-label">항목 완료율</div>
-  </div>
+<div id="todayCard"></div>
+
+<div class="stats">
+  <div class="stat"><div class="num" id="dday">-</div><div class="lbl">D-DAY</div></div>
+  <div class="stat plan"><div class="num" id="planpct">0%</div><div class="lbl">📅 계획 진행률</div><div class="bar"><i id="planbar" style="width:0%"></i></div></div>
+  <div class="stat real"><div class="num" id="pct">0%</div><div class="lbl">✅ 실제 진행률</div><div class="bar"><i id="pctbar" style="width:0%"></i></div></div>
+  <div class="stat streak"><div class="num" id="streak">0일</div><div class="lbl">🔥 연속 완료</div></div>
 </div>
 
-<!-- 진행률: 계획 vs 실제 -->
-<div class="progress-card">
-  <div class="progress-row">
-    <span>📅 계획 진행률 (경과일 기준)</span>
-    <span id="progressPct">0%</span>
-  </div>
-  <div class="bar-bg"><div class="bar-fill" id="progressBar" style="width:0%"></div></div>
-  <div class="bar-label" id="progressLabel"></div>
-
-  <div class="progress-row" style="margin-top:14px;">
-    <span>✅ 실제 진행률 (체크 완료 기준)</span>
-    <span id="realPct">0%</span>
-  </div>
-  <div class="bar-bg"><div class="bar-fill real" id="realBar" style="width:0%"></div></div>
-  <div class="bar-label" id="realLabel"></div>
-
-  <div class="progress-compare" id="progressCompare"></div>
+<div class="linkrow">
+  <a href="https://ohmmygod81.github.io/1page/" target="_blank" rel="noopener"><span class="ic">🔗</span>전트키 바로가기</a>
+  <a class="store" href="https://www.machuda.kr/learning/certification/전기기사/written" target="_blank" rel="noopener"><span class="ic">📝</span>CBT 문제풀이 (맞추다)</a>
 </div>
 
-<!-- ===== 회로이론 ===== -->
-<div class="subject-panel active" id="panel-circuit">
-  <div class="subject-header">
-    <div class="subject-title-row">
-      <span class="subject-icon">⚡</span>
-      <span class="subject-name-big">회로이론</span>
-      <span class="subject-period-badge">Day 1~8</span>
-    </div>
-    <div class="subject-desc">계산 문제 비중 최고. 공식 암기 → 유형 패턴화 순서로 접근</div>
-    <div class="subject-strategy">💡 이론책 정독 ❌ — 기출 공식만 뽑아 외우기. 매일 기출 5문제 필수! (1회독: 개념+공식 / 2회독: 전체 총복습)</div>
-  </div>
-
-  <div class="week-section">
-    <div class="week-header" onclick="toggleWeek('c1')">
-      <span class="week-badge current">진행중</span>
-      <span class="week-title">1단계 — 직류회로 기초</span>
-      <span class="week-days">Day 1~4</span>
-      <span class="week-arrow" id="arrow-c1">▼</span>
-    </div>
-    <div class="week-body" id="body-c1">
-
-      <div class="day-mark">📅 Day 1 <span class="day-date">07/09</span><span class="quota-badge">기출 5문제</span></div>
-      <div class="topic-item">
-        <input type="checkbox" id="c1-1" onchange="saveAndRefresh(this)">
-        <div class="topic-content">
-          <div class="topic-name">옴의 법칙 · KVL · KCL</div>
-          <div class="formula-box">
-            <div class="f-title">📐 핵심공식</div>
-            <div class="formula">V=IR / KVL: 폐회로 전압합=0 / KCL: 분기점 전류합=0</div>
-            <div class="formula">도체저항: R=ρL/A [Ω] (ρ:고유저항, L:길이, A:단면적)</div>
-          </div>
-          <span class="topic-tag tag-formula">공식</span>
-        </div>
-      </div>
-      <div class="task-sub"><input type="checkbox" id="c1-1a" onchange="saveAndRefresh(this)"><span class="task-sub-text">V=IR, I=V/R, R=V/I 문제 5개 풀기 (comcbt)</span></div>
-
-      <div class="day-mark">📅 Day 2 <span class="day-date">07/10</span><span class="quota-badge">기출 5문제</span></div>
-      <div class="topic-item">
-        <input type="checkbox" id="c1-2" onchange="saveAndRefresh(this)">
-        <div class="topic-content">
-          <div class="topic-name">저항 직렬·병렬 합성 / 전류·전압 분배</div>
-          <div class="formula-box">
-            <div class="f-title">📐 핵심공식</div>
-            <div class="formula">직렬: R합 = R₁+R₂ / 전압분배: V₁=V×R₁/(R₁+R₂)</div>
-            <div class="formula">병렬: R합 = R₁R₂/(R₁+R₂) / 전류분배: I₁=I×R₂/(R₁+R₂)</div>
-          </div>
-          <span class="topic-tag tag-formula">공식</span><span class="topic-tag tag-calc">계산</span>
-        </div>
-      </div>
-      <div class="task-sub"><input type="checkbox" id="c1-2a" onchange="saveAndRefresh(this)"><span class="task-sub-text">직병렬 합성저항 계산 기출 5문제</span></div>
-      <div class="task-sub"><input type="checkbox" id="c1-2b" onchange="saveAndRefresh(this)"><span class="task-sub-text">전류분배·전압분배 공식 손으로 3번 써보기</span></div>
-
-      <div class="day-mark">📅 Day 3 <span class="day-date">07/11</span><span class="quota-badge">기출 5문제</span></div>
-      <div class="topic-item">
-        <input type="checkbox" id="c1-3" onchange="saveAndRefresh(this)">
-        <div class="topic-content">
-          <div class="topic-name">전력·전력량 / 밀만의 정리</div>
-          <div class="formula-box">
-            <div class="f-title">📐 핵심공식 — 밀만정리 자주출제!</div>
-            <div class="formula">P=VI=I²R=V²/R [W] / W=Pt [J] (1Wh=3600J)</div>
-            <div class="formula">밀만의 정리: V0 = (V1/R1+V2/R2+…)/(1/R1+1/R2+…)</div>
-          </div>
-          <span class="topic-tag tag-formula">공식</span><span class="topic-tag tag-memo">암기</span>
-        </div>
-      </div>
-      <div class="task-sub"><input type="checkbox" id="c1-3a" onchange="saveAndRefresh(this)"><span class="task-sub-text">전력 P 계산 기출 3문제</span></div>
-      <div class="task-sub"><input type="checkbox" id="c1-3b" onchange="saveAndRefresh(this)"><span class="task-sub-text">밀만의 정리 적용 기출 2문제</span></div>
-
-      <div class="day-mark">📅 Day 4 <span class="day-date">07/12</span><span class="quota-badge">기출 5문제</span></div>
-      <div class="topic-item">
-        <input type="checkbox" id="c1-4" onchange="saveAndRefresh(this)">
-        <div class="topic-content">
-          <div class="topic-name">중첩의 원리 · 테브난 / 노턴 정리</div>
-          <div class="topic-detail">테브난: 개방전압 Vth + 등가저항 Rth / 노턴: 단락전류 In</div>
-          <span class="topic-tag tag-hard">자주출제</span>
-        </div>
-      </div>
-      <div class="task-sub"><input type="checkbox" id="c1-4a" onchange="saveAndRefresh(this)"><span class="task-sub-text">테브난 등가회로 변환 기출 3문제</span></div>
-      <div class="task-sub"><input type="checkbox" id="c1-4b" onchange="saveAndRefresh(this)"><span class="task-sub-text">중첩의 원리 전류 계산 기출 2문제</span></div>
-    </div>
-  </div>
-
-  <div class="week-section">
-    <div class="week-header" onclick="toggleWeek('c2')">
-      <span class="week-badge">예정</span>
-      <span class="week-title">2단계 — 교류회로 · RLC</span>
-      <span class="week-days">Day 5~7</span>
-      <span class="week-arrow" id="arrow-c2">▼</span>
-    </div>
-    <div class="week-body" id="body-c2">
-
-      <div class="day-mark">📅 Day 5 <span class="day-date">07/13</span><span class="quota-badge">기출 5문제</span></div>
-      <div class="topic-item">
-        <input type="checkbox" id="c2-1" onchange="saveAndRefresh(this)">
-        <div class="topic-content">
-          <div class="topic-name">정현파 교류 · 페이저 · 실효값</div>
-          <div class="formula-box">
-            <div class="f-title">📐 핵심공식</div>
-            <div class="formula">순시값 v=Vm sin(ωt+θ) / 실효값 V=Vm/√2≈0.707Vm / 평균값 Vav=2Vm/π≈0.637Vm</div>
-            <div class="formula">파고율=최대값/실효값(sin파=√2) / 파형률=실효값/평균값(sin파≈1.11)</div>
-          </div>
-          <span class="topic-tag tag-formula">공식</span><span class="topic-tag tag-memo">암기</span>
-        </div>
-      </div>
-      <div class="task-sub"><input type="checkbox" id="c2-1a" onchange="saveAndRefresh(this)"><span class="task-sub-text">실효값·최대값 변환 기출 3문제</span></div>
-      <div class="task-sub"><input type="checkbox" id="c2-1b" onchange="saveAndRefresh(this)"><span class="task-sub-text">위상차·위상관계 기출 2문제</span></div>
-
-      <div class="day-mark">📅 Day 6 <span class="day-date">07/14</span><span class="quota-badge">기출 5문제</span></div>
-      <div class="topic-item">
-        <input type="checkbox" id="c2-2" onchange="saveAndRefresh(this)">
-        <div class="topic-content">
-          <div class="topic-name">R·L·C 임피던스 / 어드미턴스</div>
-          <div class="formula-box">
-            <div class="f-title">📐 핵심공식</div>
-            <div class="formula">XL=ωL=2πfL / XC=1/ωC / Z=R+j(XL-XC)</div>
-            <div class="formula">|Z|=√(R²+(XL-XC)²) / Y=1/Z=G+jB</div>
-          </div>
-          <span class="topic-tag tag-hard">자주출제</span><span class="topic-tag tag-calc">계산</span>
-        </div>
-      </div>
-      <div class="task-sub"><input type="checkbox" id="c2-2a" onchange="saveAndRefresh(this)"><span class="task-sub-text">임피던스 크기·위상각 계산 기출 3문제</span></div>
-      <div class="task-sub"><input type="checkbox" id="c2-2b" onchange="saveAndRefresh(this)"><span class="task-sub-text">XL, XC 주파수 변화에 따른 변화 문제 2문제</span></div>
-
-      <div class="day-mark">📅 Day 7 <span class="day-date">07/15</span><span class="quota-badge">기출 5문제</span></div>
-      <div class="topic-item">
-        <input type="checkbox" id="c2-3" onchange="saveAndRefresh(this)">
-        <div class="topic-content">
-          <div class="topic-name">RLC 공진 · 교류 전력 · 역률</div>
-          <div class="topic-detail">공진: XL=XC → f₀=1/(2π√LC) / P=VIcosθ / cosθ=P/S / Q=VIsinθ</div>
-          <span class="topic-tag tag-hard">자주출제</span><span class="topic-tag tag-formula">공식</span>
-        </div>
-      </div>
-      <div class="task-sub"><input type="checkbox" id="c2-3a" onchange="saveAndRefresh(this)"><span class="task-sub-text">공진주파수 계산 기출 2문제</span></div>
-      <div class="task-sub"><input type="checkbox" id="c2-3b" onchange="saveAndRefresh(this)"><span class="task-sub-text">유효전력·무효전력·역률 계산 기출 3문제</span></div>
-    </div>
-  </div>
-
-  <div class="week-section">
-    <div class="week-header" onclick="toggleWeek('c3')">
-      <span class="week-badge">예정</span>
-      <span class="week-title">3단계 — 3상회로·과도현상·마무리</span>
-      <span class="week-days">Day 8</span>
-      <span class="week-arrow" id="arrow-c3">▼</span>
-    </div>
-    <div class="week-body" id="body-c3">
-
-      <div class="day-mark">📅 Day 8 (회로이론 2회독·총정리) <span class="day-date">07/16</span><span class="quota-badge">기출 10문제</span></div>
-      <div class="topic-item">
-        <input type="checkbox" id="c3-1" onchange="saveAndRefresh(this)">
-        <div class="topic-content">
-          <div class="topic-name">3상회로 Y-Δ 변환 · 3상 전력</div>
-          <div class="formula-box">
-            <div class="f-title">📐 핵심공식</div>
-            <div class="formula">Y결선: VL=√3Vp, IL=Ip / Δ결선: VL=Vp, IL=√3Ip</div>
-            <div class="formula">3상 전력: P=√3×VL×IL×cosθ = 3×Vp×Ip×cosθ</div>
-          </div>
-          <span class="topic-tag tag-hard">자주출제</span>
-        </div>
-      </div>
-      <div class="task-sub"><input type="checkbox" id="c3-1a" onchange="saveAndRefresh(this)"><span class="task-sub-text">Y↔Δ 변환 전압·전류 계산 기출 3문제</span></div>
-      <div class="topic-item">
-        <input type="checkbox" id="c3-2" onchange="saveAndRefresh(this)">
-        <div class="topic-content">
-          <div class="topic-name">과도현상 · 시정수 τ</div>
-          <div class="formula-box">
-            <div class="f-title">📐 핵심공식</div>
-            <div class="formula">RL회로: τ=L/R / RC회로: τ=RC / 5τ 후 정상상태 도달(약 99.3%)</div>
-            <div class="formula">RL 전류: i(t)=I(1-e^(-t/τ)) / RC 전압: v(t)=V(1-e^(-t/τ))</div>
-          </div>
-          <span class="topic-tag tag-formula">공식</span>
-        </div>
-      </div>
-      <div class="task-sub"><input type="checkbox" id="c3-2a" onchange="saveAndRefresh(this)"><span class="task-sub-text">시정수 계산 기출 2문제</span></div>
-      <div class="topic-item">
-        <input type="checkbox" id="c3-3" onchange="saveAndRefresh(this)">
-        <div class="topic-content">
-          <div class="topic-name">회로이론 전체 기출 10문제 풀기</div>
-          <div class="topic-detail">comcbt.com → 회로이론 최근 1개년 / 틀린 거 오답노트 업로드</div>
-          <span class="topic-tag tag-hard">총정리</span>
-        </div>
-      </div>
-      <div class="task-sub"><input type="checkbox" id="c3-3a" onchange="saveAndRefresh(this)"><span class="task-sub-text">틀린 문제 사진 찍어서 오답노트 채널 업로드</span></div>
-      <div class="task-sub"><input type="checkbox" id="c3-3b" onchange="saveAndRefresh(this)"><span class="task-sub-text">공식 요약노트 손으로 정리 (A4 1장)</span></div>
-    </div>
-  </div>
+<div class="subjects">
+  <h2>과목별 진행률</h2>
+  <div class="subj-grid" id="subjGrid"></div>
 </div>
 
-<!-- ===== 제어공학 ===== -->
-<div class="subject-panel" id="panel-control">
-  <div class="subject-header">
-    <div class="subject-title-row">
-      <span class="subject-icon">🎛️</span>
-      <span class="subject-name-big">제어공학</span>
-      <span class="subject-period-badge">Day 9~13</span>
-    </div>
-    <div class="subject-desc">라플라스·블록선도가 핵심. 패턴이 반복되므로 유형 파악이 관건</div>
-    <div class="subject-strategy">💡 변환표 통째 암기 → 전달함수 → 블록선도 순서. 5일 집중! (1회독: 개념+공식 / 2회독: 전체 총복습)</div>
+<div class="cal-card">
+  <div class="cal-header">
+    <button class="cal-btn" id="prevMonthBtn" onclick="prevMonth()" aria-label="이전 달">‹</button>
+    <div class="cal-title" id="calTitle">-</div>
+    <button class="cal-btn" id="nextMonthBtn" onclick="nextMonth()" aria-label="다음 달">›</button>
   </div>
-
-  <div class="week-section">
-    <div class="week-header" onclick="toggleWeek('ct1')">
-      <span class="week-badge">예정</span>
-      <span class="week-title">라플라스 변환 · 역변환</span>
-      <span class="week-days">Day 9~10</span>
-      <span class="week-arrow" id="arrow-ct1">▼</span>
-    </div>
-    <div class="week-body" id="body-ct1">
-
-      <div class="day-mark">📅 Day 9 <span class="day-date">07/17</span><span class="quota-badge">기출 5문제</span></div>
-      <div class="topic-item">
-        <input type="checkbox" id="ct1-1" onchange="saveAndRefresh(this)">
-        <div class="topic-content">
-          <div class="topic-name">기본 라플라스 변환쌍 완전 암기</div>
-          <div class="formula-box">
-            <div class="f-title">📐 반드시 외울 것</div>
-            <div class="formula">δ(t) → 1 / u(t)=1 → 1/s</div>
-            <div class="formula">t → 1/s² / t² → 2/s³</div>
-            <div class="formula">e^(-at) → 1/(s+a)</div>
-            <div class="formula">sinωt → ω/(s²+ω²)</div>
-            <div class="formula">cosωt → s/(s²+ω²)</div>
-            <div class="formula">te^(-at) → 1/(s+a)²</div>
-          </div>
-          <span class="topic-tag tag-memo">암기</span><span class="topic-tag tag-hard">자주출제</span>
-        </div>
-      </div>
-      <div class="task-sub"><input type="checkbox" id="ct1-1a" onchange="saveAndRefresh(this)"><span class="task-sub-text">변환쌍 표 손으로 3번 쓰기 (보지 않고)</span></div>
-      <div class="task-sub"><input type="checkbox" id="ct1-1b" onchange="saveAndRefresh(this)"><span class="task-sub-text">라플라스 변환 기출 5문제</span></div>
-
-      <div class="day-mark">📅 Day 10 <span class="day-date">07/18</span><span class="quota-badge">기출 5문제</span></div>
-      <div class="topic-item">
-        <input type="checkbox" id="ct1-2" onchange="saveAndRefresh(this)">
-        <div class="topic-content">
-          <div class="topic-name">초기값·최종값 정리 / 부분분수 분해</div>
-          <div class="formula-box">
-            <div class="f-title">📐 핵심공식</div>
-            <div class="formula">초기값: lim(s→∞)sF(s) / 최종값: lim(s→0)sF(s)</div>
-            <div class="formula">헤비사이드 전개법(부분분수) / 시간추이정리: f(t-a)u(t-a) → e^(-as)F(s)</div>
-          </div>
-          <span class="topic-tag tag-hard">자주출제</span>
-        </div>
-      </div>
-      <div class="task-sub"><input type="checkbox" id="ct1-2a" onchange="saveAndRefresh(this)"><span class="task-sub-text">초기값·최종값 구하기 기출 3문제</span></div>
-      <div class="task-sub"><input type="checkbox" id="ct1-2b" onchange="saveAndRefresh(this)"><span class="task-sub-text">역라플라스 변환 (부분분수 분해) 기출 2문제</span></div>
-    </div>
+  <div class="grid" id="calGrid"></div>
+</div>
+  <div class="cal-header">
+    <button class="cal-btn" id="prevMonthBtn" onclick="prevMonth()" aria-label="이전 달">‹</button>
+    <div class="cal-title" id="calTitle">-</div>
+    <button class="cal-btn" id="nextMonthBtn" onclick="nextMonth()" aria-label="다음 달">›</button>
   </div>
-
-  <div class="week-section">
-    <div class="week-header" onclick="toggleWeek('ct2')">
-      <span class="week-badge">예정</span>
-      <span class="week-title">전달함수 · 블록선도</span>
-      <span class="week-days">Day 11~12</span>
-      <span class="week-arrow" id="arrow-ct2">▼</span>
-    </div>
-    <div class="week-body" id="body-ct2">
-
-      <div class="day-mark">📅 Day 11 <span class="day-date">07/19</span><span class="quota-badge">기출 5문제</span></div>
-      <div class="topic-item">
-        <input type="checkbox" id="ct2-1" onchange="saveAndRefresh(this)">
-        <div class="topic-content">
-          <div class="topic-name">전달함수 G(s) / RC·RL 회로 전달함수</div>
-          <div class="topic-detail">G(s)=출력/입력(라플라스) / 초기조건=0 / RC: G=1/(RCs+1) / RL: G=RLs/(RLs+R)</div>
-          <span class="topic-tag tag-hard">자주출제</span>
-        </div>
-      </div>
-      <div class="task-sub"><input type="checkbox" id="ct2-1a" onchange="saveAndRefresh(this)"><span class="task-sub-text">RC 회로 전달함수 G(s) 구하기 기출 3문제</span></div>
-      <div class="task-sub"><input type="checkbox" id="ct2-1b" onchange="saveAndRefresh(this)"><span class="task-sub-text">RLC 회로 전달함수 기출 2문제</span></div>
-
-      <div class="day-mark">📅 Day 12 <span class="day-date">07/20</span><span class="quota-badge">기출 5문제</span></div>
-      <div class="topic-item">
-        <input type="checkbox" id="ct2-2" onchange="saveAndRefresh(this)">
-        <div class="topic-content">
-          <div class="topic-name">블록선도 단순화 · 피드백 공식 · 신호흐름선도</div>
-          <div class="formula-box">
-            <div class="f-title">📐 핵심공식 (가장 많이 출제!)</div>
-            <div class="formula">직렬연결: G = G₁×G₂</div>
-            <div class="formula">병렬연결: G = G₁±G₂</div>
-            <div class="formula">부피드백: C/R = G/(1+GH)</div>
-            <div class="formula">정피드백: C/R = G/(1-GH)</div>
-          </div>
-          <span class="topic-tag tag-hard">자주출제</span>
-        </div>
-      </div>
-      <div class="task-sub"><input type="checkbox" id="ct2-2a" onchange="saveAndRefresh(this)"><span class="task-sub-text">피드백 전달함수 C/R 계산 기출 3문제</span></div>
-      <div class="task-sub"><input type="checkbox" id="ct2-2b" onchange="saveAndRefresh(this)"><span class="task-sub-text">블록선도 단순화 기출 2문제</span></div>
-    </div>
-  </div>
-
-  <div class="week-section">
-    <div class="week-header" onclick="toggleWeek('ct3')">
-      <span class="week-badge">예정</span>
-      <span class="week-title">시간응답 · 안정도 · 마무리</span>
-      <span class="week-days">Day 13</span>
-      <span class="week-arrow" id="arrow-ct3">▼</span>
-    </div>
-    <div class="week-body" id="body-ct3">
-
-      <div class="day-mark">📅 Day 13 (제어공학 2회독·총정리) <span class="day-date">07/21</span><span class="quota-badge">기출 10문제</span></div>
-      <div class="topic-item">
-        <input type="checkbox" id="ct3-1" onchange="saveAndRefresh(this)">
-        <div class="topic-content">
-          <div class="topic-name">2차 시스템 특성 · 감쇠비 ζ · 자연주파수 ωn</div>
-          <div class="formula-box">
-            <div class="f-title">📐 핵심공식</div>
-            <div class="formula">특성방정식: s²+2ζωns+ωn²=0</div>
-            <div class="formula">ζ&lt;1: 부족감쇠(진동, 오버슈트 발생) / ζ=1: 임계감쇠 / ζ&gt;1: 과감쇠(느림)</div>
-          </div>
-          <span class="topic-tag tag-memo">암기</span>
-        </div>
-      </div>
-      <div class="topic-item">
-        <input type="checkbox" id="ct3-2" onchange="saveAndRefresh(this)">
-        <div class="topic-content">
-          <div class="topic-name">루스-후르비츠 안정도 판별</div>
-          <div class="formula-box">
-            <div class="f-title">📐 핵심공식</div>
-            <div class="formula">특성방정식 a0sⁿ+a1sⁿ⁻¹+…+an=0 → 1행: a0,a2,a4… / 2행: a1,a3,a5…</div>
-            <div class="formula">① 계수 모두 같은 부호(양수) ② 루스 배열 1열 부호변화 없음 → 안정</div>
-          </div>
-          <span class="topic-tag tag-hard">자주출제</span>
-        </div>
-      </div>
-      <div class="task-sub"><input type="checkbox" id="ct3-2a" onchange="saveAndRefresh(this)"><span class="task-sub-text">루스 행렬 작성 후 안정도 판별 기출 3문제</span></div>
-      <div class="topic-item">
-        <input type="checkbox" id="ct3-3" onchange="saveAndRefresh(this)">
-        <div class="topic-content">
-          <div class="topic-name">제어공학 전체 기출 10문제 + 오답 정리</div>
-          <div class="topic-detail">보드선도 개념(이득여유·위상여유) 포함 / 틀린 거 오답노트</div>
-          <span class="topic-tag tag-hard">총정리</span>
-        </div>
-      </div>
-    </div>
-  </div>
+  <div class="grid" id="calGrid"></div>
 </div>
 
-<!-- ===== 전기자기학 ===== -->
-<div class="subject-panel" id="panel-emag">
-  <div class="subject-header">
-    <div class="subject-title-row">
-      <span class="subject-icon">🧲</span>
-      <span class="subject-name-big">전기자기학</span>
-      <span class="subject-period-badge">Day 14~21</span>
-    </div>
-    <div class="subject-desc">공식 암기 비중 가장 높음. 유도하려 하지 말고 공식 패턴만 외우기</div>
-    <div class="subject-strategy">💡 공식 외우고 → 숫자 대입 → 끝. 이 과목 이해는 나중에! (1회독: 개념+공식 / 2회독: 전체 총복습)</div>
-  </div>
+<footer>ohmmygod81.github.io/Plan · 목표: 과목당 40점↑ 평균 60점 🎯</footer>
 
-  <div class="week-section">
-    <div class="week-header" onclick="toggleWeek('e1')">
-      <span class="week-badge">예정</span>
-      <span class="week-title">정전계</span>
-      <span class="week-days">Day 14~17</span>
-      <span class="week-arrow" id="arrow-e1">▼</span>
-    </div>
-    <div class="week-body" id="body-e1">
-
-      <div class="day-mark">📅 Day 14 <span class="day-date">07/22</span><span class="quota-badge">기출 5문제</span></div>
-      <div class="topic-item">
-        <input type="checkbox" id="e1-1" onchange="saveAndRefresh(this)">
-        <div class="topic-content">
-          <div class="topic-name">쿨롱의 법칙 · 전계 E · 전기력선</div>
-          <div class="formula-box">
-            <div class="f-title">📐 핵심공식</div>
-            <div class="formula">F = Q₁Q₂/(4πε₀r²) [N]</div>
-            <div class="formula">E = Q/(4πε₀r²) = F/Q [V/m]</div>
-            <div class="formula">ε₀ = 8.854×10⁻¹² [F/m]</div>
-          </div>
-          <span class="topic-tag tag-formula">공식</span>
-        </div>
-      </div>
-      <div class="task-sub"><input type="checkbox" id="e1-1a" onchange="saveAndRefresh(this)"><span class="task-sub-text">두 점전하 사이 힘 F 계산 기출 3문제</span></div>
-      <div class="task-sub"><input type="checkbox" id="e1-1b" onchange="saveAndRefresh(this)"><span class="task-sub-text">전계 E 세기 계산 기출 2문제</span></div>
-
-      <div class="day-mark">📅 Day 15 <span class="day-date">07/23</span><span class="quota-badge">기출 5문제</span></div>
-      <div class="topic-item">
-        <input type="checkbox" id="e1-2" onchange="saveAndRefresh(this)">
-        <div class="topic-content">
-          <div class="topic-name">가우스 법칙 · 전속밀도 D · 유전율</div>
-          <div class="formula-box">
-            <div class="f-title">📐 핵심공식</div>
-            <div class="formula">가우스 법칙: ∮D·dS = Q (폐곡면 통과 전속=내부전하)</div>
-            <div class="formula">D = εE = ε₀εsE / 전속 Ψ=Q / D=Q/(4πr²) [C/m²]</div>
-          </div>
-          <span class="topic-tag tag-formula">공식</span>
-        </div>
-      </div>
-      <div class="task-sub"><input type="checkbox" id="e1-2a" onchange="saveAndRefresh(this)"><span class="task-sub-text">D, E, ε 관계 계산 기출 3문제</span></div>
-      <div class="task-sub"><input type="checkbox" id="e1-2b" onchange="saveAndRefresh(this)"><span class="task-sub-text">유전율 변화 시 전속밀도 변화 문제 2문제</span></div>
-
-      <div class="day-mark">📅 Day 16 <span class="day-date">07/24</span><span class="quota-badge">기출 5문제</span></div>
-      <div class="topic-item">
-        <input type="checkbox" id="e1-3" onchange="saveAndRefresh(this)">
-        <div class="topic-content">
-          <div class="topic-name">콘덴서 정전용량 C · 직병렬 · 에너지</div>
-          <div class="formula-box">
-            <div class="f-title">📐 핵심공식</div>
-            <div class="formula">평행판: C = εA/d [F] (면적↑거리↓ → C↑)</div>
-            <div class="formula">에너지: W = ½CV² = Q²/2C = ½QV [J]</div>
-            <div class="formula">직렬: 1/C합=Σ1/Cₙ / 병렬: C합=ΣCₙ</div>
-          </div>
-          <span class="topic-tag tag-hard">자주출제</span>
-        </div>
-      </div>
-      <div class="task-sub"><input type="checkbox" id="e1-3a" onchange="saveAndRefresh(this)"><span class="task-sub-text">평행판 C 계산 (거리·면적 변화) 기출 3문제</span></div>
-      <div class="task-sub"><input type="checkbox" id="e1-3b" onchange="saveAndRefresh(this)"><span class="task-sub-text">직병렬 합성 정전용량 + 에너지 기출 2문제</span></div>
-
-      <div class="day-mark">📅 Day 17 <span class="day-date">07/25</span><span class="quota-badge">기출 5문제</span></div>
-      <div class="topic-item">
-        <input type="checkbox" id="e1-4" onchange="saveAndRefresh(this)">
-        <div class="topic-content">
-          <div class="topic-name">전위 V · 전위경도 · 도체 특성</div>
-          <div class="formula-box">
-            <div class="f-title">📐 핵심공식</div>
-            <div class="formula">V = Q/(4πεr) [V] / E = -dV/dr = -gradV</div>
-            <div class="formula">도체표면: 등전위면, E는 항상 표면에 수직 / 도체 내부 E=0</div>
-          </div>
-          <span class="topic-tag tag-formula">공식</span><span class="topic-tag tag-memo">암기</span>
-        </div>
-      </div>
-      <div class="task-sub"><input type="checkbox" id="e1-4a" onchange="saveAndRefresh(this)"><span class="task-sub-text">점전하에 의한 전위 V 계산 기출 3문제</span></div>
-      <div class="task-sub"><input type="checkbox" id="e1-4b" onchange="saveAndRefresh(this)"><span class="task-sub-text">전위경도(E=-dV/dr) 적용 기출 2문제</span></div>
-    </div>
-  </div>
-
-  <div class="week-section">
-    <div class="week-header" onclick="toggleWeek('e2')">
-      <span class="week-badge">예정</span>
-      <span class="week-title">자계 · 전자기유도</span>
-      <span class="week-days">Day 18~20</span>
-      <span class="week-arrow" id="arrow-e2">▼</span>
-    </div>
-    <div class="week-body" id="body-e2">
-
-      <div class="day-mark">📅 Day 18 <span class="day-date">07/26</span><span class="quota-badge">기출 5문제</span></div>
-      <div class="topic-item">
-        <input type="checkbox" id="e2-1" onchange="saveAndRefresh(this)">
-        <div class="topic-content">
-          <div class="topic-name">앙페르 법칙 · 자계 H · 자속밀도 B</div>
-          <div class="formula-box">
-            <div class="f-title">📐 핵심공식</div>
-            <div class="formula">무한직선: H=I/(2πr) [A/m]</div>
-            <div class="formula">원형코일: H=I/(2r) / 솔레노이드: H=nI</div>
-            <div class="formula">B=μH=μ₀μsH [T] / μ₀=4π×10⁻⁷</div>
-          </div>
-          <span class="topic-tag tag-formula">공식</span>
-        </div>
-      </div>
-      <div class="task-sub"><input type="checkbox" id="e2-1a" onchange="saveAndRefresh(this)"><span class="task-sub-text">무한직선 도체에서 H, B 계산 기출 3문제</span></div>
-      <div class="task-sub"><input type="checkbox" id="e2-1b" onchange="saveAndRefresh(this)"><span class="task-sub-text">평행도체 사이 힘 계산 기출 2문제</span></div>
-
-      <div class="day-mark">📅 Day 19 <span class="day-date">07/27</span><span class="quota-badge">기출 5문제</span></div>
-      <div class="topic-item">
-        <input type="checkbox" id="e2-2" onchange="saveAndRefresh(this)">
-        <div class="topic-content">
-          <div class="topic-name">패러데이 법칙 · 렌츠의 법칙 · 인덕턴스 L</div>
-          <div class="formula-box">
-            <div class="f-title">📐 핵심공식</div>
-            <div class="formula">e=-N×dΦ/dt [V] / 렌츠: 자속변화 방해방향(-부호)</div>
-            <div class="formula">L=NΦ/I / e=L×di/dt</div>
-            <div class="formula">도체운동 기전력: e=Blvsinθ [V] (플레밍의 오른손법칙)</div>
-          </div>
-          <span class="topic-tag tag-hard">자주출제</span>
-        </div>
-      </div>
-      <div class="task-sub"><input type="checkbox" id="e2-2a" onchange="saveAndRefresh(this)"><span class="task-sub-text">유기기전력 e 계산 기출 3문제</span></div>
-      <div class="task-sub"><input type="checkbox" id="e2-2b" onchange="saveAndRefresh(this)"><span class="task-sub-text">렌츠 법칙 방향 판별 기출 2문제</span></div>
-
-      <div class="day-mark">📅 Day 20 <span class="day-date">07/28</span><span class="quota-badge">기출 5문제</span></div>
-      <div class="topic-item">
-        <input type="checkbox" id="e2-3" onchange="saveAndRefresh(this)">
-        <div class="topic-content">
-          <div class="topic-name">상호인덕턴스 M · 자기에너지 · 자성체</div>
-          <div class="formula-box">
-            <div class="f-title">📐 핵심공식</div>
-            <div class="formula">M=k√(L₁L₂) (k: 결합계수 0~1)</div>
-            <div class="formula">직렬: L합=L₁+L₂±2M (가동:+, 차동:-)</div>
-            <div class="formula">자기에너지: W=½LI² [J]</div>
-          </div>
-          <span class="topic-tag tag-hard">자주출제</span>
-        </div>
-      </div>
-      <div class="task-sub"><input type="checkbox" id="e2-3a" onchange="saveAndRefresh(this)"><span class="task-sub-text">상호인덕턴스 M 계산 기출 3문제</span></div>
-      <div class="task-sub"><input type="checkbox" id="e2-3b" onchange="saveAndRefresh(this)"><span class="task-sub-text">가동·차동 직렬 L합 계산 기출 2문제</span></div>
-    </div>
-  </div>
-
-  <div class="week-section">
-    <div class="week-header" onclick="toggleWeek('e3')">
-      <span class="week-badge">예정</span>
-      <span class="week-title">전자파 · 마무리</span>
-      <span class="week-days">Day 21</span>
-      <span class="week-arrow" id="arrow-e3">▼</span>
-    </div>
-    <div class="week-body" id="body-e3">
-
-      <div class="day-mark">📅 Day 21 (전자기학 2회독·총정리) <span class="day-date">07/29</span><span class="quota-badge">기출 10문제</span></div>
-      <div class="topic-item">
-        <input type="checkbox" id="e3-1" onchange="saveAndRefresh(this)">
-        <div class="topic-content">
-          <div class="topic-name">맥스웰 방정식 (이름+의미 암기)</div>
-          <div class="topic-detail">① 가우스(전계) ② 가우스(자계) ③ 패러데이 ④ 앙페르-맥스웰</div>
-          <span class="topic-tag tag-memo">암기</span>
-        </div>
-      </div>
-      <div class="topic-item">
-        <input type="checkbox" id="e3-2" onchange="saveAndRefresh(this)">
-        <div class="topic-content">
-          <div class="topic-name">전자파 속도 · 포인팅벡터</div>
-          <div class="formula-box">
-            <div class="f-title">📐 핵심공식</div>
-            <div class="formula">v=1/√(με)=3×10⁸ m/s (진공) / 파장 λ=v/f</div>
-            <div class="formula">포인팅벡터: P=E×H [W/m²] / 고유임피던스(진공): η₀=√(μ₀/ε₀)≈377Ω</div>
-          </div>
-          <span class="topic-tag tag-formula">공식</span>
-        </div>
-      </div>
-      <div class="topic-item">
-        <input type="checkbox" id="e3-3" onchange="saveAndRefresh(this)">
-        <div class="topic-content">
-          <div class="topic-name">전기자기학 전체 기출 10문제 풀기</div>
-          <div class="topic-detail">comcbt.com → 전기자기학 최근 1개년 / 틀린 거 오답노트 업로드</div>
-          <span class="topic-tag tag-hard">총정리</span>
-        </div>
-      </div>
-      <div class="task-sub"><input type="checkbox" id="e3-3a" onchange="saveAndRefresh(this)"><span class="task-sub-text">공식 암기표 다시 확인 (쿨롱~맥스웰 전체)</span></div>
-      <div class="task-sub"><input type="checkbox" id="e3-3b" onchange="saveAndRefresh(this)"><span class="task-sub-text">오답 사진 찍어서 채널 업로드</span></div>
-    </div>
-  </div>
 </div>
 
-<!-- ===== 전기기기 ===== -->
-<div class="subject-panel" id="panel-machine">
-  <div class="subject-header">
-    <div class="subject-title-row">
-      <span class="subject-icon">⚙️</span>
-      <span class="subject-name-big">전기기기</span>
-      <span class="subject-period-badge">Day 22~24</span>
+<div class="overlay" id="overlay">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-header">
+      <h3 id="sheetTitle">Day</h3>
+      <span class="sheet-tag" id="sheetTag">과목</span>
     </div>
-    <div class="subject-desc">변압기·유도전동기·직류기 3가지 집중. 인버터 현장경험 적극 활용!</div>
-    <div class="subject-strategy">💡 슬립·동기속도는 현장 VFD와 직결! 연결해서 외우면 절대 안 잊음 (1회독: 개념+공식 / 2회독: 전체 총복습)</div>
-  </div>
-
-  <div class="week-section">
-    <div class="week-header" onclick="toggleWeek('m1')">
-      <span class="week-badge">예정</span>
-      <span class="week-title">변압기</span>
-      <span class="week-days">Day 22</span>
-      <span class="week-arrow" id="arrow-m1">▼</span>
+    <div class="sheet-date" id="sheetDate"></div>
+    <div id="sheetTopic" class="sheet-title"></div>
+    <div id="sheetFormulas"></div>
+    <div class="tasklist">
+      <h4>✅ 오늘 할 일 (체크하면 저장돼요)</h4>
+      <div id="sheetTasks"></div>
     </div>
-    <div class="week-body" id="body-m1">
-
-      <div class="day-mark">📅 Day 22 <span class="day-date">07/30</span><span class="quota-badge">기출 7문제</span></div>
-      <div class="topic-item">
-        <input type="checkbox" id="m1-1" onchange="saveAndRefresh(this)">
-        <div class="topic-content">
-          <div class="topic-name">권수비 · 전압·전류·임피던스 변환</div>
-          <div class="formula-box">
-            <div class="f-title">📐 핵심공식</div>
-            <div class="formula">a = N₁/N₂ = V₁/V₂ = I₂/I₁</div>
-            <div class="formula">임피던스 변환: Z₁ = a²Z₂</div>
-          </div>
-          <span class="topic-tag tag-formula">공식</span><span class="topic-tag tag-hard">자주출제</span>
-        </div>
-      </div>
-      <div class="task-sub"><input type="checkbox" id="m1-1a" onchange="saveAndRefresh(this)"><span class="task-sub-text">권수비로 2차 전압·전류 계산 기출 3문제</span></div>
-      <div class="topic-item">
-        <input type="checkbox" id="m1-2" onchange="saveAndRefresh(this)">
-        <div class="topic-content">
-          <div class="topic-name">변압기 효율 · 최대효율 조건</div>
-          <div class="formula-box">
-            <div class="f-title">📐 핵심공식</div>
-            <div class="formula">η = 출력/(출력+Pi+m²Pc) × 100%</div>
-            <div class="formula">최대효율조건: Pi = m²Pc (철손=동손)</div>
-            <div class="formula">최대효율 부하율: m = √(Pi/Pc)</div>
-          </div>
-          <span class="topic-tag tag-hard">자주출제</span>
-        </div>
-      </div>
-      <div class="task-sub"><input type="checkbox" id="m1-2a" onchange="saveAndRefresh(this)"><span class="task-sub-text">최대효율 부하율 m 계산 기출 2문제</span></div>
-      <div class="topic-item">
-        <input type="checkbox" id="m1-3" onchange="saveAndRefresh(this)">
-        <div class="topic-content">
-          <div class="topic-name">변압기 결선 (Y-Y·Δ-Δ·Y-Δ) · 병렬운전</div>
-          <div class="formula-box">
-            <div class="f-title">📐 핵심공식</div>
-            <div class="formula">Y-Δ: 위상차 30° / 병렬운전 조건: 극성·전압·주파수·%Z 일치</div>
-            <div class="formula">V결선 출력비: P_V/P_Δ = 1/√3 ≈ 57.7% (변압기 2대로 3상 공급 시)</div>
-          </div>
-          <span class="topic-tag tag-memo">암기</span>
-        </div>
-      </div>
-      <div class="task-sub"><input type="checkbox" id="m1-3a" onchange="saveAndRefresh(this)"><span class="task-sub-text">결선방식별 특징 기출 2문제</span></div>
-    </div>
-  </div>
-
-  <div class="week-section">
-    <div class="week-header" onclick="toggleWeek('m2')">
-      <span class="week-badge">예정</span>
-      <span class="week-title">유도전동기 ← 인버터 직결!</span>
-      <span class="week-days">Day 23</span>
-      <span class="week-arrow" id="arrow-m2">▼</span>
-    </div>
-    <div class="week-body" id="body-m2">
-
-      <div class="day-mark">📅 Day 23 <span class="day-date">07/31</span><span class="quota-badge">기출 7문제</span></div>
-      <div class="topic-item">
-        <input type="checkbox" id="m2-1" onchange="saveAndRefresh(this)">
-        <div class="topic-content">
-          <div class="topic-name">동기속도 Ns · 슬립 s · 회전속도 N</div>
-          <div class="formula-box">
-            <div class="f-title">📐 현장 VFD와 직결!</div>
-            <div class="formula">Ns = 120f/P [rpm] ← 인버터로 f 바꾸면 Ns 변함</div>
-            <div class="formula">s = (Ns-N)/Ns / N = Ns(1-s)</div>
-            <div class="formula">s=0: 동기속도 / s=1: 정지상태</div>
-          </div>
-          <span class="topic-tag tag-hard">자주출제</span>
-        </div>
-      </div>
-      <div class="task-sub"><input type="checkbox" id="m2-1a" onchange="saveAndRefresh(this)"><span class="task-sub-text">Ns, s, N 계산 기출 3문제</span></div>
-      <div class="topic-item">
-        <input type="checkbox" id="m2-2" onchange="saveAndRefresh(this)">
-        <div class="topic-content">
-          <div class="topic-name">2차 입력·동손·기계출력 비율 · 토크</div>
-          <div class="formula-box">
-            <div class="f-title">📐 핵심공식</div>
-            <div class="formula">P2 : Pc2 : P0 = 1 : s : (1-s)</div>
-            <div class="formula">기계출력 P0 = P2(1-s) [W]</div>
-            <div class="formula">토크 T = P2/ωs = P2/(2πNs/60) [N·m]</div>
-          </div>
-          <span class="topic-tag tag-hard">자주출제</span>
-        </div>
-      </div>
-      <div class="task-sub"><input type="checkbox" id="m2-2a" onchange="saveAndRefresh(this)"><span class="task-sub-text">슬립s로 동손·기계출력 비율 계산 기출 2문제</span></div>
-      <div class="topic-item">
-        <input type="checkbox" id="m2-3" onchange="saveAndRefresh(this)">
-        <div class="topic-content">
-          <div class="topic-name">기동방법 · 속도제어 방법</div>
-          <div class="topic-detail">기동: 직입/Y-Δ/리액터/콘도르파 / 속도제어: 주파수(인버터)·극수변환·2차저항</div>
-          <div class="formula-box">
-            <div class="f-title">📐 핵심 암기</div>
-            <div class="formula">Y-Δ 기동: 기동전류·기동토크 모두 1/3배로 감소 (상전압 1/√3배)</div>
-          </div>
-          <span class="topic-tag tag-memo">암기</span>
-        </div>
-      </div>
-      <div class="task-sub"><input type="checkbox" id="m2-3a" onchange="saveAndRefresh(this)"><span class="task-sub-text">기동법별 기동전류·토크 특성 기출 2문제</span></div>
-    </div>
-  </div>
-
-  <div class="week-section">
-    <div class="week-header" onclick="toggleWeek('m3')">
-      <span class="week-badge">예정</span>
-      <span class="week-title">직류기 · 동기기 · 마무리</span>
-      <span class="week-days">Day 24</span>
-      <span class="week-arrow" id="arrow-m3">▼</span>
-    </div>
-    <div class="week-body" id="body-m3">
-
-      <div class="day-mark">📅 Day 24 (전기기기 2회독·총정리) <span class="day-date">08/01</span><span class="quota-badge">기출 10문제</span></div>
-      <div class="topic-item">
-        <input type="checkbox" id="m3-1" onchange="saveAndRefresh(this)">
-        <div class="topic-content">
-          <div class="topic-name">직류기 종류 · 직류전동기 속도제어</div>
-          <div class="formula-box">
-            <div class="f-title">📐 핵심공식</div>
-            <div class="formula">기전력: E = PZΦNa/60a [V]</div>
-            <div class="formula">속도: N = (V-IaRa)/kΦ [rpm]</div>
-            <div class="formula">속도제어: 전압↑ or 저항↓ or 자속↓ → 속도↑</div>
-          </div>
-          <span class="topic-tag tag-formula">공식</span>
-        </div>
-      </div>
-      <div class="task-sub"><input type="checkbox" id="m3-1a" onchange="saveAndRefresh(this)"><span class="task-sub-text">직류전동기 속도 N 계산 기출 2문제</span></div>
-      <div class="topic-item">
-        <input type="checkbox" id="m3-2" onchange="saveAndRefresh(this)">
-        <div class="topic-content">
-          <div class="topic-name">동기발전기 · 동기전동기 특성</div>
-          <div class="formula-box">
-            <div class="f-title">📐 핵심공식</div>
-            <div class="formula">병렬운전 조건: 전압·주파수·위상·파형 일치 / 동기조상기: 역률개선</div>
-            <div class="formula">단락비 Ks=1/%Zs×100 (Ks 클수록 안정도↑, 동기임피던스↓)</div>
-          </div>
-          <span class="topic-tag tag-memo">암기</span>
-        </div>
-      </div>
-      <div class="topic-item">
-        <input type="checkbox" id="m3-3" onchange="saveAndRefresh(this)">
-        <div class="topic-content">
-          <div class="topic-name">전기기기 전체 기출 10문제 + 오답 정리</div>
-          <div class="topic-detail">comcbt.com → 전기기기 최근 1개년 / 오답노트 업로드</div>
-          <span class="topic-tag tag-hard">총정리</span>
-        </div>
-      </div>
-      <div class="task-sub"><input type="checkbox" id="m3-3a" onchange="saveAndRefresh(this)"><span class="task-sub-text">틀린 문제 사진 찍어서 오답노트 업로드</span></div>
-    </div>
+    <button class="close-btn" onclick="closeSheet()">닫기</button>
   </div>
 </div>
-
-<!-- ===== 전력공학 ===== -->
-<div class="subject-panel" id="panel-power">
-  <div class="subject-header">
-    <div class="subject-title-row">
-      <span class="subject-icon">🏭</span>
-      <span class="subject-name-big">전력공학</span>
-      <span class="subject-period-badge">Day 25~28</span>
-    </div>
-    <div class="subject-desc">현장 경험 있어서 개념 이해 빠름. 현장 설비와 연결해서 외우기</div>
-    <div class="subject-strategy">💡 인버터·VFD 경험을 떠올리면서 공부하면 훨씬 빠름! (1회독: 개념+공식 / 2회독: 전체 총복습)</div>
-  </div>
-
-  <div class="week-section">
-    <div class="week-header" onclick="toggleWeek('p1')">
-      <span class="week-badge">예정</span>
-      <span class="week-title">송전선로 · 선로정수 · 송전특성</span>
-      <span class="week-days">Day 25~26</span>
-      <span class="week-arrow" id="arrow-p1">▼</span>
-    </div>
-    <div class="week-body" id="body-p1">
-
-      <div class="day-mark">📅 Day 25 <span class="day-date">08/02</span><span class="quota-badge">기출 5문제</span></div>
-      <div class="topic-item">
-        <input type="checkbox" id="p1-1" onchange="saveAndRefresh(this)">
-        <div class="topic-content">
-          <div class="topic-name">선로정수 R·L·C·G / 전압강하 · 전력손실</div>
-          <div class="formula-box">
-            <div class="f-title">📐 핵심공식</div>
-            <div class="formula">전압강하: Vd=√3×I×(Rcosθ+Xsinθ) [V]</div>
-            <div class="formula">전력손실: Pl=3I²R [W]</div>
-            <div class="formula">전압강하율: ε=Vd/Vs×100 [%]</div>
-          </div>
-          <span class="topic-tag tag-formula">공식</span><span class="topic-tag tag-hard">자주출제</span>
-        </div>
-      </div>
-      <div class="task-sub"><input type="checkbox" id="p1-1a" onchange="saveAndRefresh(this)"><span class="task-sub-text">3상 전압강하 Vd 계산 기출 3문제</span></div>
-      <div class="task-sub"><input type="checkbox" id="p1-1b" onchange="saveAndRefresh(this)"><span class="task-sub-text">전력손실·손실률 계산 기출 2문제</span></div>
-
-      <div class="day-mark">📅 Day 26 <span class="day-date">08/03</span><span class="quota-badge">기출 5문제</span></div>
-      <div class="topic-item">
-        <input type="checkbox" id="p1-2" onchange="saveAndRefresh(this)">
-        <div class="topic-content">
-          <div class="topic-name">코로나 방전 · 페란티 효과 · 중성점 접지</div>
-          <div class="formula-box">
-            <div class="f-title">📐 핵심공식</div>
-            <div class="formula">코로나 임계전압: E0=24.3×m0×m1×δ×d×log10(D/r) [kV]</div>
-            <div class="formula">페란티: 경부하 시 Vr&gt;Vs (충전전류 영향) / 중성점: 직접·저항·리액터·소호리액터 접지</div>
-          </div>
-          <span class="topic-tag tag-memo">암기</span>
-        </div>
-      </div>
-      <div class="task-sub"><input type="checkbox" id="p1-2a" onchange="saveAndRefresh(this)"><span class="task-sub-text">코로나 임계전압 공식 암기 + 기출 2문제</span></div>
-      <div class="task-sub"><input type="checkbox" id="p1-2b" onchange="saveAndRefresh(this)"><span class="task-sub-text">중성점 접지방식별 특징 암기표 작성</span></div>
-      <div class="task-sub"><input type="checkbox" id="p1-2c" onchange="saveAndRefresh(this)"><span class="task-sub-text">페란티·코로나 관련 기출 3문제</span></div>
-    </div>
-  </div>
-
-  <div class="week-section">
-    <div class="week-header" onclick="toggleWeek('p2')">
-      <span class="week-badge">예정</span>
-      <span class="week-title">변전소 · 차단기 · 보호계전 · 마무리</span>
-      <span class="week-days">Day 27~28</span>
-      <span class="week-arrow" id="arrow-p2">▼</span>
-    </div>
-    <div class="week-body" id="body-p2">
-
-      <div class="day-mark">📅 Day 27 <span class="day-date">08/04</span><span class="quota-badge">기출 5문제</span></div>
-      <div class="topic-item">
-        <input type="checkbox" id="p2-1" onchange="saveAndRefresh(this)">
-        <div class="topic-content">
-          <div class="topic-name">차단기 종류 · 차단용량 · %임피던스</div>
-          <div class="formula-box">
-            <div class="f-title">📐 핵심공식</div>
-            <div class="formula">차단용량: Ps=√3×V×Is [MVA]</div>
-            <div class="formula">%Z=I×Z/V×100 / Is=In×100/%Z</div>
-          </div>
-          <span class="topic-tag tag-hard">자주출제</span>
-        </div>
-      </div>
-      <div class="task-sub"><input type="checkbox" id="p2-1a" onchange="saveAndRefresh(this)"><span class="task-sub-text">OCB·VCB·GCB 특징 비교표 암기</span></div>
-      <div class="task-sub"><input type="checkbox" id="p2-1b" onchange="saveAndRefresh(this)"><span class="task-sub-text">%Z이용 단락전류 계산 기출 3문제</span></div>
-      <div class="topic-item">
-        <input type="checkbox" id="p2-2" onchange="saveAndRefresh(this)">
-        <div class="topic-content">
-          <div class="topic-name">보호계전기 종류 · 동작원리</div>
-          <div class="topic-detail">과전류(OCR)·거리(DR)·방향지락(DGR)·차동(87)·부족전압(UVR) 기능 암기</div>
-          <div class="formula-box">
-            <div class="f-title">📐 ANSI 계전기 번호 암기</div>
-            <div class="formula">51: 과전류 / 27: 부족전압 / 59: 과전압 / 67: 방향지락 / 87: 차동계전</div>
-          </div>
-          <span class="topic-tag tag-memo">암기</span>
-        </div>
-      </div>
-      <div class="task-sub"><input type="checkbox" id="p2-2a" onchange="saveAndRefresh(this)"><span class="task-sub-text">계전기 종류별 적용장소 기출 2문제</span></div>
-
-      <div class="day-mark">📅 Day 28 (전력공학 2회독·총정리) <span class="day-date">08/05</span><span class="quota-badge">기출 10문제</span></div>
-      <div class="topic-item">
-        <input type="checkbox" id="p2-3" onchange="saveAndRefresh(this)">
-        <div class="topic-content">
-          <div class="topic-name">이상전압·피뢰기 / 조상설비 / 수전설비</div>
-          <div class="formula-box">
-            <div class="f-title">📐 핵심공식</div>
-            <div class="formula">뇌서지·개폐서지 / 콘덴서 무효전력: Qc=ωCV² [Var]</div>
-            <div class="formula">역률개선 콘덴서 용량: Qc=P(tanθ1-tanθ2) [kVA]</div>
-          </div>
-          <span class="topic-tag tag-memo">암기</span>
-        </div>
-      </div>
-      <div class="topic-item">
-        <input type="checkbox" id="p2-4" onchange="saveAndRefresh(this)">
-        <div class="topic-content">
-          <div class="topic-name">전력공학 전체 기출 10문제 + 오답 정리</div>
-          <div class="topic-detail">comcbt.com → 전력공학 최근 1개년 풀기</div>
-          <span class="topic-tag tag-hard">총정리</span>
-        </div>
-      </div>
-      <div class="task-sub"><input type="checkbox" id="p2-4a" onchange="saveAndRefresh(this)"><span class="task-sub-text">틀린 문제 오답노트 업로드</span></div>
-    </div>
-  </div>
-</div>
-
-<!-- ===== KEC ===== -->
-<div class="subject-panel" id="panel-kec">
-  <div class="subject-header">
-    <div class="subject-title-row">
-      <span class="subject-icon">📋</span>
-      <span class="subject-name-big">KEC (전기설비기술기준)</span>
-      <span class="subject-period-badge">Day 29</span>
-    </div>
-    <div class="subject-desc">순수 암기. 숫자·거리·용량 수치가 핵심. 기출에 나온 숫자만!</div>
-    <div class="subject-strategy">💡 하루만 쓰는 과목. 표 만들어서 통째로 외우기 (오전 1회독 → 오후 2회독)</div>
-  </div>
-
-  <div class="week-section">
-    <div class="week-header" onclick="toggleWeek('k1')">
-      <span class="week-badge">예정</span>
-      <span class="week-title">전압구분 · 이격거리 · 접지</span>
-      <span class="week-days">Day 29 오전</span>
-      <span class="week-arrow" id="arrow-k1">▼</span>
-    </div>
-    <div class="week-body" id="body-k1">
-
-      <div class="day-mark">📅 Day 29 오전 (1회독) <span class="day-date">08/06</span><span class="quota-badge">기출 10문제</span></div>
-      <div class="topic-item">
-        <input type="checkbox" id="k1-1" onchange="saveAndRefresh(this)">
-        <div class="topic-content">
-          <div class="topic-name">전압 구분 · 전선 굵기 규정</div>
-          <div class="formula-box">
-            <div class="f-title">📐 반드시 암기 (자주출제)</div>
-            <div class="formula">저압: 교류 1kV 이하 / 직류 1.5kV 이하</div>
-            <div class="formula">고압: 교류 1kV 초과 ~ 7kV 이하</div>
-            <div class="formula">특고압: 7kV 초과</div>
-          </div>
-          <span class="topic-tag tag-memo">암기</span><span class="topic-tag tag-hard">자주출제</span>
-        </div>
-      </div>
-      <div class="task-sub"><input type="checkbox" id="k1-1a" onchange="saveAndRefresh(this)"><span class="task-sub-text">전압구분 관련 기출 3문제</span></div>
-      <div class="topic-item">
-        <input type="checkbox" id="k1-2" onchange="saveAndRefresh(this)">
-        <div class="topic-content">
-          <div class="topic-name">가공전선로 지표상 높이 · 이격거리</div>
-          <div class="formula-box">
-            <div class="f-title">📐 이격거리 암기표</div>
-            <div class="formula">일반 도로: 5m (저압) / 6m (고압·특고압)</div>
-            <div class="formula">도로 횡단: 6m / 철도 횡단: 6.5m</div>
-            <div class="formula">보안공사 도로: 5m / 횡단보도: 3m</div>
-          </div>
-          <span class="topic-tag tag-memo">암기</span><span class="topic-tag tag-hard">자주출제</span>
-        </div>
-      </div>
-      <div class="task-sub"><input type="checkbox" id="k1-2a" onchange="saveAndRefresh(this)"><span class="task-sub-text">이격거리 기출 3문제</span></div>
-      <div class="topic-item">
-        <input type="checkbox" id="k1-3" onchange="saveAndRefresh(this)">
-        <div class="topic-content">
-          <div class="topic-name">접지 계통 · 접지저항 값</div>
-          <div class="formula-box">
-            <div class="f-title">📐 핵심 암기 (KEC 개정 반영)</div>
-            <div class="formula">TN/TT/IT 계통 특징 / 계통접지·보호접지·등전위본딩</div>
-            <div class="formula">구접지(1~특별3종) 폐지 → 통합접지 방식 적용 / 접지도체 굵기는 KEC 표 기준</div>
-          </div>
-          <span class="topic-tag tag-memo">암기</span>
-        </div>
-      </div>
-      <div class="task-sub"><input type="checkbox" id="k1-3a" onchange="saveAndRefresh(this)"><span class="task-sub-text">접지 종류·저항값 기출 4문제</span></div>
-    </div>
-  </div>
-
-  <div class="week-section">
-    <div class="week-header" onclick="toggleWeek('k2')">
-      <span class="week-badge">예정</span>
-      <span class="week-title">배선 · 보호장치 · 수전설비</span>
-      <span class="week-days">Day 29 오후</span>
-      <span class="week-arrow" id="arrow-k2">▼</span>
-    </div>
-    <div class="week-body" id="body-k2">
-
-      <div class="day-mark">📅 Day 29 오후 (2회독) <span class="day-date">08/06</span><span class="quota-badge">기출 10문제</span></div>
-      <div class="topic-item">
-        <input type="checkbox" id="k2-1" onchange="saveAndRefresh(this)">
-        <div class="topic-content">
-          <div class="topic-name">누전차단기 · 과전류차단기 정격</div>
-          <div class="formula-box">
-            <div class="f-title">📐 핵심 수치 암기</div>
-            <div class="formula">누전차단기 정격감도전류: 30mA (인체보호)</div>
-            <div class="formula">동작시간: 0.03초 이내</div>
-            <div class="formula">과전류차단기: 전선 허용전류 이하 정격</div>
-          </div>
-          <span class="topic-tag tag-memo">암기</span><span class="topic-tag tag-hard">자주출제</span>
-        </div>
-      </div>
-      <div class="task-sub"><input type="checkbox" id="k2-1a" onchange="saveAndRefresh(this)"><span class="task-sub-text">차단기 정격 관련 기출 3문제</span></div>
-      <div class="topic-item">
-        <input type="checkbox" id="k2-2" onchange="saveAndRefresh(this)">
-        <div class="topic-content">
-          <div class="topic-name">전압강하 기준 · 전선 굵기 선정</div>
-          <div class="topic-detail">간선 전압강하: 2% 이하 / 분기회로: 2% 이하 / 간선+분기 합계: 4% 이하</div>
-          <span class="topic-tag tag-memo">암기</span>
-        </div>
-      </div>
-      <div class="task-sub"><input type="checkbox" id="k2-2a" onchange="saveAndRefresh(this)"><span class="task-sub-text">전압강하 기준 기출 2문제</span></div>
-      <div class="topic-item">
-        <input type="checkbox" id="k2-3" onchange="saveAndRefresh(this)">
-        <div class="topic-content">
-          <div class="topic-name">피뢰설비 · 수전설비 · 특고압 기준</div>
-          <div class="formula-box">
-            <div class="f-title">📐 핵심 암기</div>
-            <div class="formula">피뢰침 보호각 원칙 45° 이하 / 회전구체법으로 보호범위 산정</div>
-            <div class="formula">수전설비 구성: CB(차단기)·MOF(계기용변성기)·DS(단로기)·LA(피뢰기)·PT·CT</div>
-          </div>
-          <span class="topic-tag tag-memo">암기</span>
-        </div>
-      </div>
-      <div class="task-sub"><input type="checkbox" id="k2-3a" onchange="saveAndRefresh(this)"><span class="task-sub-text">KEC 전체 기출 10문제 풀기 + 오답 정리</span></div>
-      <div class="task-sub"><input type="checkbox" id="k2-3b" onchange="saveAndRefresh(this)"><span class="task-sub-text">숫자·수치 암기표 최종 확인</span></div>
-    </div>
-  </div>
-</div>
-
-
-
-<!-- ===== 기출풀이 ===== -->
-<div class="subject-panel" id="panel-exam">
-  <div class="subject-header">
-    <div class="subject-title-row">
-      <span class="subject-icon">📝</span>
-      <span class="subject-name-big">기출풀이 20일</span>
-      <span class="subject-period-badge">Day 30~48</span>
-    </div>
-    <div class="subject-desc">최근 5개년 기출 3회전. 오답 반복이 핵심</div>
-    <div class="subject-strategy">💡 comcbt.com 연도별 풀기 → 틀린 거 사진 → 오답노트 업로드</div>
-  </div>
-
-  <div class="exam-card">
-    <div class="exam-card-title">📌 1회전 (Day 30~37)</div>
-    <div class="exam-step">
-      <div class="step-num">1</div>
-      <div class="step-text"><strong>최근 3개년</strong> 과목별로 풀기 (comcbt.com)</div>
-    </div>
-    <div class="exam-step">
-      <div class="step-num">2</div>
-      <div class="step-text">틀린 문제 <strong>사진 찍어서 오답노트 업로드</strong></div>
-    </div>
-    <div class="exam-step">
-      <div class="step-num">3</div>
-      <div class="step-text">과목당 <strong>40점 미만</strong> 과목 체크 → 집중 복습</div>
-    </div>
-  </div>
-
-  <div class="exam-card">
-    <div class="exam-card-title">📌 2회전 (Day 38~44)</div>
-    <div class="exam-step">
-      <div class="step-num">1</div>
-      <div class="step-text">1회전 <strong>오답 문제만</strong> 다시 풀기</div>
-    </div>
-    <div class="exam-step">
-      <div class="step-num">2</div>
-      <div class="step-text">최근 <strong>4~5개년</strong>으로 범위 확장</div>
-    </div>
-    <div class="exam-step">
-      <div class="step-num">3</div>
-      <div class="step-text">반복해서 틀리는 문제 → <strong>별표 표시</strong></div>
-    </div>
-  </div>
-
-  <div class="exam-card">
-    <div class="exam-card-title">📌 3회전 마무리 (Day 45~48)</div>
-    <div class="exam-step">
-      <div class="step-num">1</div>
-      <div class="step-text"><strong>실전처럼 시간 맞춰</strong> 전 과목 모의고사</div>
-    </div>
-    <div class="exam-step">
-      <div class="step-num">2</div>
-      <div class="step-text">오답노트 <strong>총복습</strong> — 별표 문제 집중</div>
-    </div>
-    <div class="exam-step">
-      <div class="step-num">3</div>
-      <div class="step-text">KEC 숫자·공식 <strong>최종 암기 확인</strong></div>
-    </div>
-  </div>
-
-  <div class="week-section">
-    <div class="week-header" onclick="toggleWeek('ex1')">
-      <span class="week-badge current">체크리스트</span>
-      <span class="week-title">기출 진행 체크</span>
-      <span class="week-days">Day 30~48</span>
-      <span class="week-arrow" id="arrow-ex1">▼</span>
-    </div>
-    <div class="week-body" id="body-ex1">
-      <div class="day-mark">📅 Day 30</div>
-      <div class="topic-item"><input type="checkbox" id="ex-30" onchange="saveAndRefresh(this)">
-        <div class="topic-content"><div class="topic-name">1회전 — 회로이론 최근 3개년</div>
-        <div class="topic-detail">comcbt.com 연도별 풀기 → 오답 즉시 사진 업로드</div></div></div>
-
-      <div class="day-mark">📅 Day 31</div>
-      <div class="topic-item"><input type="checkbox" id="ex-31" onchange="saveAndRefresh(this)">
-        <div class="topic-content"><div class="topic-name">1회전 — 전자기학 최근 3개년</div></div></div>
-
-      <div class="day-mark">📅 Day 32</div>
-      <div class="topic-item"><input type="checkbox" id="ex-32" onchange="saveAndRefresh(this)">
-        <div class="topic-content"><div class="topic-name">1회전 — 제어공학 최근 3개년</div></div></div>
-
-      <div class="day-mark">📅 Day 33</div>
-      <div class="topic-item"><input type="checkbox" id="ex-33" onchange="saveAndRefresh(this)">
-        <div class="topic-content"><div class="topic-name">1회전 — 전력공학 최근 3개년</div></div></div>
-
-      <div class="day-mark">📅 Day 34</div>
-      <div class="topic-item"><input type="checkbox" id="ex-34" onchange="saveAndRefresh(this)">
-        <div class="topic-content"><div class="topic-name">1회전 — 전기기기 최근 3개년</div></div></div>
-
-      <div class="day-mark">📅 Day 35</div>
-      <div class="topic-item"><input type="checkbox" id="ex-35" onchange="saveAndRefresh(this)">
-        <div class="topic-content"><div class="topic-name">1회전 — KEC 최근 3개년</div></div></div>
-
-      <div class="day-mark">📅 Day 36</div>
-      <div class="topic-item"><input type="checkbox" id="ex-36" onchange="saveAndRefresh(this)">
-        <div class="topic-content"><div class="topic-name">1회전 오답노트 정리 ① — 40점 미만 과목 집중</div></div></div>
-
-      <div class="day-mark">📅 Day 37 (1회전 마무리)</div>
-      <div class="topic-item"><input type="checkbox" id="ex-37" onchange="saveAndRefresh(this)">
-        <div class="topic-content"><div class="topic-name">1회전 오답노트 정리 ② — 40점 미만 과목 집중</div></div></div>
-
-      <div class="day-mark">📅 Day 38</div>
-      <div class="topic-item"><input type="checkbox" id="ex-38" onchange="saveAndRefresh(this)">
-        <div class="topic-content"><div class="topic-name">2회전 — 회로이론·전자기학 오답 재풀이</div>
-        <div class="topic-detail">범위 4~5개년으로 확장</div></div></div>
-
-      <div class="day-mark">📅 Day 39</div>
-      <div class="topic-item"><input type="checkbox" id="ex-39" onchange="saveAndRefresh(this)">
-        <div class="topic-content"><div class="topic-name">2회전 — 제어공학·전력공학 오답 재풀이</div></div></div>
-
-      <div class="day-mark">📅 Day 40</div>
-      <div class="topic-item"><input type="checkbox" id="ex-40" onchange="saveAndRefresh(this)">
-        <div class="topic-content"><div class="topic-name">2회전 — 전기기기·KEC 오답 재풀이</div></div></div>
-
-      <div class="day-mark">📅 Day 41</div>
-      <div class="topic-item"><input type="checkbox" id="ex-41" onchange="saveAndRefresh(this)">
-        <div class="topic-content"><div class="topic-name">2회전 — 확장범위 신규문제 풀이 ①</div></div></div>
-
-      <div class="day-mark">📅 Day 42</div>
-      <div class="topic-item"><input type="checkbox" id="ex-42" onchange="saveAndRefresh(this)">
-        <div class="topic-content"><div class="topic-name">2회전 — 확장범위 신규문제 풀이 ②</div></div></div>
-
-      <div class="day-mark">📅 Day 43</div>
-      <div class="topic-item"><input type="checkbox" id="ex-43" onchange="saveAndRefresh(this)">
-        <div class="topic-content"><div class="topic-name">2회전 — 반복오답(별표) 문제만 재확인</div></div></div>
-
-      <div class="day-mark">📅 Day 44 (2회전 마무리)</div>
-      <div class="topic-item"><input type="checkbox" id="ex-44" onchange="saveAndRefresh(this)">
-        <div class="topic-content"><div class="topic-name">2회전 — 전 과목 총점검</div></div></div>
-
-      <div class="day-mark">📅 Day 45</div>
-      <div class="topic-item"><input type="checkbox" id="ex-45" onchange="saveAndRefresh(this)">
-        <div class="topic-content"><div class="topic-name">3회전 — 실전 모의고사 ①</div>
-        <div class="topic-detail">시간 맞춰 전 과목 (2시간30분) 실전처럼</div></div></div>
-
-      <div class="day-mark">📅 Day 46</div>
-      <div class="topic-item"><input type="checkbox" id="ex-46" onchange="saveAndRefresh(this)">
-        <div class="topic-content"><div class="topic-name">3회전 — 오답노트 총복습 (별표 위주)</div></div></div>
-
-      <div class="day-mark">📅 Day 47</div>
-      <div class="topic-item"><input type="checkbox" id="ex-47" onchange="saveAndRefresh(this)">
-        <div class="topic-content"><div class="topic-name">3회전 — 실전 모의고사 ②</div></div></div>
-
-      <div class="day-mark">📅 Day 48 (최종 마무리)</div>
-      <div class="topic-item"><input type="checkbox" id="ex-48" onchange="saveAndRefresh(this)">
-        <div class="topic-content"><div class="topic-name">KEC 숫자·공식 최종 암기 확인 + 전체 마무리</div></div></div>
-    </div>
-  </div>
-</div>
-
-<!-- 핵심 규칙 -->
-<div class="rules-mini">
-  <div class="rules-mini-title">⚡ 핵심 규칙</div>
-  <div class="rule-row">📱 <span><strong>근무날</strong> — 기출 10문제만, 무조건</span></div>
-  <div class="rule-row">📚 <span><strong>비번날</strong> — 도서관 2~3시간</span></div>
-  <div class="rule-row">🌙 <span><strong>야간 다음날</strong> — 오후 3시 기상 후 1~2시간</span></div>
-  <div class="rule-row">📸 <span><strong>모르는 문제</strong> — 바로 사진 → 오답노트 업로드</span></div>
-  <div class="rule-row">🍺 <span><strong>술</strong> — 비번 첫날 저녁만 ㅋㅋ</span></div>
-</div>
-
-<div class="footer">목표: 과목당 40점↑ + 평균 60점 🎯 할 수 있어요 💪</div>
-
-<!-- 하단 고정 탭바 (iOS 스타일) -->
-<div class="bottom-nav" id="bottomNav">
-  <div class="nav-item active" onclick="showTabNav('circuit',this)">
-    <div class="nav-label">회로</div>
-  </div>
-  <div class="nav-item" onclick="showTabNav('control',this)">
-    <div class="nav-label">제어</div>
-  </div>
-  <div class="nav-item" onclick="showTabNav('emag',this)">
-    <div class="nav-label">자기학</div>
-  </div>
-  <div class="nav-item" onclick="showTabNav('machine',this)">
-    <div class="nav-label">기기</div>
-  </div>
-  <div class="nav-item" onclick="showTabNav('power',this)">
-    <div class="nav-label">전력공학</div>
-  </div>
-  <div class="nav-item" onclick="showTabNav('kec',this)">
-    <div class="nav-label">KEC</div>
-  </div>
-  <div class="nav-item" onclick="showTabNav('exam',this)">
-    <div class="nav-label">기출</div>
-  </div>
-  <a class="nav-item theory" href="https://ohmmygod81.github.io/1page/">
-    <div class="nav-label">전트키</div>
-  </a>
-</div>
-
-<!-- Firebase (체크박스 기록을 기기 간 동기화하기 위해 사용) -->
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
 
 <script>
-  // ⚠️ 아래 firebaseConfig 값을 본인 Firebase 프로젝트 설정으로 교체하세요.
-  // (코팅반_통합관리.html에서 쓰던 것과 같은 프로젝트를 써도 되고, 새 프로젝트를 만들어도 됩니다.)
-  // Firebase 콘솔 > 프로젝트 설정 > 일반 > 내 앱 > SDK 설정 및 구성 에서 확인 가능합니다.
-  const firebaseConfig = {
-    apiKey: "AIzaSyBbm0hy_qz_85UCSu2uLUCUN6zYhs-sAqo",
-    authDomain: "hoho-a270e.firebaseapp.com",
-    databaseURL: "https://hoho-a270e-default-rtdb.firebaseio.com",
-    projectId: "hoho-a270e",
-    storageBucket: "hoho-a270e.firebasestorage.app",
-    messagingSenderId: "240112645938",
-    appId: "1:240112645938:web:7bc00ffa220c07327ec92b",
-    measurementId: "G-97XCVP2Z3H"
-  };
+const catNames = {circuit:"회로이론",control:"제어공학",magnetic:"전자기학",machine:"전기기기",power:"전력공학",kec:"KEC",exam:"기출풀이"};
+const catIcons = {circuit:"🔌",control:"🎛️",magnetic:"🧲",machine:"⚙️",power:"⚡",kec:"📐",exam:"📝"};
+const catColors = {circuit:"#5aa9ff",control:"#3ddc84",magnetic:"#ffb454",machine:"#c792ff",power:"#ff6b6b",kec:"#3ddceb",exam:"#9aa7ba"};
 
-  const CHECK_PATH = 'examPlan49/checks'; // Realtime Database 안에서 이 앱의 체크 기록이 저장되는 경로
+const plan = [
+ {d:1,dt:"2026-07-09",cat:"circuit",topic:"옴의 법칙 · KVL · KCL",
+  f:["V=IR / KVL: 폐회로 전압합=0 / KCL: 분기점 전류합=0","도체저항: R=ρL/A [Ω] (ρ:고유저항, L:길이, A:단면적)"],
+  t:["V=IR, I=V/R, R=V/I 문제 5개 풀기 (comcbt)"]},
+ {d:2,dt:"2026-07-10",cat:"circuit",topic:"저항 직렬·병렬 합성 / 전류·전압 분배",
+  f:["직렬: R합=R₁+R₂ / 전압분배: V₁=V×R₁/(R₁+R₂)","병렬: R합=R₁R₂/(R₁+R₂) / 전류분배: I₁=I×R₂/(R₁+R₂)"],
+  t:["직병렬 합성저항 계산 기출 5문제","전류분배·전압분배 공식 손으로 3번 써보기"]},
+ {d:3,dt:"2026-07-11",cat:"circuit",topic:"전력·전력량 / 밀만의 정리",
+  f:["P=VI=I²R=V²/R [W] / W=Pt [J] (1Wh=3600J)","밀만의 정리: V0=(V1/R1+V2/R2+…)/(1/R1+1/R2+…) — 자주출제!"],
+  t:["전력 P 계산 기출 3문제","밀만의 정리 적용 기출 2문제"]},
+ {d:4,dt:"2026-07-12",cat:"circuit",topic:"중첩의 원리 · 테브난/노턴 정리",
+  f:["테브난: 개방전압 Vth + 등가저항 Rth / 노턴: 단락전류 In"],
+  t:["테브난 등가회로 변환 기출 3문제","중첩의 원리 전류 계산 기출 2문제"]},
+ {d:5,dt:"2026-07-13",cat:"circuit",topic:"정현파 교류 · 페이저 · 실효값",
+  f:["순시값 v=Vm sin(ωt+θ) / 실효값 V=Vm/√2≈0.707Vm / 평균값 Vav=2Vm/π≈0.637Vm","파고율=최대값/실효값(sin파=√2) / 파형률=실효값/평균값(sin파≈1.11)"],
+  t:["실효값·최대값 변환 기출 3문제","위상차·위상관계 기출 2문제"]},
+ {d:6,dt:"2026-07-14",cat:"circuit",topic:"R·L·C 임피던스 / 어드미턴스",
+  f:["XL=ωL=2πfL / XC=1/ωC / Z=R+j(XL-XC)","|Z|=√(R²+(XL-XC)²) / Y=1/Z=G+jB"],
+  t:["임피던스 크기·위상각 계산 기출 3문제","XL, XC 주파수 변화에 따른 변화 문제 2문제"]},
+ {d:7,dt:"2026-07-15",cat:"circuit",topic:"RLC 공진 · 교류 전력 · 역률",
+  f:["공진: XL=XC → f0=1/(2π√LC) / P=VIcosθ / cosθ=P/S / Q=VIsinθ"],
+  t:["공진주파수 계산 기출 2문제","유효전력·무효전력·역률 계산 기출 3문제"]},
+ {d:8,dt:"2026-07-16",cat:"circuit",topic:"3상회로 Y-Δ 변환·3상전력 / 과도현상 (2회독·총정리)",
+  f:["Y결선: VL=√3Vp, IL=Ip / Δ결선: VL=Vp, IL=√3Ip","3상 전력: P=√3×VL×IL×cosθ=3×Vp×Ip×cosθ","RL회로: τ=L/R / RC회로: τ=RC / 5τ 후 정상상태(약99.3%)","RL전류 i(t)=I(1-e^(-t/τ)) / RC전압 v(t)=V(1-e^(-t/τ))"],
+  t:["Y↔Δ 변환 전압·전류 계산 기출 3문제","시정수 계산 기출 2문제","회로이론 전체 기출 10문제 풀기 (comcbt.com 최근1개년)","틀린 문제 사진 찍어서 오답노트 채널 업로드","공식 요약노트 손으로 정리 (A4 1장)"]},
+ {d:9,dt:"2026-07-17",cat:"control",topic:"기본 라플라스 변환쌍 완전 암기",
+  f:["δ(t)→1 / u(t)=1→1/s / t→1/s² / t²→2/s³","e^(-at)→1/(s+a) / sinωt→ω/(s²+ω²) / cosωt→s/(s²+ω²) / te^(-at)→1/(s+a)²"],
+  t:["변환쌍 표 손으로 3번 쓰기 (보지 않고)","라플라스 변환 기출 5문제"]},
+ {d:10,dt:"2026-07-18",cat:"control",topic:"초기값·최종값 정리 / 부분분수 분해",
+  f:["초기값: lim(s→∞)sF(s) / 최종값: lim(s→0)sF(s)","헤비사이드 전개법(부분분수) / 시간추이정리: f(t-a)u(t-a)→e^(-as)F(s)"],
+  t:["초기값·최종값 구하기 기출 3문제","역라플라스 변환(부분분수 분해) 기출 2문제"]},
+ {d:11,dt:"2026-07-19",cat:"control",topic:"전달함수 G(s) / RC·RL 회로 전달함수",
+  f:["G(s)=출력/입력(라플라스), 초기조건=0 / RC: G=1/(RCs+1) / RL: G=RLs/(RLs+R)"],
+  t:["RC 회로 전달함수 G(s) 구하기 기출 3문제","RLC 회로 전달함수 기출 2문제"]},
+ {d:12,dt:"2026-07-20",cat:"control",topic:"블록선도 단순화 · 피드백 공식 · 신호흐름선도",
+  f:["직렬연결: G=G₁×G₂ / 병렬연결: G=G₁±G₂","부피드백: C/R=G/(1+GH) / 정피드백: C/R=G/(1-GH) — 가장 많이 출제!"],
+  t:["피드백 전달함수 C/R 계산 기출 3문제","블록선도 단순화 기출 2문제"]},
+ {d:13,dt:"2026-07-21",cat:"control",topic:"2차 시스템 특성 · 감쇠비 ζ / 루스-후르비츠 안정도 (2회독·총정리)",
+  f:["특성방정식: s²+2ζωns+ωn²=0","ζ<1 부족감쇠(진동,오버슈트) / ζ=1 임계감쇠 / ζ>1 과감쇠(느림)","루스-후르비츠: a0sⁿ+a1sⁿ⁻¹+…+an=0 → 1행 a0,a2,a4… 2행 a1,a3,a5…","① 계수 모두 같은 부호 ② 1열 부호변화 없음 → 안정"],
+  t:["루스 행렬 작성 후 안정도 판별 기출 3문제","제어공학 전체 기출 10문제 + 오답 정리 (보드선도 개념 포함)"]},
+ {d:14,dt:"2026-07-22",cat:"magnetic",topic:"쿨롱의 법칙 · 전계 E · 전기력선",
+  f:["F=Q₁Q₂/(4πε₀r²) [N]","E=Q/(4πε₀r²)=F/Q [V/m]","ε₀=8.854×10⁻¹² [F/m]"],
+  t:["두 점전하 사이 힘 F 계산 기출 3문제","전계 E 세기 계산 기출 2문제"]},
+ {d:15,dt:"2026-07-23",cat:"magnetic",topic:"가우스 법칙 · 전속밀도 D · 유전율",
+  f:["가우스 법칙: ∮D·dS=Q (폐곡면 통과 전속=내부전하)","D=εE=ε₀εsE / 전속 Ψ=Q / D=Q/(4πr²) [C/m²]"],
+  t:["D, E, ε 관계 계산 기출 3문제","유전율 변화 시 전속밀도 변화 문제 2문제"]},
+ {d:16,dt:"2026-07-24",cat:"magnetic",topic:"콘덴서 정전용량 C · 직병렬 · 에너지",
+  f:["평행판: C=εA/d [F] (면적↑거리↓ → C↑)","에너지: W=½CV²=Q²/2C=½QV [J]","직렬: 1/C합=Σ1/Cₙ / 병렬: C합=ΣCₙ"],
+  t:["평행판 C 계산 (거리·면적 변화) 기출 3문제","직병렬 합성 정전용량 + 에너지 기출 2문제"]},
+ {d:17,dt:"2026-07-25",cat:"magnetic",topic:"전위 V · 전위경도 · 도체 특성",
+  f:["V=Q/(4πεr) [V] / E=-dV/dr=-gradV","도체표면: 등전위면, E는 항상 표면에 수직 / 도체 내부 E=0"],
+  t:["점전하에 의한 전위 V 계산 기출 3문제","전위경도(E=-dV/dr) 적용 기출 2문제"]},
+ {d:18,dt:"2026-07-26",cat:"magnetic",topic:"앙페르 법칙 · 자계 H · 자속밀도 B",
+  f:["무한직선: H=I/(2πr) [A/m] / 원형코일: H=I/(2r) / 솔레노이드: H=nI","B=μH=μ₀μsH [T] / μ₀=4π×10⁻⁷"],
+  t:["무한직선 도체에서 H, B 계산 기출 3문제","평행도체 사이 힘 계산 기출 2문제"]},
+ {d:19,dt:"2026-07-27",cat:"magnetic",topic:"패러데이 법칙 · 렌츠의 법칙 · 인덕턴스 L",
+  f:["e=-N×dΦ/dt [V] / 렌츠: 자속변화 방해방향(-부호)","L=NΦ/I / e=L×di/dt","도체운동 기전력: e=Blvsinθ [V] (플레밍의 오른손법칙)"],
+  t:["유기기전력 e 계산 기출 3문제","렌츠 법칙 방향 판별 기출 2문제"]},
+ {d:20,dt:"2026-07-28",cat:"magnetic",topic:"상호인덕턴스 M · 자기에너지 · 자성체",
+  f:["M=k√(L₁L₂) (k: 결합계수 0~1)","직렬: L합=L₁+L₂±2M (가동:+, 차동:-)","자기에너지: W=½LI² [J]"],
+  t:["상호인덕턴스 M 계산 기출 3문제","가동·차동 직렬 L합 계산 기출 2문제"]},
+ {d:21,dt:"2026-07-29",cat:"magnetic",topic:"맥스웰 방정식 · 전자파 (2회독·총정리)",
+  f:["맥스웰 방정식(이름+의미암기): ①가우스(전계) ②가우스(자계) ③패러데이 ④앙페르-맥스웰","전자파속도 v=1/√(με)=3×10⁸ m/s(진공) / 파장 λ=v/f","포인팅벡터: P=E×H [W/m²] / 고유임피던스(진공): η₀=√(μ₀/ε₀)≈377Ω"],
+  t:["전기자기학 전체 기출 10문제 풀기 (comcbt.com 최근1개년)","공식 암기표 다시 확인 (쿨롱~맥스웰 전체)","오답 사진 찍어서 채널 업로드"]},
+ {d:22,dt:"2026-07-30",cat:"machine",topic:"변압기 - 권수비 · 효율 · 결선",
+  f:["a=N₁/N₂=V₁/V₂=I₂/I₁ / 임피던스변환: Z₁=a²Z₂","η=출력/(출력+Pi+m²Pc)×100% / 최대효율조건: Pi=m²Pc(철손=동손) / 부하율 m=√(Pi/Pc)","Y-Δ 위상차 30° / 병렬운전조건: 극성·전압·주파수·%Z 일치","V결선 출력비: P_V/P_Δ=1/√3≈57.7%"],
+  t:["권수비로 2차 전압·전류 계산 기출 3문제","최대효율 부하율 m 계산 기출 2문제","결선방식별 특징 기출 2문제"]},
+ {d:23,dt:"2026-07-31",cat:"machine",topic:"유도전동기 - 슬립·토크·기동법 (VFD직결!)",
+  f:["Ns=120f/P [rpm] ← 인버터로 f 바꾸면 Ns 변함","s=(Ns-N)/Ns / N=Ns(1-s) — s=0 동기속도, s=1 정지","P2:Pc2:P0=1:s:(1-s) / P0=P2(1-s) [W] / T=P2/ωs=P2/(2πNs/60)","기동: 직입/Y-Δ/리액터/콘도르파 / 속도제어: 주파수(인버터)·극수변환·2차저항","Y-Δ기동: 기동전류·기동토크 모두 1/3배 감소(상전압 1/√3배)"],
+  t:["Ns, s, N 계산 기출 3문제","슬립s로 동손·기계출력 비율 계산 기출 2문제","기동법별 기동전류·토크 특성 기출 2문제"]},
+ {d:24,dt:"2026-08-01",cat:"machine",topic:"직류기 · 동기기 (2회독·총정리)",
+  f:["기전력: E=PZΦNa/60a [V] / 속도: N=(V-IaRa)/kΦ [rpm]","속도제어: 전압↑ or 저항↓ or 자속↓ → 속도↑","병렬운전조건: 전압·주파수·위상·파형 일치 / 동기조상기: 역률개선","단락비 Ks=1/%Zs×100 (클수록 안정도↑, 동기임피던스↓)"],
+  t:["직류전동기 속도 N 계산 기출 2문제","전기기기 전체 기출 10문제 + 오답 정리 (comcbt.com 최근1개년)","틀린 문제 사진 찍어서 오답노트 업로드"]},
+ {d:25,dt:"2026-08-02",cat:"power",topic:"선로정수 · 전압강하 · 전력손실",
+  f:["전압강하: Vd=√3×I×(Rcosθ+Xsinθ) [V]","전력손실: Pl=3I²R [W] / 전압강하율: ε=Vd/Vs×100 [%]"],
+  t:["3상 전압강하 Vd 계산 기출 3문제","전력손실·손실률 계산 기출 2문제"]},
+ {d:26,dt:"2026-08-03",cat:"power",topic:"코로나 방전 · 페란티 효과 · 중성점 접지",
+  f:["코로나 임계전압: E0=24.3×m0×m1×δ×d×log10(D/r) [kV]","페란티: 경부하 시 Vr>Vs(충전전류 영향) / 중성점: 직접·저항·리액터·소호리액터 접지"],
+  t:["코로나 임계전압 공식 암기 + 기출 2문제","중성점 접지방식별 특징 암기표 작성","페란티·코로나 관련 기출 3문제"]},
+ {d:27,dt:"2026-08-04",cat:"power",topic:"차단기 종류 · 차단용량 · 보호계전",
+  f:["차단용량: Ps=√3×V×Is [MVA] / %Z=I×Z/V×100 / Is=In×100/%Z","ANSI 계전기 번호: 51과전류 / 27부족전압 / 59과전압 / 67방향지락 / 87차동계전"],
+  t:["OCB·VCB·GCB 특징 비교표 암기","%Z이용 단락전류 계산 기출 3문제","계전기 종류별 적용장소 기출 2문제"]},
+ {d:28,dt:"2026-08-05",cat:"power",topic:"이상전압·피뢰기 / 조상설비 / 수전설비 (2회독·총정리)",
+  f:["뇌서지·개폐서지 / 콘덴서 무효전력: Qc=ωCV² [Var]","역률개선 콘덴서 용량: Qc=P(tanθ1-tanθ2) [kVA]"],
+  t:["전력공학 전체 기출 10문제 + 오답 정리 (comcbt.com 최근1개년)","틀린 문제 오답노트 업로드"]},
+ {d:29,dt:"2026-08-06",cat:"kec",topic:"KEC 전체 (전압구분·이격거리·접지·배선·보호장치·수전설비)",
+  f:["저압: 교류1kV이하/직류1.5kV이하 / 고압: 교류1kV초과~7kV이하 / 특고압: 7kV초과","이격거리: 일반도로5m(저압)/6m(고압특고압), 도로횡단6m, 철도횡단6.5m, 횡단보도3m","접지: TN/TT/IT계통 / 구접지(1~특별3종) 폐지→통합접지 방식","누전차단기 정격감도전류 30mA, 동작시간 0.03초 이내","전압강하기준: 간선2%이하, 분기2%이하, 합계4%이하","피뢰침 보호각 45°이하, 회전구체법 / 수전설비: CB·MOF·DS·LA·PT·CT"],
+  t:["전압구분 관련 기출 3문제","이격거리 기출 3문제","접지 종류·저항값 기출 4문제","차단기 정격 관련 기출 3문제","전압강하 기준 기출 2문제","KEC 전체 기출 10문제 풀기 + 오답 정리","숫자·수치 암기표 최종 확인"]},
+ {d:30,dt:"2026-08-07",cat:"exam",topic:"1회전 — 회로이론 최근 3개년",t:["comcbt.com 연도별 풀기 → 오답 즉시 사진 업로드"]},
+ {d:31,dt:"2026-08-08",cat:"exam",topic:"1회전 — 전자기학 최근 3개년",t:["comcbt.com 연도별 풀기 → 오답 즉시 사진 업로드"]},
+ {d:32,dt:"2026-08-09",cat:"exam",topic:"1회전 — 제어공학 최근 3개년",t:["comcbt.com 연도별 풀기 → 오답 즉시 사진 업로드"]},
+ {d:33,dt:"2026-08-10",cat:"exam",topic:"1회전 — 전력공학 최근 3개년",t:["comcbt.com 연도별 풀기 → 오답 즉시 사진 업로드"]},
+ {d:34,dt:"2026-08-11",cat:"exam",topic:"1회전 — 전기기기 최근 3개년",t:["comcbt.com 연도별 풀기 → 오답 즉시 사진 업로드"]},
+ {d:35,dt:"2026-08-12",cat:"exam",topic:"1회전 — KEC 최근 3개년",t:["comcbt.com 연도별 풀기 → 오답 즉시 사진 업로드"]},
+ {d:36,dt:"2026-08-13",cat:"exam",topic:"1회전 오답노트 정리 ①",t:["40점 미만 과목 집중 복습"]},
+ {d:37,dt:"2026-08-14",cat:"exam",topic:"1회전 오답노트 정리 ② (1회전 마무리)",t:["40점 미만 과목 집중 복습"]},
+ {d:38,dt:"2026-08-15",cat:"exam",topic:"2회전 — 회로이론·전자기학 오답 재풀이",t:["범위 4~5개년으로 확장"]},
+ {d:39,dt:"2026-08-16",cat:"exam",topic:"2회전 — 제어공학·전력공학 오답 재풀이",t:["범위 4~5개년으로 확장"]},
+ {d:40,dt:"2026-08-17",cat:"exam",topic:"2회전 — 전기기기·KEC 오답 재풀이",t:["범위 4~5개년으로 확장"]},
+ {d:41,dt:"2026-08-18",cat:"exam",topic:"2회전 — 확장범위 신규문제 풀이 ①",t:["4~5개년 범위 신규문제 풀이"]},
+ {d:42,dt:"2026-08-19",cat:"exam",topic:"2회전 — 확장범위 신규문제 풀이 ②",t:["4~5개년 범위 신규문제 풀이"]},
+ {d:43,dt:"2026-08-20",cat:"exam",topic:"2회전 — 반복오답(별표) 문제만 재확인",t:["별표 표시된 반복오답 문제 재확인"]},
+ {d:44,dt:"2026-08-21",cat:"exam",topic:"2회전 — 전 과목 총점검 (2회전 마무리)",t:["전 과목 총점검"]},
+ {d:45,dt:"2026-08-22",cat:"exam",topic:"3회전 — 실전 모의고사 ①",t:["시간 맞춰 전 과목(2시간30분) 실전처럼 풀기"]},
+ {d:46,dt:"2026-08-23",cat:"exam",topic:"3회전 — 오답노트 총복습",t:["별표 문제 위주로 총복습"]},
+ {d:47,dt:"2026-08-24",cat:"exam",topic:"3회전 — 실전 모의고사 ②",t:["시간 맞춰 전 과목(2시간30분) 실전처럼 풀기"]},
+ {d:48,dt:"2026-08-25",cat:"exam",topic:"최종 마무리",t:["KEC 숫자·공식 최종 암기 확인","전체 마무리 점검"]},
+];
+const examDate = "2026-08-27";
+const planStart = "2026-07-09";
 
-  let db = null;
-  let fbReady = false;
+// ---- 로컬 날짜 포맷 (toISOString은 UTC 기준이라 한국시간에서 하루 밀리는 버그가 있어 사용 금지) ----
+function fmtDate(d){
+  const y = d.getFullYear();
+  const m = String(d.getMonth()+1).padStart(2,"0");
+  const dd = String(d.getDate()).padStart(2,"0");
+  return `${y}-${m}-${dd}`;
+}
+
+const dataByDate = {};
+const dataByDay = {};
+plan.forEach(p => { dataByDate[p.dt] = p; dataByDay[p.d] = p; });
+const todayStr = fmtDate(new Date());
+const orderedDates = plan.map(p=>p.dt);
+const lastDayNum = plan[plan.length-1].d;
+
+const STORE_KEY = "elec49_checks";
+function loadChecks(){ try { return JSON.parse(localStorage.getItem(STORE_KEY)) || {}; } catch(e){ return {}; } }
+function saveChecks(obj){ localStorage.setItem(STORE_KEY, JSON.stringify(obj)); }
+let checks = loadChecks();
+
+// ---- 진행중인 학습일(체크하면 다음날로, 안 하면 유지) ----
+const STORE_KEY2 = "elec49_currentDay";
+function loadCurrentDay(){
   try {
-    firebase.initializeApp(firebaseConfig);
-    db = firebase.database();
-    fbReady = true;
-  } catch (e) {
-    console.warn('Firebase 초기화 실패 - localStorage만 사용합니다.', e);
+    const v = parseInt(localStorage.getItem(STORE_KEY2), 10);
+    return (v >= 1) ? v : plan[0].d;
+  } catch(e){ return plan[0].d; }
+}
+function saveCurrentDay(v){ localStorage.setItem(STORE_KEY2, String(v)); }
+let currentDay = loadCurrentDay();
+
+function dayProgress(day){
+  const total = day.t.length;
+  if (!total) return 0;
+  let done = 0;
+  day.t.forEach((_,i)=>{ if (checks[day.d+"_"+i]) done++; });
+  return done/total;
+}
+function isDayDone(day){ return dayProgress(day) === 1; }
+
+// 현재 학습일의 할 일을 모두 체크하면 다음 날로 진행, 체크 안 하면 그대로 유지
+// 진행중인 학습일 = 아직 다 체크되지 않은 가장 빠른 Day
+// 체크를 다 하면 다음 Day로 넘어가고, 이미 완료했던 Day의 체크를 해제하면 다시 그 Day로 돌아옵니다.
+function advancePointer(){
+  let d = 1;
+  while (d <= lastDayNum && dataByDay[d] && isDayDone(dataByDay[d])) d++;
+  currentDay = d;
+  saveCurrentDay(currentDay);
+}
+advancePointer();
+
+// ---- 현재 학습 카드 (실제 날짜가 아니라 진행 상황 기준) ----
+// 체크를 다 하면 다음 Day로 넘어가고, 체크를 안 하면 같은 Day가 계속 유지됩니다.
+function renderTodayCard(){
+  const el = document.getElementById("todayCard");
+
+  if (todayStr === examDate) {
+    el.innerHTML = `<div class="today-card no-plan"><div class="tc-title">📝 오늘은 시험일입니다. 그동안 고생 많으셨어요! 화이팅 🔥</div></div>`;
+    return;
   }
-
-  const START = new Date(2026, 6, 9);
-  const EXAM  = new Date(2026, 7, 27);
-  const STUDY_END = new Date(2026, 7, 26);
-  const TOTAL_DAYS = Math.ceil((STUDY_END - START) / 86400000);
-
-  function updateHeader() {
-    const today = new Date(); today.setHours(0,0,0,0);
-    const dday = Math.ceil((EXAM - today) / 86400000);
-    document.getElementById('ddayNum').textContent = Math.max(0, dday);
-    document.getElementById('examBadge').textContent =
-      `📅 시험일: 2026.08.27 · 공부가능 ${TOTAL_DAYS}일`;
+  if (currentDay > lastDayNum) {
+    el.innerHTML = `<div class="today-card no-plan"><div class="tc-title">🎉 49일 플랜을 모두 완료했어요! 오답노트 복습하며 시험일까지 컨디션 유지하세요.</div></div>`;
+    return;
   }
+  const info = dataByDay[currentDay];
+  if (!info) {
+    el.innerHTML = `<div class="today-card no-plan"><div class="tc-title">계획을 불러올 수 없어요. 아래 달력에서 날짜를 확인해보세요 🙂</div></div>`;
+    return;
+  }
+  const isRealToday = info.dt === todayStr;
+  const tasksHtml = info.t.map((task,i)=>{
+    const key = info.d+"_"+i;
+    const isDone = !!checks[key];
+    return `<div class="tc-task ${isDone?'done':''}" id="tctask-${key}">
+      <input type="checkbox" id="tcchk-${key}" ${isDone?'checked':''} onchange="toggleTask('${key}')">
+      <label for="tcchk-${key}">${task}</label>
+    </div>`;
+  }).join("");
+  el.innerHTML = `
+    <div class="today-card">
+      <div class="tc-top">
+        <span class="tc-label">${isRealToday ? "🌅 오늘의 학습" : "▶ 진행중인 학습"} · Day ${info.d}</span>
+        <span class="tc-tag" style="background:${catColors[info.cat]}">${catIcons[info.cat]} ${catNames[info.cat]}</span>
+      </div>
+      <div class="tc-title">${info.topic}</div>
+      <div class="tc-tasks">${tasksHtml}</div>
+      <button class="tc-more" onclick="openSheet('${info.dt}')">📐 공식 + 상세 보기</button>
+    </div>`;
+}
 
-  function updateProgress() {
-    // 계획 진행률 — 경과일 기준 (시험 계획상 지금쯤 도달해야 하는 지점)
-    const today = new Date(); today.setHours(0,0,0,0);
-    const elapsed = Math.max(0, Math.ceil((today - START) / 86400000));
-    const planPct = Math.min(100, Math.round(elapsed / TOTAL_DAYS * 100));
-    document.getElementById('progressPct').textContent = planPct + '%';
-    document.getElementById('progressBar').style.width = planPct + '%';
-    document.getElementById('progressLabel').textContent =
-      `경과 ${elapsed}일 / ${TOTAL_DAYS}일 (시험날 제외)`;
+// ---- 연속 완료일(스트릭) ----
+function computeStreak(){
+  let streak = 0;
+  // 오늘 이전(오늘 포함하지 않음, 어제부터) 날짜들을 최신순으로 확인
+  const past = orderedDates.filter(d => d < todayStr).sort().reverse();
+  for (const d of past){
+    const info = dataByDate[d];
+    if (!info) continue;
+    if (isDayDone(info)) streak++;
+    else break;
+  }
+  // 오늘도 완료했으면 +1
+  const todayInfo = dataByDate[todayStr];
+  if (todayInfo && isDayDone(todayInfo)) streak++;
+  return streak;
+}
 
-    // 실제 진행률 — 체크박스 완료 기준 (진짜 내가 한 만큼)
-    const all  = document.querySelectorAll('input[type=checkbox]');
-    const done = document.querySelectorAll('input[type=checkbox]:checked');
-    const realPct = all.length ? Math.round(done.length / all.length * 100) : 0;
-    document.getElementById('checkPct').textContent = realPct + '%';
-    document.getElementById('realPct').textContent = realPct + '%';
-    document.getElementById('realBar').style.width = realPct + '%';
-    document.getElementById('realLabel').textContent =
-      `완료 ${done.length}개 / 전체 ${all.length}개`;
+// ---- 과목별 진행률 ----
+function renderSubjects(){
+  const cats = ["circuit","control","magnetic","machine","power","kec","exam"];
+  const wrap = document.getElementById("subjGrid");
+  wrap.innerHTML = cats.map(cat=>{
+    const days = plan.filter(p=>p.cat===cat);
+    let total=0, done=0;
+    days.forEach(d=>{ total+=d.t.length; d.t.forEach((_,i)=>{ if(checks[d.d+"_"+i]) done++; }); });
+    const pct = total ? Math.round(done/total*100) : 0;
+    return `<div class="subj">
+      <span>${catIcons[cat]} ${catNames[cat]}</span>
+      <span class="s-pct">${pct}%</span>
+    </div>`;
+  }).join("");
+}
 
-    // 계획 vs 실제 비교
-    const diff = realPct - planPct;
-    const cmp = document.getElementById('progressCompare');
-    if (diff >= 5) {
-      cmp.textContent = `🔥 계획보다 ${diff}%p 앞서고 있어요!`;
-      cmp.className = 'progress-compare ahead';
-    } else if (diff <= -5) {
-      cmp.textContent = `⚠️ 계획보다 ${Math.abs(diff)}%p 뒤처졌어요. 페이스업 하자!`;
-      cmp.className = 'progress-compare behind';
+function updateStats(){
+  const exam = new Date(examDate+"T00:00:00");
+  const start = new Date(planStart+"T00:00:00");
+  const now = new Date();
+  const dday = Math.ceil((exam - now)/(1000*60*60*24));
+  document.getElementById("dday").textContent = dday >= 0 ? "D-"+dday : "종료";
+
+  const totalSpan = exam - start;
+  const elapsed = now - start;
+  const planPct = Math.min(100, Math.max(0, Math.round(elapsed/totalSpan*100)));
+  document.getElementById("planpct").textContent = planPct+"%";
+  document.getElementById("planbar").style.width = planPct+"%";
+
+  let totalTasks=0, doneTasks=0;
+  plan.forEach(p => { totalTasks += p.t.length; p.t.forEach((_,i)=>{ if(checks[p.d+"_"+i]) doneTasks++; }); });
+  const pct = totalTasks ? Math.round(doneTasks/totalTasks*100) : 0;
+  document.getElementById("pct").textContent = pct+"%";
+  document.getElementById("pctbar").style.width = pct+"%";
+
+  document.getElementById("streak").textContent = computeStreak()+"일";
+
+  renderSubjects();
+}
+
+function buildMonthGrid(year, month) {
+  const first = new Date(year, month, 1);
+  const startDow = first.getDay();
+  const daysInMonth = new Date(year, month+1, 0).getDate();
+
+  let html = "";
+  ["일","월","화","수","목","금","토"].forEach(w => html += `<div class="wd">${w}</div>`);
+  for (let i=0;i<startDow;i++) html += `<div class="cell empty"></div>`;
+
+  for (let day=1; day<=daysInMonth; day++) {
+    const dateObj = new Date(year, month, day);
+    const dateStr = fmtDate(dateObj);
+    const info = dataByDate[dateStr];
+    let cls = "cell";
+    if (dateStr === todayStr) cls += " today";
+    if (dateStr === examDate) cls += " exam";
+
+    let inner = `<div class="date">${day}</div>`;
+    if (dateStr === examDate) {
+      inner += `<div class="tag" style="background:#ff6b6b;color:#12161c">📝 시험일</div>`;
+      html += `<div class="${cls}">${inner}</div>`;
+    } else if (info) {
+      const prog = dayProgress(info);
+      if (prog === 1) cls += " done";
+      const badge = prog === 1 ? `<span class="check">✅</span>` : "";
+      inner += `<div class="dnum">Day ${info.d}${info.d===currentDay ? `<span class="curbadge">▶ 진행중</span>` : ""}</div>`;
+      inner += `<div class="tag c-${info.cat}">${catNames[info.cat]}</div>`;
+      inner += `<div class="topic">${info.topic.length>16? info.topic.slice(0,16)+"…" : info.topic}</div>`;
+      inner += badge;
+      inner += `<div class="prog" style="width:${Math.round(prog*100)}%"></div>`;
+      html += `<div class="${cls}" onclick="openSheet('${dateStr}')">${inner}</div>`;
+    } else if (dateStr > "2026-08-25" && dateStr < examDate) {
+      cls += " rest";
+      inner += `<div class="topic" style="color:var(--subdim)">최종 점검/휴식</div>`;
+      html += `<div class="${cls}">${inner}</div>`;
     } else {
-      cmp.textContent = `👍 계획과 거의 같은 페이스예요`;
-      cmp.className = 'progress-compare even';
+      html += `<div class="${cls}">${inner}</div>`;
     }
   }
+  return html;
+}
 
-  function saveAndRefresh(el) {
-    const val = el.checked;
-    // 1) localStorage에 즉시 저장 (오프라인이거나 Firebase가 느려도 화면은 바로 반영)
-    localStorage.setItem('chk_' + el.id, val);
-    updateProgress();
-    // 2) Firebase에도 저장해서 다른 기기(폰/PC)에서도 같은 기록을 보게 함
-    if (fbReady) {
-      db.ref(CHECK_PATH + '/' + el.id).set(val)
-        .catch(err => console.warn('Firebase 저장 실패 (localStorage에는 저장됨):', err));
-    }
-  }
+// ---- 월 네비게이션 상태 ----
+const planStartDate = new Date(planStart+"T00:00:00");
+const examDateObj = new Date(examDate+"T00:00:00");
+let viewYear, viewMonth;
 
-  function loadChecks() {
-    // 1) localStorage 값으로 먼저 즉시 렌더링 (첫 화면 빠르게)
-    document.querySelectorAll('input[type=checkbox]').forEach(el => {
-      el.checked = localStorage.getItem('chk_' + el.id) === 'true';
-    });
-    updateProgress();
+function initView(){
+  const anchor = dataByDay[currentDay] || plan[plan.length-1];
+  const anchorDate = new Date(anchor.dt+"T00:00:00");
+  viewYear = anchorDate.getFullYear();
+  viewMonth = anchorDate.getMonth();
+}
 
-    // 2) Firebase에 연결되어 있으면 실시간으로 최신 기록을 받아와서 덮어씀
-    //    (다른 기기에서 체크한 내용도 자동으로 반영됨)
-    if (fbReady) {
-      db.ref(CHECK_PATH).on('value', snapshot => {
-        const data = snapshot.val() || {};
-        document.querySelectorAll('input[type=checkbox]').forEach(el => {
-          const checked = !!data[el.id];
-          el.checked = checked;
-          localStorage.setItem('chk_' + el.id, checked);
-        });
-        updateProgress();
-      }, err => {
-        console.warn('Firebase 읽기 실패 - localStorage 기록을 그대로 사용합니다.', err);
-      });
-    }
-  }
+function isBeforeMinMonth(y,m){ return (y < planStartDate.getFullYear()) || (y===planStartDate.getFullYear() && m < planStartDate.getMonth()); }
+function isAfterMaxMonth(y,m){ return (y > examDateObj.getFullYear()) || (y===examDateObj.getFullYear() && m > examDateObj.getMonth()); }
 
-  // 하단 탭바 클릭
-  function showTabNav(id, el) {
-    document.querySelectorAll('.subject-panel').forEach(p => p.classList.remove('active'));
-    document.getElementById('panel-' + id).classList.add('active');
-    // 하단 탭바 active (전트키 이론 링크는 제외)
-    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-    if (el) el.classList.add('active');
-    window.scrollTo({top: 0, behavior: 'smooth'});
-  }
+function prevMonth(){
+  let y=viewYear, m=viewMonth-1;
+  if (m<0){ m=11; y--; }
+  if (isBeforeMinMonth(y,m)) return;
+  viewYear=y; viewMonth=m; renderCalendars();
+}
+function nextMonth(){
+  let y=viewYear, m=viewMonth+1;
+  if (m>11){ m=0; y++; }
+  if (isAfterMaxMonth(y,m)) return;
+  viewYear=y; viewMonth=m; renderCalendars();
+}
 
-  function toggleWeek(id) {
-    const body  = document.getElementById('body-' + id);
-    const arrow = document.getElementById('arrow-' + id);
-    body.classList.toggle('open');
-    arrow.classList.toggle('open');
-  }
+function renderCalendars(){
+  document.getElementById("calTitle").textContent = `${viewYear}년 ${viewMonth+1}월`;
+  document.getElementById("calGrid").innerHTML = buildMonthGrid(viewYear, viewMonth);
+  document.getElementById("prevMonthBtn").disabled = isBeforeMinMonth(viewMonth===0?viewYear-1:viewYear, viewMonth===0?11:viewMonth-1);
+  document.getElementById("nextMonthBtn").disabled = isAfterMaxMonth(viewMonth===11?viewYear+1:viewYear, viewMonth===11?0:viewMonth+1);
+}
 
-  updateHeader();
-  loadChecks();
+function openSheet(dateStr){
+  const info = dataByDate[dateStr];
+  if (!info) return;
+  const d = new Date(dateStr+"T00:00:00");
+  document.getElementById("sheetTitle").textContent = "Day "+info.d;
+  const tagEl = document.getElementById("sheetTag");
+  tagEl.textContent = catIcons[info.cat]+" "+catNames[info.cat];
+  tagEl.style.background = catColors[info.cat];
+  document.getElementById("sheetDate").textContent = (d.getMonth()+1)+"월 "+d.getDate()+"일";
+  document.getElementById("sheetTopic").textContent = info.topic;
+
+  const fWrap = document.getElementById("sheetFormulas");
+  fWrap.innerHTML = (info.f||[]).map(f => `<div class="formula-box">${f}</div>`).join("");
+
+  const tWrap = document.getElementById("sheetTasks");
+  tWrap.innerHTML = info.t.map((task,i) => {
+    const key = info.d+"_"+i;
+    const isDone = !!checks[key];
+    return `<div class="task ${isDone?'done':''}" id="task-${key}">
+      <input type="checkbox" id="chk-${key}" ${isDone?'checked':''} onchange="toggleTask('${key}')">
+      <label for="chk-${key}">${task}</label>
+    </div>`;
+  }).join("");
+
+  document.getElementById("overlay").classList.add("show");
+}
+function closeSheet(){
+  document.getElementById("overlay").classList.remove("show");
+  renderCalendars();
+  updateStats();
+  renderTodayCard();
+}
+function toggleTask(key){
+  checks[key] = !checks[key];
+  saveChecks(checks);
+  advancePointer(); // 체크하면 다음 Day로, 체크 해제하면 진행중인 Day가 다시 그 Day로 돌아옴
+  document.querySelectorAll(`#task-${key}, #tctask-${key}`).forEach(el=>{
+    if (el) el.classList.toggle("done", checks[key]);
+  });
+  updateStats();
+  renderTodayCard();
+  renderCalendars();
+}
+document.getElementById("overlay").addEventListener("click", (e)=>{
+  if (e.target.id === "overlay") closeSheet();
+});
+
+initView();
+renderTodayCard();
+renderCalendars();
+updateStats();
 </script>
 </body>
 </html>
