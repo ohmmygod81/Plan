@@ -8,6 +8,8 @@
 <meta name="apple-mobile-web-app-title" content="전기기사플랜">
 <meta name="theme-color" content="#1c2128">
 <title>전기기사 49일 플랜</title>
+<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-database-compat.js"></script>
 <style>
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
   :root {
@@ -33,7 +35,8 @@
     font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Segoe UI", Roboto, sans-serif;
     -webkit-font-smoothing: antialiased;
   }
-  .wrap { padding: 16px 12px 0; }
+  .wrap { padding: 16px 12px 0; max-width: 640px; margin: 0 auto; }
+  @media (min-width: 700px) { .wrap { padding: 28px 20px 0; } }
 
   /* ---- Header ---- */
   .hero { text-align:center; margin-bottom:12px; }
@@ -102,18 +105,8 @@
   .linkrow a .ic { font-size:14px; }
   .linkrow a.store { border-color:rgba(61,220,132,0.35); background:rgba(61,220,132,0.08); color:#8ff0bd; }
 
-  /* ---- Subject progress ---- */
-  .subjects { margin-bottom:16px; }
-  .subjects h2 { font-size:12.5px; color:var(--sub); font-weight:700; margin:0 0 8px 2px; }
-  .subj-grid { display:flex; flex-wrap:wrap; gap:6px; }
-  .subj {
-    background:var(--card); border:1px solid var(--border); border-radius:20px; padding:7px 12px;
-    display:flex; align-items:center; gap:6px; font-size:11.5px; font-weight:700; white-space:nowrap;
-  }
-  .subj .s-pct { color:var(--sub); font-variant-numeric:tabular-nums; font-weight:600; }
-
   /* ---- Calendar card w/ month navigation ---- */
-  .cal-card { background:var(--card2); border:1px solid var(--border); border-radius:16px; padding:12px; margin-bottom:16px; }
+  .cal-card { background:var(--card2); border:1px solid var(--border); border-radius:16px; padding: clamp(10px,2vw,18px); margin-bottom:16px; }
   .cal-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
   .cal-header .cal-title { font-size:14.5px; font-weight:800; color:var(--text); display:flex; align-items:center; gap:7px; }
   .cal-header .cal-title::before { content:""; width:4px; height:14px; background:var(--accent); border-radius:2px; display:inline-block; }
@@ -124,20 +117,21 @@
   }
   .cal-btn:active { transform:scale(0.9); }
   .cal-btn:disabled { opacity:.3; cursor:default; }
-  .grid { display:grid; grid-template-columns: repeat(7, 1fr); gap:4px; }
-  .wd { text-align:center; font-size:10.5px; color:var(--sub); padding-bottom:3px; font-weight:700; }
+  .grid { display:grid; grid-template-columns: repeat(7, 1fr); gap: clamp(3px, 0.9vw, 7px); }
+  .wd { text-align:center; font-size: clamp(9.5px, 1.4vw, 12px); color:var(--sub); padding-bottom:3px; font-weight:700; }
   .cell {
-    min-height:82px; border-radius:10px; padding:5px 5px 6px;
+    aspect-ratio: 1 / 1; border-radius:10px; padding: clamp(3px,1vw,7px);
     background:var(--card); border:1px solid var(--border); position:relative;
-    font-size:10px; line-height:1.25; cursor:pointer;
+    font-size: clamp(8.5px, 1.4vw, 11px); line-height:1.15; cursor:pointer;
+    overflow:hidden; display:flex; flex-direction:column;
     transition: transform .1s ease;
   }
   .cell:active { transform: scale(0.94); }
   .cell.empty { background:transparent; border:none; cursor:default; }
-  .cell .dnum { font-size:9px; color:var(--sub); font-weight:600; }
-  .cell .date { font-size:11.5px; font-weight:700; color:var(--text); }
-  .cell .tag { display:inline-block; margin-top:2px; padding:1.5px 5px; border-radius:5px; font-size:8.7px; font-weight:700; color:#12161c; }
-  .cell .topic { margin-top:2px; color:#c2cddc; font-size:9.3px; }
+  .cell .dnum { font-size: clamp(7.5px, 1.1vw, 9.5px); color:var(--sub); font-weight:600; }
+  .cell .date { font-size: clamp(9.5px, 1.6vw, 13px); font-weight:700; color:var(--text); }
+  .cell .tag { display:inline-block; margin-top:1px; padding: clamp(1px,0.3vw,2px) clamp(3px,0.6vw,6px); border-radius:5px; font-size: clamp(7px,1vw,9px); font-weight:700; color:#12161c; }
+  .cell .topic { margin-top:1px; color:#c2cddc; font-size: clamp(7.5px, 1.1vw, 9.5px); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
   .cell.today { border-color:var(--accent); box-shadow:0 0 0 1.5px var(--accent) inset, 0 0 14px rgba(90,169,255,0.25); }
   .cell.exam { background:linear-gradient(155deg,#3a1418,#1a0d10); border-color:var(--bad); }
   .cell.exam .date { color:#ff8f8f; }
@@ -212,8 +206,6 @@
   <div class="sub">2026년 8월 27일 시험 · 하루하루 체크하며 완주하기</div>
 </div>
 
-<div id="todayCard"></div>
-
 <div class="stats">
   <div class="stat"><div class="num" id="dday">-</div><div class="lbl">D-DAY</div></div>
   <div class="stat plan"><div class="num" id="planpct">0%</div><div class="lbl">📅 계획 진행률</div><div class="bar"><i id="planbar" style="width:0%"></i></div></div>
@@ -226,19 +218,9 @@
   <a class="store" href="https://www.machuda.kr/learning/certification/전기기사/written" target="_blank" rel="noopener"><span class="ic">📝</span>CBT 문제풀이 (맞추다)</a>
 </div>
 
-<div class="subjects">
-  <h2>과목별 진행률</h2>
-  <div class="subj-grid" id="subjGrid"></div>
-</div>
+<div id="todayCard"></div>
 
 <div class="cal-card">
-  <div class="cal-header">
-    <button class="cal-btn" id="prevMonthBtn" onclick="prevMonth()" aria-label="이전 달">‹</button>
-    <div class="cal-title" id="calTitle">-</div>
-    <button class="cal-btn" id="nextMonthBtn" onclick="nextMonth()" aria-label="다음 달">›</button>
-  </div>
-  <div class="grid" id="calGrid"></div>
-</div>
   <div class="cal-header">
     <button class="cal-btn" id="prevMonthBtn" onclick="prevMonth()" aria-label="이전 달">‹</button>
     <div class="cal-title" id="calTitle">-</div>
@@ -413,8 +395,65 @@ function loadCurrentDay(){
     return (v >= 1) ? v : plan[0].d;
   } catch(e){ return plan[0].d; }
 }
-function saveCurrentDay(v){ localStorage.setItem(STORE_KEY2, String(v)); }
+function saveCurrentDay(v){
+  localStorage.setItem(STORE_KEY2, String(v));
+  if (fbRef && fbSyncReady) fbRef.child("currentDay").set(v);
+}
 let currentDay = loadCurrentDay();
+
+// ==== Firebase 동기화 (모든 기기에서 체크/진행률 동일하게) ====
+// 아래 firebaseConfig에 본인 프로젝트 설정을 붙여넣으세요.
+// (기존 "hoho" 프로젝트를 재사용해도 되고, 새 프로젝트를 만들어도 됩니다.
+//  단, 다른 도구와 데이터가 섞이지 않도록 DB_PATH는 이 앱 전용 이름을 씁니다.)
+const firebaseConfig = {
+  apiKey: "AIzaSyBbm0hy_qz_85UCSu2uLUCUN6zYhs-sAqo",
+  authDomain: "hoho-a270e.firebaseapp.com",
+  databaseURL: "https://hoho-a270e-default-rtdb.firebaseio.com",
+  projectId: "hoho-a270e"
+};
+const DB_PATH = "elec49plan"; // 이 플랜 전용 경로 (다른 프로젝트와 안 겹침)
+
+let fbRef = null;
+let fbSyncReady = false; // 최초 원격 데이터 로드 전에는 쓰기를 막아 로컬(구버전) 값이 원격을 덮어쓰는 걸 방지
+function fbEnabled(){ return firebaseConfig.apiKey !== "YOUR_API_KEY"; }
+
+if (fbEnabled()) {
+  try {
+    firebase.initializeApp(firebaseConfig);
+    fbRef = firebase.database().ref(DB_PATH);
+
+    fbRef.once("value").then(snap => {
+      if (snap.exists()) {
+        const remote = snap.val();
+        checks = remote.checks || {};
+        currentDay = remote.currentDay || currentDay;
+        saveChecks(checks);
+        saveCurrentDayLocal(currentDay);
+      } else {
+        // 원격에 데이터가 없으면(최초 1회) 이 기기의 로컬 데이터를 올려서 시작점으로 삼음
+        fbRef.set({ checks, currentDay });
+      }
+      fbSyncReady = true;
+      initView(); renderTodayCard(); renderCalendars(); updateStats();
+
+      // 다른 기기에서 바뀐 내용을 실시간으로 반영
+      fbRef.child("checks").on("value", s => {
+        checks = s.val() || {};
+        saveChecks(checks);
+        renderTodayCard(); renderCalendars(); updateStats();
+      });
+      fbRef.child("currentDay").on("value", s => {
+        const v = s.val();
+        if (v) { currentDay = v; saveCurrentDayLocal(v); renderTodayCard(); renderCalendars(); }
+      });
+    }).catch(err => console.warn("Firebase 초기 로드 실패, 로컬 데이터로 계속:", err));
+  } catch (e) {
+    console.warn("Firebase 초기화 실패, 로컬 저장만 사용:", e);
+  }
+}
+
+// localStorage에만 쓰는 내부용 (원격 리스너가 currentDay를 바꿀 때 무한루프 방지)
+function saveCurrentDayLocal(v){ localStorage.setItem(STORE_KEY2, String(v)); }
 
 function dayProgress(day){
   const total = day.t.length;
@@ -492,22 +531,6 @@ function computeStreak(){
   return streak;
 }
 
-// ---- 과목별 진행률 ----
-function renderSubjects(){
-  const cats = ["circuit","control","magnetic","machine","power","kec","exam"];
-  const wrap = document.getElementById("subjGrid");
-  wrap.innerHTML = cats.map(cat=>{
-    const days = plan.filter(p=>p.cat===cat);
-    let total=0, done=0;
-    days.forEach(d=>{ total+=d.t.length; d.t.forEach((_,i)=>{ if(checks[d.d+"_"+i]) done++; }); });
-    const pct = total ? Math.round(done/total*100) : 0;
-    return `<div class="subj">
-      <span>${catIcons[cat]} ${catNames[cat]}</span>
-      <span class="s-pct">${pct}%</span>
-    </div>`;
-  }).join("");
-}
-
 function updateStats(){
   const exam = new Date(examDate+"T00:00:00");
   const start = new Date(planStart+"T00:00:00");
@@ -528,8 +551,6 @@ function updateStats(){
   document.getElementById("pctbar").style.width = pct+"%";
 
   document.getElementById("streak").textContent = computeStreak()+"일";
-
-  renderSubjects();
 }
 
 function buildMonthGrid(year, month) {
@@ -644,6 +665,7 @@ function closeSheet(){
 function toggleTask(key){
   checks[key] = !checks[key];
   saveChecks(checks);
+  if (fbRef && fbSyncReady) fbRef.child("checks/"+key).set(checks[key]);
   advancePointer(); // 체크하면 다음 Day로, 체크 해제하면 진행중인 Day가 다시 그 Day로 돌아옴
   document.querySelectorAll(`#task-${key}, #tctask-${key}`).forEach(el=>{
     if (el) el.classList.toggle("done", checks[key]);
@@ -660,6 +682,18 @@ initView();
 renderTodayCard();
 renderCalendars();
 updateStats();
+
+// 백그라운드에 있다가 다시 열었을 때(홈화면 앱, 탭 전환 복귀 등) D-day를 새로 계산
+function refreshOnReturn(){
+  initView();
+  renderTodayCard();
+  renderCalendars();
+  updateStats();
+}
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "visible") refreshOnReturn();
+});
+window.addEventListener("pageshow", () => refreshOnReturn());
 </script>
 </body>
 </html>
