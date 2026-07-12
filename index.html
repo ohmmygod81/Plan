@@ -35,8 +35,8 @@
     font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Segoe UI", Roboto, sans-serif;
     -webkit-font-smoothing: antialiased;
   }
-  .wrap { padding: 16px 12px 0; max-width: 640px; margin: 0 auto; }
-  @media (min-width: 700px) { .wrap { padding: 28px 20px 0; } }
+  .wrap { padding: calc(16px + env(safe-area-inset-top)) 12px 0; max-width: 640px; margin: 0 auto; }
+  @media (min-width: 700px) { .wrap { padding: calc(28px + env(safe-area-inset-top)) 20px 0; } }
 
   /* ---- Header ---- */
   .hero { text-align:center; margin-bottom:12px; }
@@ -222,7 +222,7 @@
 <body>
 <div class="cheat-overlay" id="cheatOverlay">
   <div class="cheat-bar">
-    <div class="cheat-title">🗝️ 암기카드</div>
+    <div class="cheat-title" id="cheatTitle">🗝️ 암기카드</div>
     <button class="cheat-close" onclick="closeCheatOverlay()" aria-label="닫기">✕</button>
   </div>
   <iframe id="cheatFrame" src="" title="암기카드"></iframe>
@@ -242,11 +242,7 @@
 </div>
 
 <div class="linkrow">
-  <a href="https://ohmmygod81.github.io/1page/" target="_blank" rel="noopener"><span class="ic">🔗</span>전트키 바로가기</a>
-  <a class="store" href="https://www.machuda.kr/learning/certification/전기기사/written" target="_blank" rel="noopener"><span class="ic">📝</span>CBT 문제풀이 (맞추다)</a>
-</div>
-<div class="linkrow">
-  <a href="#" onclick="openCheatOverlay(); return false;"><span class="ic">🗝️</span>암기카드(치트키)</a>
+  <a href="#" onclick="openCheatOverlay('https://ohmmygod81.github.io/1page/', '전트키'); return false;"><span class="ic">🔗</span>전트키 바로가기</a>
 </div>
 
 <div id="todayCard"></div>
@@ -687,9 +683,14 @@ function openSheet(dateStr){
 
   document.getElementById("overlay").classList.add("show");
 }
-function openCheatOverlay(){
+function openCheatOverlay(url, title){
+  url = url || "cheatkey.html";
   const frame = document.getElementById("cheatFrame");
-  if (!frame.src) frame.src = "cheatkey.html"; // 처음 열 때만 로드
+  if (frame.getAttribute("data-src") !== url) {
+    frame.src = url; // 다른 링크면 새로 로드, 같은 링크면 그대로 유지
+    frame.setAttribute("data-src", url);
+  }
+  document.getElementById("cheatTitle").textContent = "🔗 " + (title || "바로가기");
   document.getElementById("cheatOverlay").classList.add("show");
 }
 function closeCheatOverlay(){
