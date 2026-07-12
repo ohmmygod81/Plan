@@ -105,6 +105,27 @@
   .linkrow a .ic { font-size:14px; }
   .linkrow a.store { border-color:rgba(61,220,132,0.35); background:rgba(61,220,132,0.08); color:#8ff0bd; }
 
+  /* ---- Cheatkey fullscreen overlay ---- */
+  .cheat-overlay {
+    display:none; position:fixed; inset:0; z-index:100; background:var(--bg);
+  }
+  .cheat-overlay.show { display:flex; flex-direction:column; }
+  .cheat-overlay .cheat-bar {
+    display:flex; align-items:center; justify-content:space-between;
+    padding: max(10px, env(safe-area-inset-top)) 12px 10px;
+    background:var(--card); border-bottom:1px solid var(--border); flex-shrink:0;
+  }
+  .cheat-overlay .cheat-title { font-size:14px; font-weight:800; color:var(--text); }
+  .cheat-overlay .cheat-close {
+    width:32px; height:32px; border-radius:50%; border:1px solid var(--border); background:var(--card2);
+    color:var(--text); font-size:16px; font-weight:700; display:flex; align-items:center; justify-content:center;
+    line-height:1; cursor:pointer; padding:0;
+  }
+  .cheat-overlay .cheat-close:active { transform:scale(0.9); }
+  .cheat-overlay iframe {
+    flex:1; width:100%; border:none; background:var(--bg);
+  }
+
   /* ---- Calendar card w/ month navigation ---- */
   .cal-card { background:var(--card2); border:1px solid var(--border); border-radius:16px; padding: clamp(10px,2vw,18px); margin-bottom:16px; }
   .cal-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
@@ -199,6 +220,13 @@
 </style>
 </head>
 <body>
+<div class="cheat-overlay" id="cheatOverlay">
+  <div class="cheat-bar">
+    <div class="cheat-title">🗝️ 암기카드</div>
+    <button class="cheat-close" onclick="closeCheatOverlay()" aria-label="닫기">✕</button>
+  </div>
+  <iframe id="cheatFrame" src="" title="암기카드"></iframe>
+</div>
 <div class="wrap">
 
 <div class="hero">
@@ -218,7 +246,7 @@
   <a class="store" href="https://www.machuda.kr/learning/certification/전기기사/written" target="_blank" rel="noopener"><span class="ic">📝</span>CBT 문제풀이 (맞추다)</a>
 </div>
 <div class="linkrow">
-  <a href="cheatkey.html"><span class="ic">🗝️</span>암기카드(치트키)</a>
+  <a href="#" onclick="openCheatOverlay(); return false;"><span class="ic">🗝️</span>암기카드(치트키)</a>
 </div>
 
 <div id="todayCard"></div>
@@ -659,6 +687,15 @@ function openSheet(dateStr){
 
   document.getElementById("overlay").classList.add("show");
 }
+function openCheatOverlay(){
+  const frame = document.getElementById("cheatFrame");
+  if (!frame.src) frame.src = "cheatkey.html"; // 처음 열 때만 로드
+  document.getElementById("cheatOverlay").classList.add("show");
+}
+function closeCheatOverlay(){
+  document.getElementById("cheatOverlay").classList.remove("show");
+}
+
 function closeSheet(){
   document.getElementById("overlay").classList.remove("show");
   renderCalendars();
