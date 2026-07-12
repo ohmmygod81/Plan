@@ -6,30 +6,30 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="필기계획">
-<meta name="theme-color" content="#1c2128">
+<meta name="theme-color" content="#ffffff">
 <title>전기기사 필기시험 계획</title>
 <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-database-compat.js"></script>
 <style>
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
   :root {
-    --bg: #1c2128;
-    --card: #262c35;
-    --card2: #2c333d;
-    --border: #3a4250;
-    --text: #eaf0f7;
-    --sub: #9aa8bd;
-    --subdim: #7f8da3;
-    --accent: #5aa9ff;
-    --accent2: #ffb454;
-    --good: #3ddc84;
-    --bad: #ff6b6b;
+    --bg: #ffffff;
+    --card: #f4f6f9;
+    --card2: #eaeef3;
+    --border: #dde3ea;
+    --text: #1c2128;
+    --sub: #5a6577;
+    --subdim: #7d879a;
+    --accent: #2f7de1;
+    --accent2: #e08a1e;
+    --good: #1f9d55;
+    --bad: #e5484d;
   }
   body {
     margin: 0; padding: 0 0 50px;
     background:
-      radial-gradient(circle at 15% 0%, rgba(90,169,255,0.10), transparent 40%),
-      radial-gradient(circle at 85% 8%, rgba(255,180,84,0.08), transparent 35%),
+      radial-gradient(circle at 15% 0%, rgba(47,125,225,0.06), transparent 40%),
+      radial-gradient(circle at 85% 8%, rgba(224,138,30,0.05), transparent 35%),
       var(--bg);
     color: var(--text);
     font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Segoe UI", Roboto, sans-serif;
@@ -42,43 +42,43 @@
   .hero { text-align:center; margin-bottom:12px; }
   .hero .badge {
     display:inline-block; font-size:10.5px; font-weight:700; letter-spacing:.5px;
-    color:var(--accent); background:rgba(90,169,255,0.12); border:1px solid rgba(90,169,255,0.3);
+    color:var(--accent); background:rgba(47,125,225,0.1); border:1px solid rgba(47,125,225,0.3);
     padding:3px 10px; border-radius:20px; margin-bottom:8px;
   }
   .hero h1 {
     font-size:21px; margin:0 0 4px; font-weight:800;
-    background:linear-gradient(90deg,#fff,#a8c8ff);
+    background:linear-gradient(90deg,#1c2128,#2f7de1);
     -webkit-background-clip:text; background-clip:text; color:transparent;
   }
   .hero .sub { color:var(--sub); font-size:12px; }
 
   /* ---- Today card ---- */
   .today-card {
-    background:linear-gradient(155deg, #17324d, #101820 65%);
-    border:1px solid #234261; border-radius:18px; padding:16px;
+    background:linear-gradient(155deg, #eaf2ff, #f7fbff 65%);
+    border:1px solid #bcd8f7; border-radius:18px; padding:16px;
     margin-bottom:14px; position:relative; overflow:hidden;
   }
   .today-card::after {
     content:""; position:absolute; top:-30px; right:-30px; width:120px; height:120px;
-    background:radial-gradient(circle, rgba(90,169,255,0.25), transparent 70%);
+    background:radial-gradient(circle, rgba(47,125,225,0.15), transparent 70%);
   }
   .today-card .tc-top { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
-  .today-card .tc-label { font-size:11px; color:#9fc2ff; font-weight:700; letter-spacing:.3px; }
+  .today-card .tc-label { font-size:11px; color:#2f6fc4; font-weight:700; letter-spacing:.3px; }
   .today-card .tc-tag { font-size:10px; font-weight:700; padding:2px 9px; border-radius:20px; color:#12161c; }
-  .today-card .tc-title { font-size:15.5px; font-weight:700; margin-bottom:10px; line-height:1.4; }
+  .today-card .tc-title { font-size:15.5px; font-weight:700; margin-bottom:10px; line-height:1.4; color:var(--text); }
   .today-card .tc-tasks { display:flex; flex-direction:column; gap:6px; margin-bottom:4px; }
   .today-card .tc-task {
-    display:flex; align-items:flex-start; gap:8px; font-size:12.5px; color:#dce6f2;
-    background:rgba(255,255,255,0.04); border-radius:9px; padding:8px 9px;
+    display:flex; align-items:flex-start; gap:8px; font-size:12.5px; color:#2c333d;
+    background:rgba(0,0,0,0.03); border-radius:9px; padding:8px 9px;
   }
   .today-card .tc-task input { width:17px; height:17px; margin-top:1px; accent-color:var(--good); flex-shrink:0; }
   .today-card .tc-task.done label { color:var(--subdim); text-decoration:line-through; }
   .today-card .tc-more {
-    margin-top:10px; width:100%; padding:9px; border-radius:10px; border:1px solid rgba(255,255,255,0.15);
-    background:rgba(255,255,255,0.06); color:#fff; font-size:12.5px; font-weight:600;
+    margin-top:10px; width:100%; padding:9px; border-radius:10px; border:1px solid rgba(0,0,0,0.12);
+    background:rgba(0,0,0,0.04); color:var(--text); font-size:12.5px; font-weight:600;
   }
   .today-card.no-plan { text-align:center; padding:20px 16px; }
-  .today-card.no-plan .tc-title { font-size:13.5px; color:#c2cee0; margin:0; }
+  .today-card.no-plan .tc-title { font-size:13.5px; color:var(--sub); margin:0; }
 
   /* ---- Stats ---- */
   .stats { display:flex; gap:7px; margin-bottom:10px; }
@@ -88,12 +88,12 @@
   }
   .stat .num { font-size:22px; font-weight:800; color:var(--accent); font-variant-numeric:tabular-nums; }
   .stat .lbl { font-size:9px; color:var(--sub); margin-top:3px; font-weight:600; }
-  .stat .bar { height:5px; background:#1c232f; border-radius:3px; margin-top:7px; overflow:hidden; }
+  .stat .bar { height:5px; background:#e4e9ef; border-radius:3px; margin-top:7px; overflow:hidden; }
   .stat .bar i { display:block; height:100%; border-radius:3px; transition:width .3s ease; }
   .stat.plan .num { color:var(--accent2); }
   .stat.plan .bar i { background:linear-gradient(90deg,#ffb454,#ff8a3d); }
   .stat.real .bar i { background:linear-gradient(90deg,#3ddc84,#22b56b); }
-  .stat.streak .num { color:#ff9f6b; }
+  .stat.streak .num { color:#d9691e; }
 
   /* ---- Quick links ---- */
   .linkrow { display:flex; gap:8px; margin-bottom:16px; }
@@ -103,7 +103,7 @@
     border:1px solid var(--border); padding:10px 8px; border-radius:12px; background:var(--card);
   }
   .linkrow a .ic { font-size:14px; }
-  .linkrow a.store { border-color:rgba(61,220,132,0.35); background:rgba(61,220,132,0.08); color:#8ff0bd; }
+  .linkrow a.store { border-color:rgba(31,157,85,0.35); background:rgba(31,157,85,0.08); color:#178a4c; }
 
   /* ---- Cheatkey fullscreen overlay ---- */
   .cheat-overlay {
@@ -152,10 +152,10 @@
   .cell .dnum { font-size: clamp(7.5px, 1.1vw, 9.5px); color:var(--sub); font-weight:600; }
   .cell .date { font-size: clamp(9.5px, 1.6vw, 13px); font-weight:700; color:var(--text); }
   .cell .tag { display:inline-block; margin-top:1px; padding: clamp(1px,0.3vw,2px) clamp(3px,0.6vw,6px); border-radius:5px; font-size: clamp(7px,1vw,9px); font-weight:700; color:#12161c; }
-  .cell .topic { margin-top:1px; color:#c2cddc; font-size: clamp(7.5px, 1.1vw, 9.5px); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-  .cell.today { border-color:var(--accent); box-shadow:0 0 0 1.5px var(--accent) inset, 0 0 14px rgba(90,169,255,0.25); }
-  .cell.exam { background:linear-gradient(155deg,#3a1418,#1a0d10); border-color:var(--bad); }
-  .cell.exam .date { color:#ff8f8f; }
+  .cell .topic { margin-top:1px; color:var(--sub); font-size: clamp(7.5px, 1.1vw, 9.5px); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .cell.today { border-color:var(--accent); box-shadow:0 0 0 1.5px var(--accent) inset, 0 0 14px rgba(47,125,225,0.2); }
+  .cell.exam { background:linear-gradient(155deg,#ffe9e9,#fff5f5); border-color:var(--bad); }
+  .cell.exam .date { color:#c0392b; }
   .cell.rest { background:var(--card); }
   .cell.done { border-color:rgba(61,220,132,0.5); }
   .cell .check {
@@ -189,7 +189,7 @@
     border-top:1px solid var(--border); animation: slideup .2s ease;
   }
   @keyframes slideup { from { transform:translateY(30px); opacity:0; } to { transform:translateY(0); opacity:1; } }
-  .sheet-handle { width:36px; height:4px; background:#2a3242; border-radius:2px; margin:0 auto 14px; }
+  .sheet-handle { width:36px; height:4px; background:#d0d5dc; border-radius:2px; margin:0 auto 14px; }
   .sheet-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:4px; }
   .sheet-header h3 { font-size:17px; margin:0; font-weight:800; }
   .sheet-tag { font-size:10px; font-weight:700; padding:3px 9px; border-radius:7px; color:#12161c; }
@@ -198,7 +198,7 @@
 
   .formula-box {
     background:var(--bg); border:1px solid var(--border); border-radius:11px;
-    padding:11px 13px; margin-bottom:8px; font-size:12.5px; color:#c3cfdf; line-height:1.65;
+    padding:11px 13px; margin-bottom:8px; font-size:12.5px; color:#3a4250; line-height:1.65;
   }
   .formula-box::before { content:"📐 "; }
 
